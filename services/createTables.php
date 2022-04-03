@@ -5,7 +5,7 @@
         private $db;
         
         public function __construct(){
-            $this -> db = (new DatabaseConfig()) -> db_connect();
+            $this -> db = (new DB()) -> db_connect();
         }
 
         public function createTables(){
@@ -28,8 +28,7 @@
                 CREATE TABLE IF NOT EXISTS `categories` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     `name` VARCHAR(255) NOT NULL UNIQUE,
-                    `avatar` VARCHAR(255) NOT NULL,
-                    `status` int(1) DEFAULT 0 NOT NULL
+                    `avatar` VARCHAR(255) NOT NULL
                 );
                 CREATE TABLE IF NOT EXISTS `branches` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
