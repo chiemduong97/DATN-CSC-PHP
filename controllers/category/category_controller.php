@@ -17,7 +17,12 @@
         public function insertItem($name = "chua co ten", $avatar = "https://cdn.pixabay.com/photo/2014/04/02/10/25/man-303792_960_720.png") {
             $category = new Category(null,$name, $avatar);
 
-            return $this->service->insertItem($category);
+            if($this->service->checkName($name)){
+                return "Danh muc da ton tai !!!" ;
+            }else{
+                return $this->service->insertItem($category);
+            }
+            
         }
         public function updateItem($id, $name, $avatar) {
             $category = new Category($id,$name, $avatar);

@@ -63,6 +63,24 @@ class CategoryService
         return null;
     }
 
+    public function checkName($name)
+    {
+        try {
+            $query = "select id from " . $this->tableName . " where name=:name and status = 0";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":name", $name);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return true;
+            }else{
+                return false;
+            }
+        } catch (Exception $e) {
+            echo "loi getByID(): " . $e->getMessage();
+        }
+        return false;
+    }
+
     public function insertItem($category)
     {
         try {
