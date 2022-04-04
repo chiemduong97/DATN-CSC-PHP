@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'].'/config/configHeader.php'; 
-include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/category/category_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/product/product_controller.php';
 
     (new CF_Header()) -> config("POST");
 
@@ -9,7 +9,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/category/category_controlle
     if(property_exists($body, 'id')){
         $id = $body->id;
       
-        $data = (new CategoryController()) -> removeItem($id);
+        $data = (new ProductController()) -> removeItem($id);
     
         if($data == 1000){
             echo json_encode(array(

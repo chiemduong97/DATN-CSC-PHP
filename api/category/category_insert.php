@@ -11,12 +11,23 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/category/category_controlle
         $avatar = $body->avatar;
         $data = (new CategoryController()) -> insertItem($name, $avatar);
     
-        if($data){
-            echo json_encode($data);
-        }else{
-
+        if($data == 1000){
+            echo json_encode(array(
+                "status"=>true,
+                "code"=>$data
+            ));
         }
+        else{
+            echo json_encode(array(
+                "status"=>false,
+                "code"=>$data
+            ));
+        }
+    } else{
+        echo json_encode(array(
+            "status"=>false,
+            "code"=>1013
+        ));
     }
-
     
 ?>

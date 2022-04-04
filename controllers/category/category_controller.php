@@ -18,7 +18,7 @@
             $category = new Category(null,$name, $avatar);
 
             if($this->service->checkName($name)){
-                return "Danh muc da ton tai !!!" ;
+                return 1011;
             }else{
                 return $this->service->insertItem($category);
             }
@@ -27,10 +27,21 @@
         public function updateItem($id, $name, $avatar) {
             $category = new Category($id,$name, $avatar);
 
-            return $this->service->updateItem($category);
+            if($this->service->checkName($name)){
+                return 1011;
+            }else{
+                return $this->service->updateItem($category);
+            }
+
         }
         public function removeItem($id) {
-            return $this->service->removeItem($id);
+
+            if($this->service->checkRemove($id)){
+                return $this->service->removeItem($id);
+            }else{
+                return 1014;
+            }
+
         }
     }
-?>
+?> 

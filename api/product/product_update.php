@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'].'/config/configHeader.php'; 
-include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/category/category_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/product/product_controller.php';
 
     (new CF_Header()) -> config("POST");
 
@@ -8,12 +8,19 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/category/category_controlle
 
     if(property_exists($body, 'id') && 
      property_exists($body, 'name') && 
-     property_exists($body, 'avatar'))
+     property_exists($body, 'avatar')&& 
+     property_exists($body, 'description')&& 
+     property_exists($body, 'price')&&
+     property_exists($body, 'category')
+     )
      {
         $id = $body->id;
         $name = $body->name;
         $avatar = $body->avatar;
-        $data = (new CategoryController()) -> updateItem($id, $name, $avatar);
+        $description = $body->description;
+        $price = $body->price;
+        $category = $body->category;
+        $data = (new ProductController()) -> updateItem($id, $name, $avatar, $description, $price, $category);
     
         if($data == 1000){
             echo json_encode(array(

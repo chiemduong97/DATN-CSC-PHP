@@ -5,23 +5,17 @@
         private $avatar;
         private $description;
         private $price;
-        private $quantity;
         private $createdAt;
         private $updatedAt;
         private $category;
-        private $branch;
 
-        function __construct($id,$name,$avatar,$description,$price,$quantity,$createdAt,$updatedAt,$category,$branch){
+        function __construct($id,$name,$avatar,$description,$price,$category){
             $this -> id = $id;
             $this -> name = $name;
             $this -> avatar = $avatar;
             $this -> description = $description;
             $this -> price = $price;
-            $this -> quantity = $quantity;
-            $this -> createdAt = $createdAt;
-            $this -> updatedAt = $updatedAt;
             $this -> category = $category;
-            $this -> branch = $branch;
         }
 
         public function getId(){
@@ -44,9 +38,6 @@
             return $this -> price;
         }
 
-        public function getQuantity(){
-            return $this -> quantity;
-        }
 
         public function getCreatedAt(){
             return $this -> createdAt;
@@ -60,9 +51,7 @@
             return $this -> category;
         }
 
-        public function getBrach(){
-            return $this -> branch;
-        }
+      
        
     }
 

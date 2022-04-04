@@ -1,22 +1,23 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/models/category_model.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/product_model.php';
 
-class CategoryService
+class ProductService
 {
     private $connection;
-    private $tableName = "categories";
+    private $tableName = "products";
 
     public function __construct()
     {
         $this->connection = (new DatabaseConfig())->db_connect();
     }
 
-    public function getAll()
+    public function getAll($category)
     {
         try {
-            $query = "select id, name, avatar from " . $this->tableName . " where status = 0 ORDER BY id DESC";
+            $query = "select id, name, avatar, price from " . $this->tableName . " where status = 0 and category =:category ORDER BY id DESC";
             $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":category", $category);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $data = array();
@@ -26,22 +27,26 @@ class CategoryService
                         "id" => $id,
                         "name" => $name,
                         "avatar" => $avatar,
+                        "price" => $price
                     );
                     array_push($data, $each);
                 }
                 return $data;
+            }else{
+                return false;
             }
         } catch (Exception $e) {
             //throw $th;
-            echo "categories loi getAll(): " . $e->getMessage();
+            echo "products loi getAll(): " . $e->getMessage();
+            return false;
         }
-        return 1001;
+        return false;
     }
 
     public function getByID($id)
     {
         try {
-            $query = "select id, name, avatar from " . $this->tableName . " where id=:id and status = 0";
+            $query = "select id, name, avatar, description, price from " . $this->tableName . " where id=:id and status = 0";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -51,17 +56,19 @@ class CategoryService
                 $data = array(
                     "id" => $id,
                     "name" => $name,
-                    "avatar" => $avatar
+                    "avatar" => $avatar,
+                    "description" => $description,
+                    "price" => $price
                 );
 
                 return $data;
             } else {
-                return 1013;
+                return false;
             }
         } catch (Exception $e) {
             echo "loi getByID(): " . $e->getMessage();
         }
-        return 1001;
+        return false;
     }
 
     public function checkName($name)
@@ -82,17 +89,23 @@ class CategoryService
         return false;
     }
 
-    public function insertItem($category)
+    public function insertItem($product_model,$category_id)
     {
         try {
-            $query = "insert into " . $this->tableName . " set name = :name, avatar = :avatar";
+            $query = "insert into " . $this->tableName . " set name = :name, avatar = :avatar,
+             description = :description, price = :price, category = :category_id";
 
-            $name = $category->getName();
-            $avatar = $category->getAvatar();
+            $name = $product_model->getName();
+            $avatar = $product_model->getAvatar();
+            $description = $product_model->getDescription();
+            $price = $product_model->getPrice();
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":name", $name);
             $stmt->bindParam(":avatar", $avatar);
+            $stmt->bindParam(":description", $description);
+            $stmt->bindParam(":price", $price);
+            $stmt->bindParam(":category_id", $category_id);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 return 1000;
@@ -105,19 +118,26 @@ class CategoryService
         return 1001;
     }
 
-    public function updateItem($category)
+    public function updateItem($product_model,$category_id)
     {
         try {
-            $query = "update " . $this->tableName . " set name = :name, avatar = :avatar where id = :id";
+            $query = "update " . $this->tableName . " set name = :name, avatar = :avatar,
+            description = :description, price = :price, category = :category_id 
+            where id = :id and status = 0";
 
-            $id = $category->getId();
-            $name = $category->getName();
-            $avatar = $category->getAvatar();
+            $id = $product_model->getId();
+            $name = $product_model->getName();
+            $avatar = $product_model->getAvatar();
+            $description = $product_model->getDescription();
+            $price = $product_model->getPrice();
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->bindParam(":name", $name);
             $stmt->bindParam(":avatar", $avatar);
+            $stmt->bindParam(":description", $description);
+            $stmt->bindParam(":price", $price);
+            $stmt->bindParam(":category_id", $category_id);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 return 1000;
