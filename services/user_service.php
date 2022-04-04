@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/models/user.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/user_model.php';
 
 
 class UserService
@@ -9,7 +9,7 @@ class UserService
     private $users = "users";
     public function __construct()
     {
-        $this->db = (new DB())->db_connect();
+        $this->db = (new DatabaseConfig())->db_connect();
     }
 
     public function register($user)

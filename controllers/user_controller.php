@@ -6,7 +6,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/services/user_service.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/PHPMailer-master/src/PHPMailer.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/PHPMailer-master/src/SMTP.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/PHPMailer-master/src/Exception.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/models/user.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/user_model.php';
 
 
 class UserController
