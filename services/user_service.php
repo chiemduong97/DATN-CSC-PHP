@@ -248,7 +248,7 @@ class UserService
 
     public function getUserByEmail($email){
         try{
-            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,status,permission,firstorder from " . $this -> users . " where email=:email";
+            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,firstorder FROM " . $this -> users . " where email=:email";
             $stmt = $this -> db -> prepare($sql);
             $stmt -> bindParam(":email",$email);
             $stmt -> execute();
@@ -302,6 +302,7 @@ class UserService
                                                     birthday=:birthday,
                                                     phone=:phone WHERE email=:email";
             $stmt = $this -> db -> prepare($sql);
+            $fullname = $user -> fullname;
             $birthday = $user -> birthday;
             $phone = $user -> phone;
             $email = $user -> email;
