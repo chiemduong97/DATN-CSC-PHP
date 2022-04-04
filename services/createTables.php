@@ -12,18 +12,18 @@
             try{
                 $sql = "CREATE TABLE IF NOT EXISTS `users` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    `email` VARCHAR(255) NOT NULL,
+                    `email` VARCHAR(255) NOT NULL UNIQUE,
                     `password` VARCHAR(255) NOT NULL,
                     `avatar` VARCHAR(255),
                     `fullname` VARCHAR(255),
                     `phone` VARCHAR(255) NOT NULL,
                     `birthday` VARCHAR(255),
-                    `wallet` DECIMAL(10,2),
+                    `wallet` DECIMAL(10,2) DEFAULT 0 NOT NULL,
                     `status` BIT DEFAULT 1 NOT NULL,
-                    `permission` int(1) DEFAULT 2,
+                    `permission` int(1) DEFAULT 2 NOT NULL,
                     `firstorder` BIT DEFAULT 0 NOT NULL,
-                    `devicetoken` VARCHAR(255) NOT NULL,
-                    `createdAt` DATE DEFAULT NOW() NOT NULL
+                    `devicetoken` VARCHAR(255),
+                    `createdAt` DATETIME DEFAULT NOW() NOT NULL
                 );
                 CREATE TABLE IF NOT EXISTS `categories` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -43,8 +43,8 @@
                     `description` VARCHAR(255) NOT NULL,
                     `price` DECIMAL(10,2) NOT NULL,
                     `quantity` int(11) NOT NULL,
-                    `createdAt` DATE DEFAULT NOW() NOT NULL,
-                    `updatedAt` DATE DEFAULT NOW() NOT NULL,
+                    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
+                    `updatedAt` DATETIME DEFAULT NOW() NOT NULL,
                     `category` int(11) NOT NULL,
                     `branch` int(11) NOT NULL,
                     FOREIGN KEY (`category`) REFERENCES categories(`id`),
@@ -56,7 +56,7 @@
                     `products` VARCHAR(255) NOT NULL,
                     `location` VARCHAR(255) NOT NULL,
                     `amount` DECIMAL(10,2) NOT NULL,
-                    `createdAt` DATE DEFAULT NOW() NOT NULL,
+                    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
                     `status` int(1) DEFAULT 0 NOT NULL,
                     `user` int(11) NOT NULL,
                     FOREIGN KEY (`user`) REFERENCES users(`id`)
@@ -67,9 +67,17 @@
                     `description` VARCHAR(255) NOT NULL,
                     `code` VARCHAR(255) NOT NULL,
                     `status` BIT DEFAULT 1 NOT NULL,
-                    `createdAt` DATE DEFAULT NOW() NOT NULL,
+                    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
                     `start` DATE NOT NULL,
                     `end` DATE NOT NULL
+                );
+                CREATE TABLE IF NOT EXISTS `requests` (
+                    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `email` VARCHAR(255) NOT NULL UNIQUE,
+                    `token` VARCHAR(255) NOT NULL,
+                    `salt` VARCHAR(255) NOT NULL,
+                    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
+                    `available` BIT DEFAULT 1 NOT NULL
                 );";
                 $stmt = $this -> db -> prepare($sql);
             
