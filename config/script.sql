@@ -46,6 +46,16 @@ CREATE TABLE IF NOT EXISTS `quantities` (
     FOREIGN KEY (`product`) REFERENCES products(`id`),
     FOREIGN KEY (`branch`) REFERENCES branches(`id`)
 );
+CREATE TABLE IF NOT EXISTS `promotions` (
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `avatar` VARCHAR(255) NOT NULL,
+    `description` VARCHAR(255) NOT NULL,
+    `code` VARCHAR(255) NOT NULL,
+    `status` BIT DEFAULT 1 NOT NULL,
+    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
+    `start` DATE NOT NULL,
+    `end` DATE NOT NULL
+);
 CREATE TABLE IF NOT EXISTS `orders` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ordercode` VARCHAR(6) NOT NULL,
@@ -60,16 +70,6 @@ CREATE TABLE IF NOT EXISTS `orders` (
     FOREIGN KEY (`user`) REFERENCES users(`id`),
     FOREIGN KEY (`branch`) REFERENCES branches(`id`),
     FOREIGN KEY (`promotion`) REFERENCES promotions(`id`)
-);
-CREATE TABLE IF NOT EXISTS `promotions` (
-    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `avatar` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `code` VARCHAR(255) NOT NULL,
-    `status` BIT DEFAULT 1 NOT NULL,
-    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
-    `start` DATE NOT NULL,
-    `end` DATE NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `requests` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
