@@ -15,7 +15,7 @@ class CategoryService
     public function getAll()
     {
         try {
-            $query = "select id, name, avatar from " . $this->tableName . " where status = 0 ORDER BY id DESC";
+            $query = "select id, name, avatar from " . $this->tableName . " where status = 1 ORDER BY id DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
