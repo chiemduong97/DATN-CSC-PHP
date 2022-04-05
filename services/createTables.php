@@ -29,12 +29,13 @@
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     `name` VARCHAR(255) NOT NULL UNIQUE,
                     `avatar` VARCHAR(255) NOT NULL,
-                    `status` int(1) DEFAULT 0 NOT NULL
+                    `status` int(1) DEFAULT 1 NOT NULL
                 );
                 CREATE TABLE IF NOT EXISTS `branches` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     `name` VARCHAR(255) NOT NULL UNIQUE,
-                    `location` VARCHAR(255) NOT NULL
+                    `location` VARCHAR(255) NOT NULL,
+                    `status` int(1) DEFAULT 1 NOT NULL
                 );
                 CREATE TABLE IF NOT EXISTS `products` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -44,7 +45,7 @@
                     `price` DECIMAL(10,2) NOT NULL,
                     `quantity` int(11) NOT NULL,
                     `createdAt` DATETIME DEFAULT NOW() NOT NULL,
-                    `updatedAt` DATETIME DEFAULT NOW() NOT NULL,
+                    `updatedAt` DATETIME NOT NULL,
                     `category` int(11) NOT NULL,
                     `branch` int(11) NOT NULL,
                     FOREIGN KEY (`category`) REFERENCES categories(`id`),
@@ -59,7 +60,11 @@
                     `createdAt` DATETIME DEFAULT NOW() NOT NULL,
                     `status` int(1) DEFAULT 0 NOT NULL,
                     `user` int(11) NOT NULL,
-                    FOREIGN KEY (`user`) REFERENCES users(`id`)
+                    `branch` int(11) NOT NULL,
+                    `promotion` int(11) NOT NULL,
+                    FOREIGN KEY (`user`) REFERENCES users(`id`),
+                    FOREIGN KEY (`branch`) REFERENCES branches(`id`),
+                    FOREIGN KEY (`promotion`) REFERENCES promotions(`id`)
                 );
                 CREATE TABLE IF NOT EXISTS `promotions` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
