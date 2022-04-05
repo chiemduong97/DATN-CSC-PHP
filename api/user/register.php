@@ -12,6 +12,7 @@
     $email = $_POST["email"];
     $password = $_POST["password"];
     $phone = $_POST["phone"];
+    $fullname = $_POST["fullname"];
 
 
     $token = array(
@@ -23,7 +24,7 @@
     );
     $jwt = JWT::encode($token,123);
 
-    $data = (new UserController()) -> register($phone,$email,$password,"2");
+    $data = (new UserController()) -> register($fullname,$phone,$email,$password,"2");
     if($data == 1000){
         echo json_encode(array(
             "status"=>true,

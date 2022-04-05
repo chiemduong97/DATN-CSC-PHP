@@ -19,17 +19,19 @@ class UserService
             $stmt = $this->db->prepare($sql);
             $email = $user->getEmail();
             $password = $user->getPassword();
+            $fullname = $user->getFullname();
             $phone = $user->getPhone();
             $permission = $user->getPermission();
             $stmt->bindParam(":email", $email);
             $this->db->beginTransaction();
             if ($stmt->execute()) {
                 $this->db->commit();
-                $sql = "insert into " . $this->users . " set email=:email,password=:password,phone=:phone,permission=:permission";
+                $sql = "insert into " . $this->users . " set email=:email,password=:password,fullname=:fullname,phone=:phone,permission=:permission";
                 $stmt = $this->db->prepare($sql);
                
                 $stmt->bindParam(":email", $email);
                 $stmt->bindParam(":password", $password);
+                $stmt->bindParam(":fullname", $fullname);
                 $stmt->bindParam(":phone", $phone);
                 $stmt->bindParam(":permission", $permission);
                 $this->db->beginTransaction();

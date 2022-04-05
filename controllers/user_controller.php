@@ -25,10 +25,10 @@ class UserController
         return $this -> service -> getUserByEmail($email);
     }
 
-    public function register($phone, $email, $password, $permission)
+    public function register($fullname,$phone, $email, $password, $permission)
     {
         $hash = password_hash($password, PASSWORD_BCRYPT);
-        $user = new User(null, $email, $hash, null, null, null, $phone, null, $permission, null, null, null,null);
+        $user = new User(null, $email, $hash, null, $fullname, null, $phone, null, $permission, null, null, null,null);
         $result = $this->service->register($user);
         return $result;
     }
