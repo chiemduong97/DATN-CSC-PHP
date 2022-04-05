@@ -35,10 +35,19 @@ CREATE TABLE IF NOT EXISTS `products` (
     `price` DECIMAL(10,2) NOT NULL,
     `createdAt` DATE DEFAULT NOW() NOT NULL,
     `updatedAt` DATE NOT NULL,
-    `status` int(1) DEFAULT 0 NOT NULL,
+    `status` int(1) DEFAULT 1 NOT NULL,
     `category` int(11) NOT NULL,
     FOREIGN KEY (`category`) REFERENCES categories(`id`)
 );
+
+CREATE TABLE IF NOT EXISTS `quantities` (
+    `quantity` int(11) NOT NULL,
+    `product` int(11) NOT NULL,
+    `branch` int(11) NOT NULL,
+    FOREIGN KEY (`product`) REFERENCES products(`id`),
+    FOREIGN KEY (`branch`) REFERENCES branches(`id`)
+);
+
 CREATE TABLE IF NOT EXISTS `orders` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `ordercode` VARCHAR(6) NOT NULL,

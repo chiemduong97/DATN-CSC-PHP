@@ -47,6 +47,7 @@
                     `updatedAt` DATETIME NOT NULL,
                     `category` int(11) NOT NULL,
                     `branch` int(11) NOT NULL,
+                    `status` int(1) DEFAULT 1 NOT NULL,
                     FOREIGN KEY (`category`) REFERENCES categories(`id`),
                     FOREIGN KEY (`branch`) REFERENCES branches(`id`)
                 );
