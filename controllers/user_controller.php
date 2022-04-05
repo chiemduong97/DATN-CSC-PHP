@@ -100,9 +100,9 @@ class UserController
         return 1001;
     }
 
-    public function vertification($email, $code)
+    public function verification($email, $code)
     {
-        return $this->service->vertification($email, $code);
+        return $this->service->verification($email, $code);
     }
 
     public function resetPassword($email, $password)

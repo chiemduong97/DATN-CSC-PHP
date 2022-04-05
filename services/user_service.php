@@ -88,7 +88,7 @@ class UserService
         return null;
     }
 
-    public function vertification($email, $code)
+    public function verification($email, $code)
     {
         try {
             date_default_timezone_set('Asia/Ho_Chi_Minh');

@@ -4,7 +4,7 @@
     (new CF_Header()) -> config("POST");
     $email = $_POST["email"];
     $code = $_POST["code"];
-    $data = (new UserController()) -> vertification($email,$code);
+    $data = (new UserController()) -> verification($email,$code);
     if($data == 1000){
         echo json_encode(array(
             "status"=>true
