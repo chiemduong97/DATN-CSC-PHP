@@ -1,5 +1,5 @@
 <?php 
-    include_once $_SERVER['DOCUMENT_ROOT'].'/services/product/product_service.php';
+    include_once $_SERVER['DOCUMENT_ROOT'].'/services/product_service.php';
 
     class ProductController{
         private $service;

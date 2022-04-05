@@ -1,13 +1,11 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'].'/config/configHeader.php'; 
-include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/product/product_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/product_controller.php';
 
-    (new CF_Header()) -> config("POST");
+    (new CF_Header()) -> config("GET");
 
-    $body = json_decode(file_get_contents("php://input"));
-
-    if(property_exists($body, 'category')){
-        $category = $body->category;
+    if($_GET['category'] != null) {
+        $category = $_GET['category'];
         $data = (new ProductController()) -> getAll($category);
     
         if($data){

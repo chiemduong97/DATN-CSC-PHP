@@ -15,7 +15,7 @@ class CategoryService
     public function getAll()
     {
         try {
-            $query = "select id, name, avatar from " . $this->tableName . " where status = 0 ORDER BY id DESC";
+            $query = "select id, name, avatar from " . $this->tableName . " where status = 1 ORDER BY id DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
@@ -31,9 +31,13 @@ class CategoryService
                 }
                 return $data;
             }
+            else {
+                return 1001;
+            }
         } catch (Exception $e) {
             //throw $th;
             echo "categories loi getAll(): " . $e->getMessage();
+            return 1001;
         }
         return 1001;
     }
@@ -41,7 +45,7 @@ class CategoryService
     public function getByID($id)
     {
         try {
-            $query = "select id, name, avatar from " . $this->tableName . " where id=:id and status = 0";
+            $query = "select id, name, avatar from " . $this->tableName . " where id=:id and status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -56,10 +60,11 @@ class CategoryService
 
                 return $data;
             } else {
-                return 1013;
+                return 1001;
             }
         } catch (Exception $e) {
             echo "loi getByID(): " . $e->getMessage();
+            return 1001;
         }
         return 1001;
     }
@@ -67,7 +72,7 @@ class CategoryService
     public function checkName($name)
     {
         try {
-            $query = "select id from " . $this->tableName . " where name=:name and status = 0";
+            $query = "select id from " . $this->tableName . " where name=:name and status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":name", $name);
             $stmt->execute();
@@ -101,6 +106,7 @@ class CategoryService
             }
         } catch (Exception $e) {
             throw $e;
+            return 1001;
         }
         return 1001;
     }
@@ -108,7 +114,8 @@ class CategoryService
     public function updateItem($category)
     {
         try {
-            $query = "update " . $this->tableName . " set name = :name, avatar = :avatar where id = :id";
+            $query = "update " . $this->tableName . " 
+            set name = :name, avatar = :avatar where id = :id and status = 1";
 
             $id = $category->getId();
             $name = $category->getName();
@@ -152,7 +159,7 @@ class CategoryService
     public function checkRemove($id)
     {
         try {
-            $query = "select id from " . $this->tableName . " where id=:id and status = 0";
+            $query = "select id from " . $this->tableName . " where id=:id and status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -167,4 +174,3 @@ class CategoryService
         return false;
     }
 }
-?>

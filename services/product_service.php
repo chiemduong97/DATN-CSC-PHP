@@ -15,7 +15,7 @@ class ProductService
     public function getAll($category)
     {
         try {
-            $query = "select id, name, avatar, price from " . $this->tableName . " where status = 0 and category =:category ORDER BY id DESC";
+            $query = "select id, name, avatar, price from " . $this->tableName . " where status = 1 and category =:category ORDER BY id DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":category", $category);
             $stmt->execute();
@@ -46,7 +46,7 @@ class ProductService
     public function getByID($id)
     {
         try {
-            $query = "select id, name, avatar, description, price from " . $this->tableName . " where id=:id and status = 0";
+            $query = "select id, name, avatar, description, price from " . $this->tableName . " where id=:id and status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -74,7 +74,7 @@ class ProductService
     public function checkName($name)
     {
         try {
-            $query = "select id from " . $this->tableName . " where name=:name and status = 0";
+            $query = "select id from " . $this->tableName . " where name=:name and status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":name", $name);
             $stmt->execute();
@@ -123,7 +123,7 @@ class ProductService
         try {
             $query = "update " . $this->tableName . " set name = :name, avatar = :avatar,
             description = :description, price = :price, category = :category_id 
-            where id = :id and status = 0";
+            where id = :id and status = 1";
 
             $id = $product_model->getId();
             $name = $product_model->getName();
@@ -153,7 +153,7 @@ class ProductService
     public function removeItem($id)
     {
         try {
-            $query = "update " . $this->tableName . " set status = 1 where id = :id";
+            $query = "update " . $this->tableName . " set status = 0 where id = :id";
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
@@ -172,7 +172,7 @@ class ProductService
     public function checkRemove($id)
     {
         try {
-            $query = "select id from " . $this->tableName . " where id=:id and status = 0";
+            $query = "select id from " . $this->tableName . " where id=:id and status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();

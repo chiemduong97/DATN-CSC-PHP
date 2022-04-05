@@ -1,16 +1,14 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'].'/config/configHeader.php'; 
-include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/category/category_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/category_controller.php';
 
-    (new CF_Header()) -> config("POST");
+    (new CF_Header()) -> config("GET");
 
-    $body = json_decode(file_get_contents("php://input"));
-
-    if(property_exists($body, 'id')){
-        $category_id = $body->id;
-        $data = (new CategoryController()) -> getByID($category_id);
+    if($_GET['id'] != null) {
+        $id = $_GET['id'];
+        $data = (new CategoryController()) -> getByID($id);
     
-        if($data){
+        if($data != 1001){
             echo json_encode($data);
         }else{
             echo json_encode(array(
@@ -24,6 +22,4 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/category/category_controlle
             "code"=>1013
         ));
     }
-
-    
 ?>

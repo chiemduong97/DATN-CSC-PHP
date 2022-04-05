@@ -1,5 +1,5 @@
 <?php 
-    include_once $_SERVER['DOCUMENT_ROOT'].'/services/category/category_service.php';
+    include_once $_SERVER['DOCUMENT_ROOT'].'/services/category_service.php';
 
     class CategoryController{
         private $service;
