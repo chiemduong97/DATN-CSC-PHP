@@ -43,12 +43,18 @@
                     `avatar` VARCHAR(255) NOT NULL,
                     `description` VARCHAR(255) NOT NULL,
                     `price` DECIMAL(10,2) NOT NULL,
-                    `quantity` int(11) NOT NULL,
                     `createdAt` DATETIME DEFAULT NOW() NOT NULL,
                     `updatedAt` DATETIME NOT NULL,
                     `category` int(11) NOT NULL,
                     `branch` int(11) NOT NULL,
                     FOREIGN KEY (`category`) REFERENCES categories(`id`),
+                    FOREIGN KEY (`branch`) REFERENCES branches(`id`)
+                );
+                CREATE TABLE IF NOT EXISTS `quantities` (
+                    `quantity` int(11) NOT NULL,
+                    `product` int(11) NOT NULL,
+                    `branch` int(11) NOT NULL,
+                    FOREIGN KEY (`product`) REFERENCES products(`id`),
                     FOREIGN KEY (`branch`) REFERENCES branches(`id`)
                 );
                 CREATE TABLE IF NOT EXISTS `orders` (
