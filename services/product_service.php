@@ -12,7 +12,7 @@ class ProductService
         $this->connection = (new DatabaseConfig())->db_connect();
     }
 
-    public function getAll($category)
+    public function getByCategory($category)
     {
         try {
             $query = "select id, name, avatar, price from " . $this->tableName . " where status = 1 and category =:category ORDER BY id DESC";

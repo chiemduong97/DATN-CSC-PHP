@@ -6,7 +6,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/product_controller.php';
 
     if($_GET['category'] != null) {
         $category = $_GET['category'];
-        $data = (new ProductController()) -> getAll($category);
+        $data = (new ProductController()) -> getByCategory($category);
     
         if($data){
             echo json_encode($data);
