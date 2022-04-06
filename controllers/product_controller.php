@@ -41,5 +41,12 @@
                 return 1014;
             }
         }
+
+        public function getProductsWithPageByCategoryAndBranch($category, $branch,$page) {
+            return $this->service->getProductsWithPageByCategoryAndBranch($category, $branch,$page);
+        }
+        public function getTotalPages($category, $branch) {
+            return $this->service->getTotalPages($category, $branch);
+        }
     }
 ?> 
