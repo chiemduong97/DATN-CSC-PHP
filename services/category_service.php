@@ -6,6 +6,7 @@ class CategoryService
 {
     private $connection;
     private $tableName = "categories";
+    private $totalPostInPage = 10;
 
     public function __construct()
     {
@@ -172,5 +173,56 @@ class CategoryService
             echo "loi getByID(): " . $e->getMessage();
         }
         return false;
+    }
+
+    
+    public function getCategoriesWithPage($page = 1)
+    {
+        try {
+            $page -= 1;
+            $start = $page * $this->totalPostInPage;
+            $query = "select id, name, avatar from " . $this->tableName . " where status = 1 ORDER BY id DESC LIMIT :start , :total";
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $this->totalPostInPage, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                $data = array();
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar
+                    );
+                    array_push($data, $each);
+                }
+                return $data;
+            }
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+        }
+        return null;
+    }
+
+    public function getTotalPagesCategories()
+    {
+        try {
+            $query = "select COUNT(id) as total FROM " . $this->tableName ." where status = 1";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $this->totalPostInPage);
+                return $totalPage;
+            }
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+        }
+        return null;
     }
 }

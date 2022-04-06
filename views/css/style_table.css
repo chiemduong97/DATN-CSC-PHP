@@ -1,0 +1,105 @@
+.containerTable {
+  position: relative;
+  /* margin: 100px auto 100px; */
+  min-height: 100vh;
+  background: #23252b;
+}
+
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 150px auto 50px auto;
+}
+
+#customers td,
+#customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  color: white;
+}
+
+#customers tr:nth-child(even) {
+  background-color: #8a8b8c;
+}
+
+#customers tr:hover {
+  background-color: #ddd;
+}
+#customers tr:hover td {
+  color: black;
+}
+#customers tr:hover th {
+  color: black;
+}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4080ef;
+  color: white;
+}
+
+.colFixed {
+  width: 10%;
+}
+
+#customers .tdAction {
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+}
+
+#customers .tdAction .btnEdit {
+  background-color: #4080ef;
+  padding-left: 20%;
+  border-radius: 5px;
+}
+#customers .tdAction .btnEdit:hover {
+  padding-left: 28%;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+#customers .tdAction .btnDelete {
+  background-color: red;
+  padding-right: 20%;
+  border-radius: 5px;
+}
+#customers .tdAction .btnDelete:hover {
+  padding-right: 28%;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.selectCategory{
+  margin: 100px auto -120px auto;
+}
+.selectCategory label, .selectBranch label{
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+}
+.selectBranch{
+  margin: 90px 350px -120px;
+}
+
+.selectCategory select, .selectBranch select{
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.btnFind {
+  outline: 0;
+	border-radius: 5px;
+	background: #136AF2;
+	border: 0;
+	padding: 3px 7px;
+	color: #FFFFFF;
+	font-size: 16px;
+  letter-spacing: 1px;
+	cursor: pointer;
+	margin-left: 10px;
+}
+.btnFind:hover{
+  background: #0243aa;
+}

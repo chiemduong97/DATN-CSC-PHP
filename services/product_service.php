@@ -6,6 +6,7 @@ class ProductService
 {
     private $connection;
     private $tableName = "products";
+    private $totalPostInPage = 10;
 
     public function __construct()
     {
@@ -189,6 +190,71 @@ class ProductService
             echo "loi getByID(): " . $e->getMessage();
         }
         return false;
+    }
+
+    public function getProductsWithPageByCategoryAndBranch($category = 1, $branch = 1,$page = 1)
+    {
+        try {
+            $page -= 1;
+            $start = $page * $this->totalPostInPage;
+
+            $query = 
+            "SELECT products.id, products.name, products.avatar, products.description, 
+                products.price, quantities.quantity
+                FROM  " . $this->tableName . " INNER JOIN quantities ON products.id = quantities.product
+                WHERE products.category = :category and quantities.branch = :branch and products.status = 1 
+                ORDER BY id DESC LIMIT :start , :total";
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':category', $category, PDO::PARAM_INT);
+            $stmt->bindParam(':branch', $branch, PDO::PARAM_INT);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $this->totalPostInPage, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                $data = array();
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar,
+                        "description" => $description,
+                        "price" => $price,
+                        "quantity" => $quantity
+                    );
+                    array_push($data, $each);
+                }
+                return $data;
+            }
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+        }
+        return null;
+    }
+
+    public function getTotalPages($category = 1, $branch = 1)
+    {
+        try {
+            $query = "select COUNT(id) as total FROM " . $this->tableName ." 
+                INNER JOIN quantities ON products.id = quantities.product
+                WHERE products.category = :category and quantities.branch = :branch and products.status = 1 ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':category', $category, PDO::PARAM_INT); 
+            $stmt->bindParam(':branch', $branch, PDO::PARAM_INT); 
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $this->totalPostInPage);
+                return $totalPage;
+            }
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+        }
+        return null;
     }
 }
 ?>

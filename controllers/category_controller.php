@@ -3,6 +3,8 @@
 
     class CategoryController{
         private $service;
+        
+
 
         public function __construct(){
             $this->service = new CategoryService();
@@ -43,5 +45,12 @@
             }
 
         }
-    }
+        public function getCategoriesWithPage($page = 1) {
+            return $this->service->getCategoriesWithPage($page);
+        }
+        public function getTotalPagesCategories() {
+            return $this->service->getTotalPagesCategories();
+        }
+
+}
 ?> 
