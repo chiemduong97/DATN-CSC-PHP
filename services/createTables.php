@@ -44,12 +44,10 @@
                     `description` VARCHAR(255) NOT NULL,
                     `price` DECIMAL(10,2) NOT NULL,
                     `createdAt` DATETIME DEFAULT NOW() NOT NULL,
-                    `updatedAt` DATETIME NOT NULL,
+                    `updatedAt` DATETIME,
                     `category` int(11) NOT NULL,
-                    `branch` int(11) NOT NULL,
                     `status` int(1) DEFAULT 1 NOT NULL,
-                    FOREIGN KEY (`category`) REFERENCES categories(`id`),
-                    FOREIGN KEY (`branch`) REFERENCES branches(`id`)
+                    FOREIGN KEY (`category`) REFERENCES categories(`id`)
                 );
                 CREATE TABLE IF NOT EXISTS `quantities` (
                     `quantity` int(11) NOT NULL,
