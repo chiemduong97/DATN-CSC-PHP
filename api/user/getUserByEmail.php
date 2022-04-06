@@ -11,10 +11,4 @@
         $data = (new UserController()) -> getUserByEmail($email);
         echo json_encode($data);
     }
-    else
-    {
-        echo json_encode(array(
-            "status"=>false,
-        ));
-    }   
 ?>

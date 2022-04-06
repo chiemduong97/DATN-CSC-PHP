@@ -32,14 +32,14 @@ class CategoryService
                 return $data;
             }
             else {
-                return 1001;
+                return null;
             }
         } catch (Exception $e) {
             //throw $th;
             echo "categories loi getAll(): " . $e->getMessage();
-            return 1001;
+            return null;
         }
-        return 1001;
+        return null;
     }
 
     public function getByID($id)

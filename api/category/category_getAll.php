@@ -1,17 +1,15 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'].'/config/configHeader.php'; 
 include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/category_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'].'/authen/authen.php';
 
-    (new CF_Header()) -> config("GET");
-
-    $data = (new CategoryController()) -> getAll();
-    
-    if($data != 1001){
+    $authen = new Authen();
+    if ($authen->checkToken()) {
+        (new CF_Header()) -> config("GET");
+        $data = (new CategoryController()) -> getAll();
         echo json_encode($data);
-    }else{
-        echo json_encode(array(
-            "status"=>false,
-            "code"=>$data
-        ));
+    } else {
+        echo null;
     }
+    
 ?>
