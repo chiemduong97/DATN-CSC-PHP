@@ -2,11 +2,15 @@
     class Branch{
         private $id;
         private $name;
-        private $location;
-        function __construct($id,$name,$location){
+        private $latitude;
+        private $longitude;
+        private $address;
+        function __construct($id,$name,$latitude,$longitude,$address){
             $this -> id = $id;
             $this -> name = $name;
-            $this -> location = $location;
+            $this -> latitude = $latitude;
+            $this -> longitude = $longitude;
+            $this -> address = $address;
         }
 
         public function getId(){
@@ -17,8 +21,16 @@
             return $this -> name;
         }
 
-        public function getLocation(){
-            return $this -> location;
+        public function getLatitude(){
+            return $this -> latitude;
+        }
+
+        public function getLongitude(){
+            return $this -> longitude;
+        }
+
+        public function getAddress() {
+            return $this -> address;
         }
     }
 
