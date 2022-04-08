@@ -15,7 +15,7 @@ class BranchService
     public function getAll()
     {
         try {
-            $query = "select id, name, location from " . $this->tableName . " where status = 1 ORDER BY id DESC";
+            $query = "select id, name, latitude, longitude, address from " . $this->tableName . " where status = 1 ORDER BY id DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
@@ -25,7 +25,9 @@ class BranchService
                     $each = array(
                         "id" => $id,
                         "name" => $name,
-                        "location" => $location
+                        "latitude" => $latitude,
+                        "longitude" => $longitude,
+                        "address" => $address,
                     );
                     array_push($data, $each);
                 }

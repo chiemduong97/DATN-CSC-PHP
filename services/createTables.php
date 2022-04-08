@@ -34,7 +34,9 @@
                 CREATE TABLE IF NOT EXISTS `branches` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     `name` VARCHAR(255) NOT NULL UNIQUE,
-                    `location` VARCHAR(255) NOT NULL,
+                    `latitude` DECIMAL(10,10) NOT NULL,
+                    `longitude` DECIMAL(10,10) NOT NULL,
+                    `address` VARCHAR(255) NOT NULL,
                     `status` int(1) DEFAULT 1 NOT NULL
                 );
                 CREATE TABLE IF NOT EXISTS `products` (

@@ -16,7 +16,7 @@ class ProductService
     public function getByCategory($category)
     {
         try {
-            $query = "select id, name, avatar, price from " . $this->tableName . " where status = 1 and category =:category ORDER BY id DESC";
+            $query = "select id, name, avatar, price, description, createdAt, updatedAt, category from " . $this->tableName . " where status = 1 and category =:category ORDER BY id DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":category", $category);
             $stmt->execute();
@@ -28,20 +28,24 @@ class ProductService
                         "id" => $id,
                         "name" => $name,
                         "avatar" => $avatar,
-                        "price" => $price
+                        "price" => $price,
+                        "description" => $description,
+                        "createdAt" => $createdAt,
+                        "updatedAt" => $updatedAt,
+                        "category" => $category
                     );
                     array_push($data, $each);
                 }
                 return $data;
             }else{
-                return false;
+                return null;
             }
         } catch (Exception $e) {
             //throw $th;
             echo "products loi getAll(): " . $e->getMessage();
-            return false;
+            return null;
         }
-        return false;
+        return null;
     }
 
     public function getByID($id)
