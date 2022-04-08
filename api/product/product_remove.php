@@ -4,10 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/product_controller.php';
 
     (new CF_Header()) -> config("POST");
 
-    $body = json_decode(file_get_contents("php://input"));
-
-    if(property_exists($body, 'id')){
-        $id = $body->id;
+    if($_POST["id"]!= null){
+        $id = $_POST["id"];
       
         $data = (new ProductController()) -> removeItem($id);
     

@@ -70,11 +70,12 @@ class CategoryService
         return 1001;
     }
 
-    public function checkName($name)
+    public function checkName($id = 0, $name)
     {
         try {
-            $query = "select id from " . $this->tableName . " where name=:name and status = 1";
+            $query = "select id from " . $this->tableName . " where name=:name and status = 1 and id <> :id";
             $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":id", $id);
             $stmt->bindParam(":name", $name);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
@@ -141,7 +142,7 @@ class CategoryService
     public function removeItem($id)
     {
         try {
-            $query = "update " . $this->tableName . " set status = 1 where id = :id";
+            $query = "update " . $this->tableName . " set status = 0 where id = :id";
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);

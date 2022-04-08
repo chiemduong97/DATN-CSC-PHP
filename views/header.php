@@ -3,6 +3,7 @@
 <script src="js/scroll_navigation.js"></script>
 <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
 <link rel="stylesheet" href="css/style_table.css">
+<link rel="stylesheet" href="css/style_update_form.css">
 <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 <header>
     <a href="/views/home.php" class="logo">logo</a>

@@ -19,7 +19,7 @@
         public function insertItem($name = "chua co ten", $avatar = "https://cdn.pixabay.com/photo/2014/04/02/10/25/man-303792_960_720.png") {
             $category = new Category(null,$name, $avatar);
 
-            if($this->service->checkName($name)){
+            if($this->service->checkName($id = 0,$name)){
                 return 1011;
             }else{
                 return $this->service->insertItem($category);
@@ -29,7 +29,7 @@
         public function updateItem($id, $name, $avatar) {
             $category = new Category($id,$name, $avatar);
 
-            if($this->service->checkName($name)){
+            if($this->service->checkName($id,$name)){
                 return 1011;
             }else{
                 return $this->service->updateItem($category);

@@ -7,6 +7,7 @@ $db = new ProductController();
 $dbCategory = new CategoryController();
 $dbBranch = new BranchController();
 
+
 session_start();
 
 if (empty($_SESSION['email'])) {
@@ -32,7 +33,7 @@ if (!empty($_GET['page'])) {
         $currentPage = $_GET['page'];
 }
 
-$products = $db->getProductsWithPageByCategoryAndBranch($categoryId, $branchId,$currentPage);
+$products = $db->getProductsWithPageByCategoryAndBranch($categoryId, $branchId, $currentPage);
 $totalPage =  $db->getTotalPages($categoryId, $branchId);
 
 $categories = $dbCategory->getAll();
@@ -70,7 +71,7 @@ $branches = $dbBranch->getAll();
                     <?php endforeach; ?>
                 <?php endif; ?>
             </select>
-            <button class="btnFind" onclick="findByCategoryAndBranch()" >Find</button>
+            <button class="btnFind" onclick="findByCategoryAndBranch()">Find</button>
         </div>
 
         <div class="selectBranch">
@@ -86,7 +87,7 @@ $branches = $dbBranch->getAll();
                     <?php endforeach; ?>
                 <?php endif; ?>
             </select>
-            <button class="btnFind" onclick="findByCategoryAndBranch()" >Find</button>
+            <button class="btnFind" onclick="findByCategoryAndBranch()">Find</button>
         </div>
 
         <table id="customers">
@@ -113,8 +114,8 @@ $branches = $dbBranch->getAll();
                             <td><?php echo $product['quantity']; ?></td>
                             <td><img src=<?= $product['avatar']; ?> width="50" height="50" /></td>
                             <td class="tdAction">
-                                <a class="btnEdit" href="#"><i class="uil uil-edit-alt"></i></a>
-                                <a class="btnDelete" href="#" onclick="return confirm('Are you sure ?');">
+                                <a class="btnEdit"><i class="uil uil-edit-alt"></i></a>
+                                <a class="btnDelete" onclick="remove(<?php echo $product['id']; ?>);">
                                     <i class="uil uil-times-circle"></i>
                                 </a>
                             </td>
@@ -141,7 +142,25 @@ $branches = $dbBranch->getAll();
         var category = document.getElementById('category').value;
         var branch = document.getElementById('branch').value;
         window.location.assign("http://127.0.0.1:8686/views/product.php?categoryId=" + category +
-         "&branchId=" + branch);
+            "&branchId=" + branch);
+    }
+
+    function remove($id) {
+        var url = 'http://127.0.0.1:8686/api/product/product_remove.php';
+        var formData = new FormData();
+        formData.append('id', $id);
+
+        fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(function(response) {
+                return response.text();
+            })
+            .then(function(body) {
+                console.log(body);
+            });
+         window.location.reload();   
     }
 </script>
 

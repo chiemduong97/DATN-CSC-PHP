@@ -70,6 +70,23 @@
   padding-right: 28%;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
+.btnNew{
+   
+    position: absolute;
+    top: 15%;
+    right: 8%;
+    border-radius: 5px;
+    background-color: #136AF2;
+    text-align: center;
+    font-size: 16px;
+    padding: 6px 24px;
+    color: white;
+}
+
+.btnNew:hover{ 
+  background-color: #73e9c1;
+  color: black;
+}
 .selectCategory{
   margin: 100px auto -120px auto;
 }
