@@ -15,7 +15,12 @@
             return $this->service->getByID($id);
         }
         public function insertItem($name, $avatar, $description, $price, $category) {
-            $product = new Product(null,$name, $avatar, $description, $price, $category);
+            $product = new Product();
+            $product -> name = $name;
+            $product -> avatar = $avatar;
+            $product -> description = $description;
+            $product -> price = $price;
+            $product -> category = $category;
 
             if($this->service->checkName($name)){
                 return 1011;
@@ -25,7 +30,13 @@
             
         }
         public function updateItem($id, $name, $avatar, $description, $price, $category) {
-            $product = new Product($id,$name, $avatar, $description, $price, $category);
+            $product = new Product();
+            $product -> id = $id;
+            $product -> name = $name;
+            $product -> avatar = $avatar;
+            $product -> description = $description;
+            $product -> price = $price;
+            $product -> category = $category;
 
             if($this->service->checkName($name)){
                 return 1011;

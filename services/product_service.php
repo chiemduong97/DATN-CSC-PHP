@@ -100,10 +100,10 @@ class ProductService
             $query = "insert into " . $this->tableName . " set name = :name, avatar = :avatar,
              description = :description, price = :price, category = :category_id";
 
-            $name = $product_model->getName();
-            $avatar = $product_model->getAvatar();
-            $description = $product_model->getDescription();
-            $price = $product_model->getPrice();
+            $name = $product_model->name;
+            $avatar = $product_model->avtar;
+            $description = $product_model->description;
+            $price = $product_model->price;
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":name", $name);
@@ -130,11 +130,11 @@ class ProductService
             description = :description, price = :price, category = :category_id 
             where id = :id and status = 1";
 
-            $id = $product_model->getId();
-            $name = $product_model->getName();
-            $avatar = $product_model->getAvatar();
-            $description = $product_model->getDescription();
-            $price = $product_model->getPrice();
+            $id = $product_model->id;
+            $name = $product_model->name;
+            $avatar = $product_model->avatar;
+            $description = $product_model->description;
+            $price = $product_model->price;
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);

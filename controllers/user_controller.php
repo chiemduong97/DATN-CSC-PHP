@@ -28,7 +28,12 @@ class UserController
     public function register($fullname,$phone, $email, $password, $permission)
     {
         $hash = password_hash($password, PASSWORD_BCRYPT);
-        $user = new User(null, $email, $hash, null, $fullname, null, $phone, null, $permission, null, null, null,null);
+        $user = new User();
+        $user -> email = $email;
+        $user -> password = $hash;
+        $user -> fullname = $fullname;
+        $user -> phone = $phone;
+        $user -> permission = $permission;
         $result = $this->service->register($user);
         return $result;
     }
@@ -37,9 +42,9 @@ class UserController
     {
         $user = $this->service->getByEmail($email);
         if ($user) {
-            $check = password_verify($password, $user->getPassword());
+            $check = password_verify($password, $user->password);
             if ($check) {
-                if ($user->getStatus() == 0) {
+                if ($user->status == 0) {
                     return 1005;
                 } else {
                     return 1000;
@@ -111,7 +116,9 @@ class UserController
     }
 
     public function updateAvatar($email,$avatar){
-        $user = new User(null,$email,null,$avatar,null,null,null,null,null,null,null,null,null);
+        $user = new User();
+        $user -> email = $email;
+        $user -> avatar = $avatar;
         return $this -> service -> updateAvatar($user);
     }
 
@@ -122,10 +129,12 @@ class UserController
     public function updatePass($email,$oldpassword,$newpassword){
         $user = $this -> service -> getByEmail($email);
         if($user){
-            $check = password_verify($oldpassword,$user -> getPassword());
+            $check = password_verify($oldpassword,$user -> password);
             if($check){
                 $hash = password_hash($newpassword,PASSWORD_BCRYPT);
-                $user = new User(null,$email,$hash,null,null,null,null,null,null,null,null,null,null);
+                $user = new User();
+                $user -> email = $email;
+                $user -> password = $hash;
                 return $this -> service -> updatePass($user);
             }
             else{

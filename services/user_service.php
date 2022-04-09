@@ -17,11 +17,11 @@ class UserService
         try {
             $sql = 'UPDATE requests SET available=0 WHERE email=:email';
             $stmt = $this->db->prepare($sql);
-            $email = $user->getEmail();
-            $password = $user->getPassword();
-            $fullname = $user->getFullname();
-            $phone = $user->getPhone();
-            $permission = $user->getPermission();
+            $email = $user->email();
+            $password = $user->password();
+            $fullname = $user->fullname();
+            $phone = $user->phone();
+            $permission = $user->permission();
             $stmt->bindParam(":email", $email);
             $this->db->beginTransaction();
             if ($stmt->execute()) {
@@ -80,7 +80,21 @@ class UserService
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 extract(array($row));
-                return new User($row["id"], $row["email"], $row["password"], $row["avatar"], $row["fullname"], $row["birthday"], $row["phone"], $row["status"], $row["permission"], $row["firstorder"], $row["wallet"], $row["devicetoken"], $row["createdAt"]);
+                $user = new User();
+                $user -> id = $row["id"];
+                $user -> email = $row["email"];
+                $user -> password = $row["password"];
+                $user -> avatar = $row["avatar"];
+                $user -> fullname = $row["fullname"];
+                $user -> birthday = $row["birthday"];
+                $user -> phone = $row["phone"];
+                $user -> status = $row["status"];
+                $user -> permission = $row["permission"];
+                $user -> firstorder = $row["firstorder"];
+                $user -> wallet = $row["wallet"];
+                $user -> devicetoken = $row["devicetoken"];
+                $user -> createdAt = $row["createdAt"];
+                return $user;
             }
         } catch (Exception $e) {
             throw $e;
@@ -229,8 +243,8 @@ class UserService
         try {
             $sql = "update " . $this->users . " set password=:password where email=:email";
             $stmt = $this->db->prepare($sql);
-            $password = $user->getPassword();
-            $email = $user->getEmail();
+            $password = $user->password;
+            $email = $user->email;
             $stmt->bindParam(":password", $password);
             $stmt->bindParam(":email", $email);
 
@@ -278,8 +292,8 @@ class UserService
         try{
             $sql = "update " . $this -> users ." set avatar=:avatar where email=:email";
             $stmt = $this -> db -> prepare($sql);
-            $avatar = $user -> getAvatar();
-            $email = $user -> getEmail();
+            $avatar = $user -> avatar;
+            $email = $user -> email;
             $stmt -> bindParam(":avatar",$avatar);
             $stmt -> bindParam(":email",$email);
 
