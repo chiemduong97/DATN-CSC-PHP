@@ -34,17 +34,17 @@ class BranchService
                 return $data;
             }
             else {
-                return 1001;
+                return null;
             }
         } catch (Exception $e) {
             //throw $th;
             echo "loi getAll(): " . $e->getMessage();
-            return 1001;
+            return null;
         }
-        return 1001;
+        return null;
     }
 
-    public function getByID($id)
+    public function getById($id)
     {
         try {
             $query = "select id, name, latitude,longitude,address from " . $this->tableName . " where id=:id";
@@ -62,9 +62,7 @@ class BranchService
                     "address" => $address
                 );
                 return $data;
-            } else {
-                return null;
-            }
+            } 
         } catch (Exception $e) {
             echo "loi getByID(): " . $e->getMessage();
             return null;

@@ -14,6 +14,37 @@ class OrderSerivce
     }
 
 
+    public function getByOrderCode($ordercode) {
+        try {
+            $query = "SELECT ordercode,status,amount,address,shippingFee,promotionCode,promotionValue,user_id,branch_id,promotion_id,createdAt,branch_address from " . $this ->orders . " WHERE ordercode = :ordercode";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":ordercode", $ordercode);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $data = array(
+                    "ordercode" => $ordercode,
+                    "status" => $status,
+                    "amount" => $amount,
+                    "address" => $address,
+                    "shippingFee" => $shippingFee,
+                    "promotionCode" => $promotionCode,
+                    "promotionValue" => $promotionValue,
+                    "user_id" => $user_id,
+                    "branch_id" => $branch_id,
+                    "promotion_id" => $promotion_id,
+                    "createdAt" => $createdAt,
+                    "branch_address" => $branch_address,
+                );
+                return $data;
+            }
+        } catch (Exception $e) {
+            echo "error: " . $e->getMessage();
+            return null;
+        }
+        return null;
+    }
     public function insertItem($order)
     {
 

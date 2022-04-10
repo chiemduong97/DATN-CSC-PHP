@@ -93,6 +93,7 @@
                     FOREIGN KEY (`promotion_id`) REFERENCES promotions(`id`)
                 );
                 CREATE TABLE IF NOT EXISTS `order_details` (
+                    `name` VARCHAR(255) NOT NULL,
                     `quantity` int(11) NOT NULL,
                     `amount` REAL NOT NULL,
                     `ordercode` VARCHAR(6) NOT NULL,

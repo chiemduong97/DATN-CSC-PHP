@@ -4,4 +4,5 @@
         public $amount;
         public $ordercode;
         public $product_id;
+        public $name;
     }

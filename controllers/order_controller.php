@@ -32,6 +32,7 @@
                     $orderdetail -> quantity = $quantity;
                     $orderdetail -> ordercode = $order -> ordercode;
                     $orderdetail -> product_id = $product_id;
+                    $orderdetail -> name = $order_details[$i] -> name;
                     $amount += $orderdetail -> amount;
                     $result = (new OrderDetailService) -> insertItem($orderdetail);
                     if (!$result) {
@@ -54,6 +55,10 @@
                 } 
             }
             return null;
+        }
+
+        public function getByOrderCode($ordercode) {
+            return $this -> service -> getByOrderCode($ordercode);
         }
     
 }

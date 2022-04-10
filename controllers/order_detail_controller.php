@@ -12,13 +12,18 @@
             $this->service = new OrderDetailService();
         }
 
-        public function insertItem($quantity,$order_id,$product_id) {
-            $orderdetail = new OrderDetail();
-            $orderdetail -> amount = (int)$quantity * ((new ProductService) -> getByID($product_id))["price"];
-            $orderdetail -> quantity = $quantity;
-            $orderdetail -> order_id = $order_id;
-            $orderdetail -> product_id = $product_id;
-            return $this->service->insertItem($orderdetail);
+        // public function insertItem($quantity,$order_id,$product_id) {
+        //     $orderdetail = new OrderDetail();
+        //     $orderdetail -> amount = (int)$quantity * ((new ProductService) -> getByID($product_id))["price"];
+        //     $orderdetail -> quantity = $quantity;
+        //     $orderdetail -> order_id = $order_id;
+        //     $orderdetail -> product_id = $product_id;
+        //     return $this->service->insertItem($orderdetail);
+        // }
+
+        public function getByOrderCode($ordercode) {
+            return $this->service->getByOrderCode($ordercode);
+
         }
     
 }
