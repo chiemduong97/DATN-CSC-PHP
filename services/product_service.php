@@ -13,12 +13,12 @@ class ProductService
         $this->connection = (new DatabaseConfig())->db_connect();
     }
 
-    public function getByCategory($category)
+    public function getByCategory($category_id)
     {
         try {
-            $query = "select id, name, avatar, price, description, createdAt, updatedAt, category from " . $this->tableName . " where status = 1 and category =:category ORDER BY id DESC";
+            $query = "select id, name, avatar, price, description, createdAt, updatedAt, category_id from " . $this->tableName . " where status = 1 and category_id =:category_id ORDER BY id DESC";
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(":category", $category);
+            $stmt->bindParam(":category_id", $category_id);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $data = array();
@@ -32,7 +32,7 @@ class ProductService
                         "description" => $description,
                         "createdAt" => $createdAt,
                         "updatedAt" => $updatedAt,
-                        "category" => $category
+                        "category_id" => $category_id
                     );
                     array_push($data, $each);
                 }
@@ -98,7 +98,7 @@ class ProductService
     {
         try {
             $query = "insert into " . $this->tableName . " set name = :name, avatar = :avatar,
-             description = :description, price = :price, category = :category_id";
+             description = :description, price = :price, category_id = :category_id";
 
             $name = $product_model->name;
             $avatar = $product_model->avtar;
@@ -127,7 +127,7 @@ class ProductService
     {
         try {
             $query = "update " . $this->tableName . " set name = :name, avatar = :avatar,
-            description = :description, price = :price, category = :category_id 
+            description = :description, price = :price, category_id = :category_id 
             where id = :id and status = 1";
 
             $id = $product_model->id;
@@ -192,7 +192,7 @@ class ProductService
         return false;
     }
 
-    public function getProductsWithPageByCategoryAndBranch($category = 1, $branch = 1,$page = 1)
+    public function getProductsWithPageByCategoryAndBranch($category_id = 1, $branch_id = 1,$page = 1)
     {
         try {
             $page -= 1;
@@ -202,12 +202,12 @@ class ProductService
             "SELECT products.id, products.name, products.avatar, products.description, 
                 products.price, quantities.quantity
                 FROM  " . $this->tableName . " INNER JOIN quantities ON products.id = quantities.product
-                WHERE products.category = :category and quantities.branch = :branch and products.status = 1 
+                WHERE products.category_id = :category_id and quantities.branch_id = :branch_id and products.status = 1 
                 ORDER BY id DESC LIMIT :start , :total";
 
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':category', $category, PDO::PARAM_INT);
-            $stmt->bindParam(':branch', $branch, PDO::PARAM_INT);
+            $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
             $stmt->bindParam(':start', $start, PDO::PARAM_INT);
             $stmt->bindParam(":total", $this->totalPostInPage, PDO::PARAM_INT);
             $stmt->execute();
@@ -234,15 +234,15 @@ class ProductService
         return null;
     }
 
-    public function getTotalPages($category = 1, $branch = 1)
+    public function getTotalPages($category_id = 1, $branch_id = 1)
     {
         try {
             $query = "select COUNT(id) as total FROM " . $this->tableName ." 
                 INNER JOIN quantities ON products.id = quantities.product
-                WHERE products.category = :category and quantities.branch = :branch and products.status = 1 ";
+                WHERE products.category_id = :category_id and quantities.branch_id = :branch_id and products.status = 1 ";
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':category', $category, PDO::PARAM_INT); 
-            $stmt->bindParam(':branch', $branch, PDO::PARAM_INT); 
+            $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT); 
+            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT); 
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);

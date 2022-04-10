@@ -8,40 +8,40 @@
             $this->service = new ProductService();
         }
 
-        public function getByCategory($category) {
-            return $this->service->getByCategory($category);
+        public function getByCategory($category_id) {
+            return $this->service->getByCategory($category_id);
         }
         public function getByID($id) {
             return $this->service->getByID($id);
         }
-        public function insertItem($name, $avatar, $description, $price, $category) {
+        public function insertItem($name, $avatar, $description, $price, $category_id) {
             $product = new Product();
             $product -> name = $name;
             $product -> avatar = $avatar;
             $product -> description = $description;
             $product -> price = $price;
-            $product -> category = $category;
+            $product -> category_id = $category_id;
 
             if($this->service->checkName($name)){
                 return 1011;
             }else{
-                return $this->service->insertItem($product, $category);
+                return $this->service->insertItem($product, $category_id);
             }
             
         }
-        public function updateItem($id, $name, $avatar, $description, $price, $category) {
+        public function updateItem($id, $name, $avatar, $description, $price, $category_id) {
             $product = new Product();
             $product -> id = $id;
             $product -> name = $name;
             $product -> avatar = $avatar;
             $product -> description = $description;
             $product -> price = $price;
-            $product -> category = $category;
+            $product -> category_id = $category_id;
 
             if($this->service->checkName($name)){
                 return 1011;
             }else{
-                return $this->service->updateItem($product, $category);
+                return $this->service->updateItem($product, $category_id);
             }
 
         }
@@ -53,11 +53,11 @@
             }
         }
 
-        public function getProductsWithPageByCategoryAndBranch($category, $branch,$page) {
-            return $this->service->getProductsWithPageByCategoryAndBranch($category, $branch,$page);
+        public function getProductsWithPageByCategoryAndBranch($category_id, $branch,$page) {
+            return $this->service->getProductsWithPageByCategoryAndBranch($category_id, $branch,$page);
         }
-        public function getTotalPages($category, $branch) {
-            return $this->service->getTotalPages($category, $branch);
+        public function getTotalPages($category_id, $branch) {
+            return $this->service->getTotalPages($category_id, $branch);
         }
     }
 ?> 

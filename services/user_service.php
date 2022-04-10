@@ -17,11 +17,11 @@ class UserService
         try {
             $sql = 'UPDATE requests SET available=0 WHERE email=:email';
             $stmt = $this->db->prepare($sql);
-            $email = $user->email();
-            $password = $user->password();
-            $fullname = $user->fullname();
-            $phone = $user->phone();
-            $permission = $user->permission();
+            $email = $user->email;
+            $password = $user->password;
+            $fullname = $user->fullname;
+            $phone = $user->phone;
+            $permission = $user->permission;
             $stmt->bindParam(":email", $email);
             $this->db->beginTransaction();
             if ($stmt->execute()) {
@@ -264,7 +264,7 @@ class UserService
 
     public function getUserByEmail($email){
         try{
-            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,firstorder FROM " . $this -> users . " where email=:email";
+            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,firstorder,latitude,longitude,address FROM " . $this -> users . " where email=:email";
             $stmt = $this -> db -> prepare($sql);
             $stmt -> bindParam(":email",$email);
             $stmt -> execute();
@@ -278,7 +278,10 @@ class UserService
                 "phone"=>$row["phone"],
                 "birthday"=>$row["birthday"],
                 "wallet"=>$row["wallet"],
-                "firstorder"=>$row["firstorder"]
+                "firstorder"=>$row["firstorder"],
+                "latitude"=>$row["latitude"],
+                "longitude"=>$row["longitude"],
+                "address"=>$row["address"]
             );
             return $data;
 

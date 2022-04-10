@@ -18,12 +18,15 @@
                     `fullname` VARCHAR(255),
                     `phone` VARCHAR(255) NOT NULL,
                     `birthday` VARCHAR(255),
-                    `wallet` DECIMAL(10,2) DEFAULT 0 NOT NULL,
+                    `wallet` REAL DEFAULT 0 NOT NULL,
                     `status` BIT DEFAULT 1 NOT NULL,
                     `permission` int(1) DEFAULT 2 NOT NULL,
                     `firstorder` BIT DEFAULT 0 NOT NULL,
                     `devicetoken` VARCHAR(255),
-                    `createdAt` DATETIME DEFAULT NOW() NOT NULL
+                    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
+                    `latitude` REAL NOT NULL,
+                    `longitude` REAL NOT NULL,
+                    `address` VARCHAR(255) NOT NULL
                 );
                 CREATE TABLE IF NOT EXISTS `categories` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -34,8 +37,8 @@
                 CREATE TABLE IF NOT EXISTS `branches` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     `name` VARCHAR(255) NOT NULL UNIQUE,
-                    `latitude` DECIMAL(10,10) NOT NULL,
-                    `longitude` DECIMAL(10,10) NOT NULL,
+                    `latitude` REAL NOT NULL,
+                    `longitude` REAL NOT NULL,
                     `address` VARCHAR(255) NOT NULL,
                     `status` int(1) DEFAULT 1 NOT NULL
                 );
@@ -44,19 +47,19 @@
                     `name` VARCHAR(255) NOT NULL,
                     `avatar` VARCHAR(255) NOT NULL,
                     `description` VARCHAR(255) NOT NULL,
-                    `price` DECIMAL(10,2) NOT NULL,
+                    `price` REAL NOT NULL,
                     `createdAt` DATETIME DEFAULT NOW() NOT NULL,
                     `updatedAt` DATETIME,
-                    `category` int(11) NOT NULL,
+                    `category_id` int(11) NOT NULL,
                     `status` int(1) DEFAULT 1 NOT NULL,
-                    FOREIGN KEY (`category`) REFERENCES categories(`id`)
+                    FOREIGN KEY (`category_id`) REFERENCES categories(`id`)
                 );
                 CREATE TABLE IF NOT EXISTS `quantities` (
                     `quantity` int(11) NOT NULL,
-                    `product` int(11) NOT NULL,
-                    `branch` int(11) NOT NULL,
-                    FOREIGN KEY (`product`) REFERENCES products(`id`),
-                    FOREIGN KEY (`branch`) REFERENCES branches(`id`)
+                    `product_id` int(11) NOT NULL,
+                    `branch_id` int(11) NOT NULL,
+                    FOREIGN KEY (`product_id`) REFERENCES products(`id`),
+                    FOREIGN KEY (`branch_id`) REFERENCES branches(`id`)
                 );
                 CREATE TABLE IF NOT EXISTS `promotions` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -69,19 +72,33 @@
                     `end` DATE NOT NULL
                 );
                 CREATE TABLE IF NOT EXISTS `orders` (
-                    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    `ordercode` VARCHAR(6) NOT NULL,
-                    `products` VARCHAR(255) NOT NULL,
-                    `location` VARCHAR(255) NOT NULL,
-                    `amount` DECIMAL(10,2) NOT NULL,
-                    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
+                    `ordercode` VARCHAR(6) NOT NULL PRIMARY KEY,
                     `status` int(1) DEFAULT 0 NOT NULL,
-                    `user` int(11) NOT NULL,
-                    `branch` int(11) NOT NULL,
-                    `promotion` int(11) NOT NULL,
-                    FOREIGN KEY (`user`) REFERENCES users(`id`),
-                    FOREIGN KEY (`branch`) REFERENCES branches(`id`),
-                    FOREIGN KEY (`promotion`) REFERENCES promotions(`id`)
+                    `amount` REAL NOT NULL,
+                    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
+                    `latitude` REAL NOT NULL,
+                    `longitude` REAL NOT NULL,
+                    `address` VARCHAR(255) NOT NULL,
+                    `branch_latitude` REAL NOT NULL,
+                    `branch_longitude` REAL NOT NULL,
+                    `branch_address` VARCHAR(255) NOT NULL,
+                    `shippingFee` REAL NOT NULL,
+                    `promotionCode` VARCHAR(255),
+                    `promotionValue` REAL,
+                    `user_id` int(11) NOT NULL,
+                    `branch_id` int(11),
+                    `promotion_id` int(11) NOT NULL,
+                    FOREIGN KEY (`user_id`) REFERENCES users(`id`),
+                    FOREIGN KEY (`branch_id`) REFERENCES branches(`id`),
+                    FOREIGN KEY (`promotion_id`) REFERENCES promotions(`id`)
+                );
+                CREATE TABLE IF NOT EXISTS `order_details` (
+                    `quantity` int(11) NOT NULL,
+                    `amount` REAL NOT NULL,
+                    `ordercode` VARCHAR(6) NOT NULL,
+                    `product_id` int(11) NOT NULL,
+                    FOREIGN KEY (`ordercode`) REFERENCES orders(`ordercode`),
+                    FOREIGN KEY (`product_id`) REFERENCES products(`id`)
                 );
                 CREATE TABLE IF NOT EXISTS `requests` (
                     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

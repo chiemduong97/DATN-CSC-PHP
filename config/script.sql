@@ -1,83 +1,102 @@
 CREATE DATABASE IF NOT EXISTS `datn_csc`;
 USE `datn_csc`;
 CREATE TABLE IF NOT EXISTS `users` (
-    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `email` VARCHAR(255) NOT NULL UNIQUE,
-    `password` VARCHAR(255) NOT NULL,
-    `avatar` VARCHAR(255),
-    `fullname` VARCHAR(255),
-    `phone` VARCHAR(255) NOT NULL,
-    `birthday` VARCHAR(255),
-    `wallet` DECIMAL(10,2) DEFAULT 0 NOT NULL,
-    `status` BIT DEFAULT 1 NOT NULL,
-    `permission` int(1) DEFAULT 2 NOT NULL,
-    `firstorder` BIT DEFAULT 0 NOT NULL,
-    `devicetoken` VARCHAR(255),
-    `createdAt` DATETIME DEFAULT NOW() NOT NULL
+`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`email` VARCHAR(255) NOT NULL UNIQUE,
+`password` VARCHAR(255) NOT NULL,
+`avatar` VARCHAR(255),
+`fullname` VARCHAR(255),
+`phone` VARCHAR(255) NOT NULL,
+`birthday` VARCHAR(255),
+`wallet` REAL DEFAULT 0 NOT NULL,
+`status` BIT DEFAULT 1 NOT NULL,
+`permission` int(1) DEFAULT 2 NOT NULL,
+`firstorder` BIT DEFAULT 0 NOT NULL,
+`devicetoken` VARCHAR(255),
+`createdAt` DATETIME DEFAULT NOW() NOT NULL,
+`latitude` REAL NOT NULL,
+`longitude` REAL NOT NULL,
+`address` VARCHAR(255) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `categories` (
-    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL UNIQUE,
-    `avatar` VARCHAR(255) NOT NULL,
-    `status` int(1) DEFAULT 1 NOT NULL
+`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`name` VARCHAR(255) NOT NULL UNIQUE,
+`avatar` VARCHAR(255) NOT NULL,
+`status` int(1) DEFAULT 1 NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `branches` (
-    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL UNIQUE,
-    `location` VARCHAR(255) NOT NULL,
-    `status` int(1) DEFAULT 1 NOT NULL
+`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`name` VARCHAR(255) NOT NULL UNIQUE,
+`latitude` REAL NOT NULL,
+`longitude` REAL NOT NULL,
+`address` VARCHAR(255) NOT NULL,
+`status` int(1) DEFAULT 1 NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `products` (
-    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
-    `avatar` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `price` DECIMAL(10,2) NOT NULL,
-    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
-    `updatedAt` DATETIME,
-    `category` int(11) NOT NULL,
-    `status` int(1) DEFAULT 1 NOT NULL,
-    FOREIGN KEY (`category`) REFERENCES categories(`id`)
+`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`name` VARCHAR(255) NOT NULL,
+`avatar` VARCHAR(255) NOT NULL,
+`description` VARCHAR(255) NOT NULL,
+`price` REAL NOT NULL,
+`createdAt` DATETIME DEFAULT NOW() NOT NULL,
+`updatedAt` DATETIME,
+`category_id` int(11) NOT NULL,
+`status` int(1) DEFAULT 1 NOT NULL,
+FOREIGN KEY (`category_id`) REFERENCES categories(`id`)
 );
 CREATE TABLE IF NOT EXISTS `quantities` (
-    `quantity` int(11) NOT NULL,
-    `product` int(11) NOT NULL,
-    `branch` int(11) NOT NULL,
-    FOREIGN KEY (`product`) REFERENCES products(`id`),
-    FOREIGN KEY (`branch`) REFERENCES branches(`id`)
+`quantity` int(11) NOT NULL,
+`product_id` int(11) NOT NULL,
+`branch_id` int(11) NOT NULL,
+FOREIGN KEY (`product_id`) REFERENCES products(`id`),
+FOREIGN KEY (`branch_id`) REFERENCES branches(`id`)
 );
 CREATE TABLE IF NOT EXISTS `promotions` (
-    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `avatar` VARCHAR(255) NOT NULL,
-    `description` VARCHAR(255) NOT NULL,
-    `code` VARCHAR(255) NOT NULL,
-    `status` BIT DEFAULT 1 NOT NULL,
-    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
-    `start` DATE NOT NULL,
-    `end` DATE NOT NULL
+`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`avatar` VARCHAR(255) NOT NULL,
+`description` VARCHAR(255) NOT NULL,
+`code` VARCHAR(255) NOT NULL,
+`status` BIT DEFAULT 1 NOT NULL,
+`createdAt` DATETIME DEFAULT NOW() NOT NULL,
+`start` DATE NOT NULL,
+`end` DATE NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `orders` (
-    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `ordercode` VARCHAR(6) NOT NULL,
-    `products` VARCHAR(255) NOT NULL,
-    `location` VARCHAR(255) NOT NULL,
-    `amount` DECIMAL(10,2) NOT NULL,
-    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
-    `status` int(1) DEFAULT 0 NOT NULL,
-    `user` int(11) NOT NULL,
-    `branch` int(11) NOT NULL,
-    `promotion` int(11) NOT NULL,
-    FOREIGN KEY (`user`) REFERENCES users(`id`),
-    FOREIGN KEY (`branch`) REFERENCES branches(`id`),
-    FOREIGN KEY (`promotion`) REFERENCES promotions(`id`)
+`ordercode` VARCHAR(6) NOT NULL PRIMARY KEY,
+`status` int(1) DEFAULT 0 NOT NULL,
+`amount` REAL NOT NULL,
+`createdAt` DATETIME DEFAULT NOW() NOT NULL,
+`latitude` REAL NOT NULL,
+`longitude` REAL NOT NULL,
+`address` VARCHAR(255) NOT NULL,
+`branch_latitude` REAL NOT NULL,
+`branch_longitude` REAL NOT NULL,
+`branch_address` VARCHAR(255) NOT NULL,
+`shippingFee` REAL NOT NULL,
+`promotionCode` VARCHAR(255),
+`promotionValue` REAL,
+`user_id` int(11) NOT NULL,
+`branch_id` int(11),
+`promotion_id` int(11) NOT NULL,
+FOREIGN KEY (`user_id`) REFERENCES users(`id`),
+FOREIGN KEY (`branch_id`) REFERENCES branches(`id`),
+FOREIGN KEY (`promotion_id`) REFERENCES promotions(`id`)
+);
+CREATE TABLE IF NOT EXISTS `order_details` (
+`quantity` int(11) NOT NULL,
+`amount` REAL NOT NULL,
+`ordercode` VARCHAR(6) NOT NULL,
+`product_id` int(11) NOT NULL,
+FOREIGN KEY (`ordercode`) REFERENCES orders(`ordercode`),
+FOREIGN KEY (`product_id`) REFERENCES products(`id`)
 );
 CREATE TABLE IF NOT EXISTS `requests` (
-    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `email` VARCHAR(255) NOT NULL UNIQUE,
-    `token` VARCHAR(255) NOT NULL,
-    `salt` VARCHAR(255) NOT NULL,
-    `createdAt` DATETIME DEFAULT NOW() NOT NULL,
-    `available` BIT DEFAULT 1 NOT NULL
+`id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`email` VARCHAR(255) NOT NULL UNIQUE,
+`token` VARCHAR(255) NOT NULL,
+`salt` VARCHAR(255) NOT NULL,
+`createdAt` DATETIME DEFAULT NOW() NOT NULL,
+`available` BIT DEFAULT 1 NOT NULL
 );
 
 insert into `categories` ( `name`, `avatar`) values 
@@ -92,13 +111,13 @@ insert into `categories` ( `name`, `avatar`) values
 ( 'Màn hình', 'https://product.hstatic.net/1000026716/product/aoc_24g2e_gearvn_1011dc9ce7b8450d993df4516006aa7f.jpg')
 
 
-insert into `branches` (`name`, `location`) values 
+insert into `branches` (`name`, `address`) values 
 ('CSC 1','350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp'),
 ('CSC 2', '350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp'),
 ('CSC 3', '350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp'),
 ('CSC 4', '350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp')
 
-insert into `products` ( `name`, `avatar`,`description`,`price`,`category`) values 
+insert into `products` ( `name`, `avatar`,`description`,`price`,`category_id`) values 
 
 ( 'Apple watch S6','https://cdn.tgdd.vn/Products/Images/7077/229044/apple-watch-s6-40mm-vien-nhom-day-cao-su-do-thumb-600x600.jpg',
 'Apple Watch S6 mang đến những nâng cấp hữu ích để hỗ trợ người dùng một cách tối ưu nhất. Nổi bật trong số đó là chip xử lý S6 cải thiện hiệu năng, 
@@ -199,7 +218,7 @@ mạng tại một nơi. Chỉ với 30 giây cài đặt, chức năng phát hi
 
 ( 'Chuột Razer Deathadder Essential White','https://product.hstatic.net/1000026716/product/screenshot_2021-06-22_084125_bc900411125c4473a0bf6a3bc6b58f1b.png',
 'Chuột gaming DeathAdder Essential White được Razer thiết kế với kiểu dáng công thái học (Ergonomic) cổ điển. Thiết kế đẹp mắt và khác biệt ở các dòng chuột gaming khác tạo ra sự thoải mái, cho phép người chơi 
-duy trì mức hiệu suất cao trong suốt thời gian chơi game dài, vì vậy bạn sẽ không bao giờ bị ngập ngừng trong các trận chiến nóng bỏng.',590000, 6)
+duy trì mức hiệu suất cao trong suốt thời gian chơi game dài, vì vậy bạn sẽ không bao giờ bị ngập ngừng trong các trận chiến nóng bỏng.',590000, 6),
 
 ( 'Chuột Steelseries Rival 650','https://product.hstatic.net/1000026716/product/rival650-gearvn_large.jpg',
 'Rival 650 của Steelseries là một trong những dòng sản phẩm chuột không dây được trang bị nhiều công nghệ tối tân nhất thế giới. Chuột được thiết kế công thái học hoàn hảo cho người thuận 

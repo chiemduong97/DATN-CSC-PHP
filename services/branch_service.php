@@ -47,7 +47,7 @@ class BranchService
     public function getByID($id)
     {
         try {
-            $query = "select id, name, location from " . $this->tableName . " where id=:id and status = 1";
+            $query = "select id, name, latitude,longitude,address from " . $this->tableName . " where id=:id";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -57,18 +57,19 @@ class BranchService
                 $data = array(
                     "id" => $id,
                     "name" => $name,
-                    "location" => $location
+                    "latitude" => $latitude,
+                    "longitude" => $longitude,
+                    "address" => $address
                 );
-
                 return $data;
             } else {
-                return 1001;
+                return null;
             }
         } catch (Exception $e) {
             echo "loi getByID(): " . $e->getMessage();
-            return 1001;
+            return null;
         }
-        return 1001;
+        return null;
     }
 
     public function checkName($name)

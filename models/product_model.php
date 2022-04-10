@@ -7,7 +7,7 @@
         public $price;
         public $createdAt;
         public $updatedAt;
-        public $category;
+        public $category_id;
     }
 
 ?>
