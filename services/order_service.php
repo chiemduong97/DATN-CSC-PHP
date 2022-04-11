@@ -13,6 +13,63 @@ class OrderSerivce
         $this->connection = (new DatabaseConfig())->db_connect();
     }
 
+    public function getByUser($user_id) {
+        try {
+            $query = "SELECT ordercode,status,amount,address,shippingFee,promotionCode,promotionValue,user_id,branch_id,promotion_id,createdAt,branch_address from " . $this ->orders . " WHERE user_id = :user_id ORDER BY createdAt DESC";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":user_id", $user_id);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $data = array();
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "ordercode" => $ordercode,
+                        "status" => $status,
+                        "amount" => $amount,
+                        "address" => $address,
+                        "shippingFee" => $shippingFee,
+                        "promotionCode" => $promotionCode,
+                        "promotionValue" => $promotionValue,
+                        "user_id" => $user_id,
+                        "branch_id" => $branch_id,
+                        "promotion_id" => $promotion_id,
+                        "createdAt" => $createdAt,
+                        "branch_address" => $branch_address
+                    );
+                    array_push($data, $each);
+                }
+                return $data;
+            }
+            return array();
+        } catch (Exception $e) {
+            echo "error: " . $e->getMessage();
+            return null;
+        }
+        return null;
+    }
+
+    public function updateStatus($ordercode,$status) {
+        try{
+            $sql = "UPDATE " . $this -> orders ." SET status=:status WHERE ordercode=:ordercode";
+            $stmt = $this -> connection -> prepare($sql);
+            $stmt -> bindParam(":ordercode",$ordercode);
+            $stmt -> bindParam(":status",$status);
+            $this -> connection -> beginTransaction();
+            if($stmt ->execute()){
+                $this -> connection -> commit();
+                return 1000;
+            }
+            else{
+                $this -> connection -> rollBack();
+                return 1001;
+            }
+        }catch(Exception $e){
+            throw $e;
+        }
+        return 1001;
+    }
+
 
     public function getByOrderCode($ordercode) {
         try {
@@ -39,6 +96,7 @@ class OrderSerivce
                 );
                 return $data;
             }
+            return array();
         } catch (Exception $e) {
             echo "error: " . $e->getMessage();
             return null;

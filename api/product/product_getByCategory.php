@@ -5,9 +5,10 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/authen/authen.php';
 $authen = new Authen();
 (new CF_Header())->config("GET");
 if ($authen->checkToken()) {
-    if ($_GET['category_id'] != null) {
+    if ($_GET['category_id'] != null && $_GET['branch_id'] != null) {
         $category_id = $_GET['category_id'];
-        $data = (new ProductController())->getByCategory($category_id);
+        $branch_id = $_GET['branch_id'];
+        $data = (new ProductController())->getByCategory($category_id,$branch_id);
         echo json_encode($data);
     } 
     else {

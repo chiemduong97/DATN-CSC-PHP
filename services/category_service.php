@@ -94,8 +94,8 @@ class CategoryService
         try {
             $query = "insert into " . $this->tableName . " set name = :name, avatar = :avatar";
 
-            $name = $category->getName();
-            $avatar = $category->getAvatar();
+            $name = $category->name;
+            $avatar = $category->avatar;
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":name", $name);
@@ -119,9 +119,9 @@ class CategoryService
             $query = "update " . $this->tableName . " 
             set name = :name, avatar = :avatar where id = :id and status = 1";
 
-            $id = $category->getId();
-            $name = $category->getName();
-            $avatar = $category->getAvatar();
+            $id = $category->id;
+            $name = $category->name;
+            $avatar = $category->avatar;
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);

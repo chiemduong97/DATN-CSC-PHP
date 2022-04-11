@@ -34,9 +34,7 @@ class OrderDetailService
                 }
                 return $data;
             }
-            else {
-                return null;
-            }
+            return array();
         } catch (Exception $e) {
             //throw $th;
             echo "loi getAll(): " . $e->getMessage();

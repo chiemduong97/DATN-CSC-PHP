@@ -33,9 +33,7 @@ class BranchService
                 }
                 return $data;
             }
-            else {
-                return null;
-            }
+            return array();
         } catch (Exception $e) {
             //throw $th;
             echo "loi getAll(): " . $e->getMessage();
@@ -63,6 +61,7 @@ class BranchService
                 );
                 return $data;
             } 
+            return array();
         } catch (Exception $e) {
             echo "loi getByID(): " . $e->getMessage();
             return null;

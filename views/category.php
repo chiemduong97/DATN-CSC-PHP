@@ -137,7 +137,7 @@ $totalPage =  $db->getTotalPagesCategories();
             return;
         }
 
-        var url = 'http://127.0.0.1:8686/api/category/category_remove.php';
+        var url = 'http://192.168.1.4:8585/api/category/category_remove.php';
         var formData = new FormData();
         formData.append('id', $id);
 
@@ -166,7 +166,7 @@ $totalPage =  $db->getTotalPagesCategories();
         if (name != firstName || img != firstAvatar) {
             // update if have id
             if (id) {
-                var url = 'http://127.0.0.1:8686/api/category/category_update.php';
+                var url = 'http://192.168.1.4:8585/api/category/category_update.php';
                 fetch(url, {
                         method: 'POST',
                         body: JSON.stringify({
@@ -192,7 +192,7 @@ $totalPage =  $db->getTotalPagesCategories();
                         alert(text);
                     });
             } else {
-                var url = 'http://127.0.0.1:8686/api/category/category_insert.php';
+                var url = 'http://192.168.1.4:8585/api/category/category_insert.php';
                 fetch(url, {
                         method: 'POST',
                         body: JSON.stringify({

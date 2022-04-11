@@ -8,8 +8,8 @@
             $this->service = new ProductService();
         }
 
-        public function getByCategory($category_id) {
-            return $this->service->getByCategory($category_id);
+        public function getByCategory($category_id,$branch_id) {
+            return $this->service->getByCategory($category_id,$branch_id);
         }
         public function getByID($id) {
             return $this->service->getByID($id);

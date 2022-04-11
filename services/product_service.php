@@ -13,12 +13,25 @@ class ProductService
         $this->connection = (new DatabaseConfig())->db_connect();
     }
 
-    public function getByCategory($category_id)
+    public function getByCategory($category_id,$branch_id)
     {
         try {
-            $query = "select id, name, avatar, price, description, createdAt, updatedAt, category_id from " . $this->tableName . " where status = 1 and category_id =:category_id ORDER BY id DESC";
+            $query = "SELECT products.id,
+                             products.name, 
+                             products.avatar, 
+                             products.price, 
+                             products.description, 
+                             products.createdAt, 
+                             products.updatedAt, 
+                             products.category_id,
+                             quantities.quantity
+                             FROM " . $this->tableName . 
+                             " INNER JOIN quantities ON products.id = quantities.product_id
+                             WHERE products.category_id = :category_id AND quantities.branch_id = :branch_id 
+                             AND products.status = 1 ORDER BY products.createdAt DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":category_id", $category_id);
+            $stmt->bindParam(":branch_id", $branch_id);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $data = array();
@@ -32,14 +45,14 @@ class ProductService
                         "description" => $description,
                         "createdAt" => $createdAt,
                         "updatedAt" => $updatedAt,
-                        "category_id" => $category_id
+                        "category_id" => $category_id,
+                        "quantity" => $quantity
                     );
                     array_push($data, $each);
                 }
                 return $data;
-            }else{
-                return null;
             }
+            return array();
         } catch (Exception $e) {
             //throw $th;
             echo "products loi getAll(): " . $e->getMessage();
@@ -201,7 +214,7 @@ class ProductService
             $query = 
             "SELECT products.id, products.name, products.avatar, products.description, 
                 products.price, quantities.quantity
-                FROM  " . $this->tableName . " INNER JOIN quantities ON products.id = quantities.product
+                FROM  " . $this->tableName . " INNER JOIN quantities ON products.id = quantities.product_id
                 WHERE products.category_id = :category_id and quantities.branch_id = :branch_id and products.status = 1 
                 ORDER BY id DESC LIMIT :start , :total";
 
@@ -238,7 +251,7 @@ class ProductService
     {
         try {
             $query = "select COUNT(id) as total FROM " . $this->tableName ." 
-                INNER JOIN quantities ON products.id = quantities.product
+                INNER JOIN quantities ON products.id = quantities.product_id
                 WHERE products.category_id = :category_id and quantities.branch_id = :branch_id and products.status = 1 ";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT); 

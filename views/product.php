@@ -141,12 +141,12 @@ $branches = $dbBranch->getAll();
     function findByCategoryAndBranch() {
         var category = document.getElementById('category').value;
         var branch = document.getElementById('branch').value;
-        window.location.assign("http://127.0.0.1:8686/views/product.php?categoryId=" + category +
+        window.location.assign("http://192.168.1.4:8585/views/product.php?categoryId=" + category +
             "&branchId=" + branch);
     }
 
     function remove($id) {
-        var url = 'http://127.0.0.1:8686/api/product/product_remove.php';
+        var url = 'http://192.168.1.4:8585/api/product/product_remove.php';
         var formData = new FormData();
         formData.append('id', $id);
 

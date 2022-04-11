@@ -14,6 +14,14 @@
             $this->service = new OrderSerivce();
         }
 
+        public function getByUser($user_id) {
+            return $this -> service -> getByUser($user_id);
+        }
+
+        public function updateStatus($ordercode,$status) {
+            return $this -> service -> updateStatus($ordercode,$status);
+        }
+
         public function insertItem($orderParam) {
             $order_details = $orderParam -> order_details;
             $order = new Order();
