@@ -76,6 +76,7 @@
                     `status` int(1) DEFAULT 0 NOT NULL,
                     `amount` REAL NOT NULL,
                     `createdAt` DATETIME DEFAULT NOW() NOT NULL,
+                    `phone` VARCHAR(255) NOT NULL,
                     `latitude` REAL NOT NULL,
                     `longitude` REAL NOT NULL,
                     `address` VARCHAR(255) NOT NULL,

@@ -109,6 +109,7 @@ class OrderSerivce
         try {
             if($this -> checkOrderCode($order -> ordercode)) {
                 $query = "UPDATE " . $this->orders . " SET amount = :amount,
+                                                    phone = :phone,
                                                     latitude = :latitude,
                                                     longitude = :longitude,
                                                     address = :address,
@@ -119,7 +120,7 @@ class OrderSerivce
                                                     promotionCode = :promotionCode,
                                                     promotionValue = :promotionValue
                                                     WHERE ordercode =:ordercode";
-
+                $phone = $order->phone;
                 $amount = $order->amount;
                 $latitude = $order->latitude;
                 $longitude = $order->longitude;
@@ -134,6 +135,7 @@ class OrderSerivce
 
                 $stmt = $this->connection->prepare($query);
                 $stmt->bindParam(":amount", $amount);
+                $stmt->bindParam(":phone", $phone);
                 $stmt->bindParam(":latitude", $latitude);
                 $stmt->bindParam(":longitude", $longitude);
                 $stmt->bindParam(":address", $address);

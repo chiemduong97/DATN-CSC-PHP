@@ -51,6 +51,7 @@
                 $order -> latitude = $orderParam -> latitude;
                 $order -> longitude = $orderParam -> longitude;
                 $order -> address = $orderParam -> address;
+                $order -> phone = $orderParam -> phone;
                 $order -> shippingFee = $orderParam -> shipping_fee;
                 $order -> promotionCode = isset($orderParam -> promotionCode)?$orderParam -> promotionCode:null;
                 $order -> promotionValue = isset($orderParam -> promotionValue)?$orderParam -> promotionValue:null;

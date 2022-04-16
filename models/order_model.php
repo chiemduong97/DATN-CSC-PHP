@@ -7,6 +7,7 @@
         public $user_id;
         public $latitude;
         public $longitude;
+        public $phone;
         public $address;
         public $branch_id;
         public $branch_latitude;
