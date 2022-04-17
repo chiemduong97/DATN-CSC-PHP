@@ -24,7 +24,7 @@
 }
 
 #customers tr:hover {
-  background-color: #ddd;
+  background-color: #C2D8F2;
 }
 #customers tr:hover td {
   color: black;
@@ -73,7 +73,7 @@
 .btnNew{
    
     position: absolute;
-    top: 15%;
+    top: 10%;
     right: 8%;
     border-radius: 5px;
     background-color: #136AF2;
@@ -84,7 +84,7 @@
 }
 
 .btnNew:hover{ 
-  background-color: #73e9c1;
+  background-color:#6DA6E9;
   color: black;
 }
 .selectCategory{

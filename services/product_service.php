@@ -28,7 +28,7 @@ class ProductService
                              FROM " . $this->tableName . 
                              " INNER JOIN quantities ON products.id = quantities.product_id
                              WHERE products.category_id = :category_id AND quantities.branch_id = :branch_id 
-                             AND products.status = 1 ORDER BY products.createdAt DESC";
+                             AND products.status = 0 ORDER BY products.createdAt DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":category_id", $category_id);
             $stmt->bindParam(":branch_id", $branch_id);

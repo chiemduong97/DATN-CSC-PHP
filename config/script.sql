@@ -109,14 +109,14 @@ insert into `categories` ( `name`, `avatar`) values
 ( 'Chuột Gaming', 'https://product.hstatic.net/1000026716/product/da_e_01_8347be5a11f14bf48e1a472ae080a1c1_be824480da3f4c30b4b15a68f0fd058b.jpg'),
 ( 'Bàn phím Gaming', 'https://product.hstatic.net/1000026716/product/logitechg613-gearvn.jpg'),
 ( 'Tai nghe Gaming', 'https://product.hstatic.net/1000026716/product/hyperx-cloud-stinger-core-71-5_00502a3b6c134f30ac98e0542e29a19b_grande_2f970ccc0fc44c239e117501d9ffa0d1.jpg'),
-( 'Màn hình', 'https://product.hstatic.net/1000026716/product/aoc_24g2e_gearvn_1011dc9ce7b8450d993df4516006aa7f.jpg')
+( 'Màn hình', 'https://product.hstatic.net/1000026716/product/aoc_24g2e_gearvn_1011dc9ce7b8450d993df4516006aa7f.jpg');
 
 
 insert into `branches` (`name`, `address`) values 
 ('CSC 1','350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp'),
 ('CSC 2', '350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp'),
 ('CSC 3', '350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp'),
-('CSC 4', '350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp')
+('CSC 4', '350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp');
 
 insert into `products` ( `name`, `avatar`,`description`,`price`,`category_id`) values 
 
@@ -273,7 +273,7 @@ thủ với sự pha trộn hoàn hảo của hiệu năng và màu sắc sống
 
 ( 'Màn hình cong ViewSonic VX2719-PC-MHD 27" VA 240Hz chuyên game','https://product.hstatic.net/1000026716/product/viewsonic_vx2719-pc-mhd_gearvn_04563dd3de7d46beae77b21e7ee8d858.jpg',
 'Với thời gian phản hồi MPRT 1ms nhanh. màn hình mang lại ảnh mượt mà, mà không bị vệt, mờ hoặc bóng mờ. Thời gian phản hồi nhanh phù hợp để chơi các tựa game cường độ cao nhất về đồ họa và cung cấp chất lượng hình ảnh tuyệt vời khi xem phim 
-thể thao hoặc hành động',5290000, 9)
+thể thao hoặc hành động',5290000, 9);
 
 
 
