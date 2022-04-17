@@ -345,6 +345,34 @@ class UserService
         }
         return 1001;
     }
+
+    public function updateLocation($email,$latitude,$longitude,$address){
+        try{
+            $sql = "UPDATE " . $this -> users ." SET latitude=:latitude,
+                                                    longitude=:longitude,
+                                                    address=:address WHERE email=:email";
+            $stmt = $this -> db -> prepare($sql);
+
+            $stmt -> bindParam(":latitude",$latitude);
+            $stmt -> bindParam(":longitude",$longitude);
+            $stmt -> bindParam(":address",$address);
+            $stmt -> bindParam(":email",$email);
+
+            $this -> db -> beginTransaction();
+            if($stmt ->execute()){
+                $this -> db -> commit();
+                return 1000;
+            }
+            else{
+                $this -> db -> rollBack();
+                return 1001;
+            }
+        }catch(Exception $e){
+            throw $e;
+        }
+        return 1001;
+    }
+
     public function updateDeviceToken($email,$deviceToken){
         try{
             $sql = "UPDATE " . $this -> users ." SET devicetoken=:devicetoken WHERE email=:email";
