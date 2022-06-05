@@ -5,8 +5,8 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/authen/authen.php';
 
     $authen = new Authen();
     if ($authen->checkToken()) {
-        $ordercode = $_GET["ordercode"];
-        $data = (new OrderDetailController()) -> getByOrderCode($ordercode);
+        $order_code = $_GET["order_code"];
+        $data = (new OrderDetailController()) -> getByOrderCode($order_code);
         echo json_encode($data);
     } else {
         echo null;

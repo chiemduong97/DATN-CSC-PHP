@@ -7,7 +7,7 @@ $authen = new Authen();
 if ($authen->checkToken()) {
     (new CF_Header())->config("POST");
 
-    $ordercode = $_POST["ordercode"];
+    $order_code = $_POST["order_code"];
     $status = $_POST["status"];
     if ($status != 0) {
         echo json_encode(array(
@@ -15,7 +15,7 @@ if ($authen->checkToken()) {
             "code" => 1014
         ));
     } else {
-        $data = (new OrderController())->updateStatus($ordercode, 4);
+        $data = (new OrderController())->updateStatus($order_code, 4);
         if ($data == 1000) {
             echo json_encode(array(
                 "status" => true

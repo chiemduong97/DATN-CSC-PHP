@@ -21,14 +21,14 @@ class ProductService
                              products.avatar, 
                              products.price, 
                              products.description, 
-                             products.createdAt, 
+                             products.created_at, 
                              products.updatedAt, 
                              products.category_id,
                              quantities.quantity
                              FROM " . $this->tableName . 
                              " INNER JOIN quantities ON products.id = quantities.product_id
                              WHERE products.category_id = :category_id AND quantities.branch_id = :branch_id 
-                             AND products.status = 1 ORDER BY products.createdAt DESC";
+                             AND products.status = 1 ORDER BY products.created_at DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":category_id", $category_id);
             $stmt->bindParam(":branch_id", $branch_id);
@@ -43,7 +43,7 @@ class ProductService
                         "avatar" => $avatar,
                         "price" => $price,
                         "description" => $description,
-                        "createdAt" => $createdAt,
+                        "created_at" => $created_at,
                         "updatedAt" => $updatedAt,
                         "category_id" => $category_id,
                         "quantity" => $quantity

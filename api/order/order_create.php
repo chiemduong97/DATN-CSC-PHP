@@ -12,7 +12,7 @@ include_once $_SERVER['DOCUMENT_ROOT'].'/authen/authen.php';
         if($data != null){
             echo json_encode(array(
                 "status"=>true,
-                "ordercode"=>$data
+                "order_code"=>$data
             ));
         }
         else{

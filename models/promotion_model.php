@@ -5,7 +5,7 @@
         public $description;
         public $code;
         public $status;
-        public $createdAt;
+        public $created_at;
         public $start;
         public $end;  
     }

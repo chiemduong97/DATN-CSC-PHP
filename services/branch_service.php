@@ -15,7 +15,7 @@ class BranchService
     public function getAll()
     {
         try {
-            $query = "select id, name, latitude, longitude, address from " . $this->tableName . " where status = 1 ORDER BY id DESC";
+            $query = "select id, name, lat, long, address from " . $this->tableName . " where status = 1 ORDER BY id DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
@@ -25,8 +25,8 @@ class BranchService
                     $each = array(
                         "id" => $id,
                         "name" => $name,
-                        "latitude" => $latitude,
-                        "longitude" => $longitude,
+                        "lat" => $lat,
+                        "long" => $long,
                         "address" => $address,
                     );
                     array_push($data, $each);
@@ -45,7 +45,7 @@ class BranchService
     public function getById($id)
     {
         try {
-            $query = "select id, name, latitude,longitude,address from " . $this->tableName . " where id=:id";
+            $query = "select id, name, lat,long,address from " . $this->tableName . " where id=:id";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -55,8 +55,8 @@ class BranchService
                 $data = array(
                     "id" => $id,
                     "name" => $name,
-                    "latitude" => $latitude,
-                    "longitude" => $longitude,
+                    "lat" => $lat,
+                    "long" => $long,
                     "address" => $address
                 );
                 return $data;

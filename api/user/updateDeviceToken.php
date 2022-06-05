@@ -8,8 +8,8 @@
 
     if($authen -> checkToken()){
         $email = $_POST["email"];
-        $deviceToken = isset($_POST["deviceToken"])?$_POST["deviceToken"]:null;
-        $data = (new UserController()) -> updateDeviceToken($email,$deviceToken);
+        $device_token = isset($_POST["device_token"])?$_POST["device_token"]:null;
+        $data = (new UserController()) -> updateDeviceToken($email,$device_token);
         if($data == 1000){
             echo json_encode(array(
                 "status"=>true

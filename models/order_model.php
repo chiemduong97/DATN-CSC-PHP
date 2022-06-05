@@ -1,20 +1,20 @@
 <?php
     class Order{
-        public $ordercode;
+        public $order_code;
         public $amount;
         public $createAt;
         public $status;
         public $user_id;
-        public $latitude;
-        public $longitude;
+        public $lat;
+        public $long;
         public $phone;
         public $address;
         public $branch_id;
-        public $branch_latitude;
-        public $branch_longitude;
+        public $branch_lat;
+        public $branch_long;
         public $branch_address;
         public $promotion_id;
-        public $promotionCode;
-        public $promotionValue;
-        public $shippingFee;  
+        public $promotion_code;
+        public $promotion_value;
+        public $shipping_fee;  
     }

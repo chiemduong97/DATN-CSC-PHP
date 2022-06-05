@@ -5,7 +5,7 @@
         public $avatar;
         public $description;
         public $price;
-        public $createdAt;
+        public $created_at;
         public $updatedAt;
         public $category_id;
     }

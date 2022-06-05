@@ -21,8 +21,8 @@
         //     return $this->service->insertItem($orderdetail);
         // }
 
-        public function getByOrderCode($ordercode) {
-            return $this->service->getByOrderCode($ordercode);
+        public function getByOrderCode($order_code) {
+            return $this->service->getByOrderCode($order_code);
 
         }
     

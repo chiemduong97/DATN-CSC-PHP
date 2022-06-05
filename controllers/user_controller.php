@@ -126,8 +126,8 @@ class UserController
         return $this -> service -> updateInfo($user);
     }
 
-    public function updateLocation($email,$latitude,$longitude,$address){
-        return $this -> service -> updateLocation($email,$latitude,$longitude,$address);
+    public function updateLocation($email,$lat,$long,$address){
+        return $this -> service -> updateLocation($email,$lat,$long,$address);
     }
 
     public function updatePass($email,$oldpassword,$newpassword){
@@ -148,8 +148,8 @@ class UserController
         return 1001;
     }
 
-    public function updateDeviceToken($email,$deviceToken){
-        return $this -> service -> updateDeviceToken($email,$deviceToken);
+    public function updateDeviceToken($email,$device_token){
+        return $this -> service -> updateDeviceToken($email,$device_token);
     }
 
     

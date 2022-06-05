@@ -9,10 +9,11 @@
         public $phone;
         public $status;
         public $permission;
-        public $firstorder;
+        public $first_order;
         public $wallet;
-        public $deviceToken;
-        public $createdAt;
+        public $csc_point;
+        public $device_token;
+        public $created_at;
     }
 
 ?>

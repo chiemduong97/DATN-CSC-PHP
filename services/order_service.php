@@ -15,7 +15,7 @@ class OrderSerivce
 
     public function getByUser($user_id) {
         try {
-            $query = "SELECT ordercode,status,amount,address,shippingFee,promotionCode,promotionValue,user_id,branch_id,promotion_id,createdAt,branch_address from " . $this ->orders . " WHERE user_id = :user_id ORDER BY createdAt DESC";
+            $query = "SELECT order_code,status,amount,address,shipping_fee,promotion_code,promotion_value,user_id,branch_id,promotion_id,created_at,branch_address from " . $this ->orders . " WHERE user_id = :user_id ORDER BY created_at DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":user_id", $user_id);
             $stmt->execute();
@@ -24,17 +24,17 @@ class OrderSerivce
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     extract($row);
                     $each = array(
-                        "ordercode" => $ordercode,
+                        "order_code" => $order_code,
                         "status" => $status,
                         "amount" => $amount,
                         "address" => $address,
-                        "shippingFee" => $shippingFee,
-                        "promotionCode" => $promotionCode,
-                        "promotionValue" => $promotionValue,
+                        "shipping_fee" => $shipping_fee,
+                        "promotion_code" => $promotion_code,
+                        "promotion_value" => $promotion_value,
                         "user_id" => $user_id,
                         "branch_id" => $branch_id,
                         "promotion_id" => $promotion_id,
-                        "createdAt" => $createdAt,
+                        "created_at" => $created_at,
                         "branch_address" => $branch_address
                     );
                     array_push($data, $each);
@@ -49,11 +49,11 @@ class OrderSerivce
         return null;
     }
 
-    public function updateStatus($ordercode,$status) {
+    public function updateStatus($order_code,$status) {
         try{
-            $sql = "UPDATE " . $this -> orders ." SET status=:status WHERE ordercode=:ordercode";
+            $sql = "UPDATE " . $this -> orders ." SET status=:status WHERE order_code=:order_code";
             $stmt = $this -> connection -> prepare($sql);
-            $stmt -> bindParam(":ordercode",$ordercode);
+            $stmt -> bindParam(":order_code",$order_code);
             $stmt -> bindParam(":status",$status);
             $this -> connection -> beginTransaction();
             if($stmt ->execute()){
@@ -71,27 +71,27 @@ class OrderSerivce
     }
 
 
-    public function getByOrderCode($ordercode) {
+    public function getByorder_code($order_code) {
         try {
-            $query = "SELECT ordercode,status,amount,address,shippingFee,promotionCode,promotionValue,user_id,branch_id,promotion_id,createdAt,branch_address from " . $this ->orders . " WHERE ordercode = :ordercode";
+            $query = "SELECT order_code,status,amount,address,shipping_fee,promotion_code,promotion_value,user_id,branch_id,promotion_id,created_at,branch_address from " . $this ->orders . " WHERE order_code = :order_code";
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(":ordercode", $ordercode);
+            $stmt->bindParam(":order_code", $order_code);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 extract($row);
                 $data = array(
-                    "ordercode" => $ordercode,
+                    "order_code" => $order_code,
                     "status" => $status,
                     "amount" => $amount,
                     "address" => $address,
-                    "shippingFee" => $shippingFee,
-                    "promotionCode" => $promotionCode,
-                    "promotionValue" => $promotionValue,
+                    "shipping_fee" => $shipping_fee,
+                    "promotion_code" => $promotion_code,
+                    "promotion_value" => $promotion_value,
                     "user_id" => $user_id,
                     "branch_id" => $branch_id,
                     "promotion_id" => $promotion_id,
-                    "createdAt" => $createdAt,
+                    "created_at" => $created_at,
                     "branch_address" => $branch_address,
                 );
                 return $data;
@@ -107,45 +107,45 @@ class OrderSerivce
     {
 
         try {
-            if($this -> checkOrderCode($order -> ordercode)) {
+            if($this -> checkorder_code($order -> order_code)) {
                 $query = "UPDATE " . $this->orders . " SET amount = :amount,
                                                     phone = :phone,
-                                                    latitude = :latitude,
-                                                    longitude = :longitude,
+                                                    lat = :lat,
+                                                    long = :long,
                                                     address = :address,
-                                                    branch_latitude = :branch_latitude,
-                                                    branch_longitude = :branch_longitude,
+                                                    branch_lat = :branch_lat,
+                                                    branch_long = :branch_long,
                                                     branch_address = :branch_address,
-                                                    shippingFee = :shippingFee,
-                                                    promotionCode = :promotionCode,
-                                                    promotionValue = :promotionValue
-                                                    WHERE ordercode =:ordercode";
+                                                    shipping_fee = :shipping_fee,
+                                                    promotion_code = :promotion_code,
+                                                    promotion_value = :promotion_value
+                                                    WHERE order_code =:order_code";
                 $phone = $order->phone;
                 $amount = $order->amount;
-                $latitude = $order->latitude;
-                $longitude = $order->longitude;
+                $lat = $order->lat;
+                $long = $order->long;
                 $address = $order->address;
-                $branch_latitude = $order->branch_latitude;
-                $branch_longitude = $order->branch_longitude;
+                $branch_lat = $order->branch_lat;
+                $branch_long = $order->branch_long;
                 $branch_address = $order->branch_address;
-                $shippingFee = $order->shippingFee;
-                $promotionCode = $order->promotionCode;
-                $promotionValue = $order->promotionValue;
-                $ordercode = $order -> ordercode;
+                $shipping_fee = $order->shipping_fee;
+                $promotion_code = $order->promotion_code;
+                $promotion_value = $order->promotion_value;
+                $order_code = $order -> order_code;
 
                 $stmt = $this->connection->prepare($query);
                 $stmt->bindParam(":amount", $amount);
                 $stmt->bindParam(":phone", $phone);
-                $stmt->bindParam(":latitude", $latitude);
-                $stmt->bindParam(":longitude", $longitude);
+                $stmt->bindParam(":lat", $lat);
+                $stmt->bindParam(":long", $long);
                 $stmt->bindParam(":address", $address);
-                $stmt->bindParam(":branch_latitude", $branch_latitude);
-                $stmt->bindParam(":branch_longitude", $branch_longitude);
+                $stmt->bindParam(":branch_lat", $branch_lat);
+                $stmt->bindParam(":branch_long", $branch_long);
                 $stmt->bindParam(":branch_address", $branch_address);
-                $stmt->bindParam(":shippingFee", $shippingFee);
-                $stmt->bindParam(":promotionCode", $promotionCode);
-                $stmt->bindParam(":promotionValue", $promotionValue);
-                $stmt->bindParam(":ordercode", $ordercode);
+                $stmt->bindParam(":shipping_fee", $shipping_fee);
+                $stmt->bindParam(":promotion_code", $promotion_code);
+                $stmt->bindParam(":promotion_value", $promotion_value);
+                $stmt->bindParam(":order_code", $order_code);
                 $this->connection->beginTransaction();
                 if ($stmt->execute()) {
                     $this->connection->commit();
@@ -155,16 +155,16 @@ class OrderSerivce
                     return false;
                 }
             } else {
-                $query = "INSERT INTO " . $this -> orders . " SET ordercode =:ordercode,
+                $query = "INSERT INTO " . $this -> orders . " SET order_code =:order_code,
                                                               user_id = :user_id,
                                                               branch_id = :branch_id,
                                                               promotion_id = :promotion_id";
-                $ordercode = $order->ordercode;
+                $order_code = $order->order_code;
                 $user_id = $order->user_id;
                 $branch_id = $order->branch_id;
                 $stmt = $this->connection->prepare($query);
                 $promotion_id = $order->promotion_id;
-                $stmt->bindParam(":ordercode", $ordercode);
+                $stmt->bindParam(":order_code", $order_code);
                 $stmt->bindParam(":user_id", $user_id);
                 $stmt->bindParam(":branch_id", $branch_id);
                 $stmt->bindParam(":promotion_id", $promotion_id);
@@ -186,12 +186,12 @@ class OrderSerivce
         return false;
     }
 
-    public function checkOrderCode($ordercode)
+    public function checkorder_code($order_code)
     {
         try {
-            $query = "SELECT ordercode from " . $this ->orders . " WHERE ordercode = :ordercode";
+            $query = "SELECT order_code from " . $this ->orders . " WHERE order_code = :order_code";
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(":ordercode", $ordercode);
+            $stmt->bindParam(":order_code", $order_code);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 return true;

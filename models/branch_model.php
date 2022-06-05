@@ -1,9 +1,9 @@
 <?php
-    class Branch{
+    class Branch {
         public $id;
         public $name;
-        public $latitude;
-        public $longitude;
+        public $lat;
+        public $long;
         public $address;
     }
 

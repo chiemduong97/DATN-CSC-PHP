@@ -1,8 +1,8 @@
 <?php
     class OrderDetail{
         public $quantity;
-        public $amount;
-        public $ordercode;
+        public $price;
+        public $order_code;
         public $product_id;
         public $name;
     }

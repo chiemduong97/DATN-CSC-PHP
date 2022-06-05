@@ -8,11 +8,11 @@
 
     if($authen -> checkToken()){
         $email = $_POST["email"];
-        $latitude = $_POST["latitude"];
-        $longitude = $_POST["longitude"];
+        $lat = $_POST["lat"];
+        $long = $_POST["long"];
         $address = $_POST["address"];
 
-        $data = (new UserController()) -> updateLocation($email,$latitude,$longitude,$address);
+        $data = (new UserController()) -> updateLocation($email,$lat,$long,$address);
         if($data == 1000){
             echo json_encode(array(
                 "status"=>true

@@ -15,7 +15,7 @@ class UserService
     public function register($user)
     {
         try {
-            $sql = 'UPDATE requests SET available=0 WHERE email=:email';
+            $sql = 'UPDATE requests SET status=0 WHERE email=:email';
             $stmt = $this->db->prepare($sql);
             $email = $user->email;
             $password = $user->password;
@@ -73,7 +73,7 @@ class UserService
     public function getByEmail($email)
     {
         try {
-            $sql = "SELECT id,email,password,avatar,fullname,phone,birthday,wallet,status,permission,firstorder,devicetoken,createdAt FROM " . $this->users . " WHERE email=:email";
+            $sql = "SELECT id,email,password,avatar,fullname,phone,birthday,wallet,csc_point,status,permission,first_order,device_token,created_at FROM " . $this->users . " WHERE email=:email";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":email", $email);
             $stmt->execute();
@@ -90,10 +90,11 @@ class UserService
                 $user -> phone = $row["phone"];
                 $user -> status = $row["status"];
                 $user -> permission = $row["permission"];
-                $user -> firstorder = $row["firstorder"];
+                $user -> first_order = $row["first_order"];
                 $user -> wallet = $row["wallet"];
-                $user -> devicetoken = $row["devicetoken"];
-                $user -> createdAt = $row["createdAt"];
+                $user -> csc_point = $row["csc_point"];
+                $user -> device_token = $row["device_token"];
+                $user -> created_at = $row["created_at"];
                 return $user;
             }
         } catch (Exception $e) {
@@ -106,7 +107,7 @@ class UserService
     {
         try {
             date_default_timezone_set('Asia/Ho_Chi_Minh');
-            $sql = 'SELECT salt,token,available,createdAt FROM requests WHERE email=:email';
+            $sql = 'SELECT salt,token,status,created_at FROM requests WHERE email=:email';
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":email", $email);
             $stmt->execute();
@@ -114,10 +115,10 @@ class UserService
                 $data = $stmt->fetchObject();
                 $salt = $data->salt;
                 $token = $data->token;
-                $available = $data->available;
-                if ($available == 1) {
+                $status = $data->status;
+                if ($status == 1) {
                     if ($this->verifyHash($code . $salt, $token)) {
-                        $old = new DateTime($data->createdAt);
+                        $old = new DateTime($data->created_at);
                         $now = new DateTime(date("Y-m-d H:i:s"));
                         $diff = $now->getTimestamp() - $old->getTimestamp();
                         if ($diff < 300) {
@@ -167,13 +168,13 @@ class UserService
             if ($stmt->execute()) {
                 $row_count = $stmt->fetchColumn();
                 if ($row_count == 0) {
-                    $sql = 'INSERT INTO requests SET email=:email,token=:token,salt=:salt,createdAt=:createdAt';
+                    $sql = 'INSERT INTO requests SET email=:email,token=:token,salt=:salt,created_at=:created_at';
                     $stmt = $this->db->prepare($sql);
                     $stmt->bindParam(":email", $email);
                     $stmt->bindParam(":token", $token);
                     $stmt->bindParam(":salt", $salt);
-                    $createdAt = date("Y-m-d H:i:s");
-                    $stmt->bindParam(":createdAt", $createdAt);
+                    $created_at = date("Y-m-d H:i:s");
+                    $stmt->bindParam(":created_at", $created_at);
                     $this->db->beginTransaction();
                     if ($stmt->execute()) {
                         $this->db->commit();
@@ -183,20 +184,20 @@ class UserService
                         return null;
                     }
                 } else {
-                    $sql = 'SELECT COUNT(*) from requests WHERE email=:email and available=1 and createdAt > now() - interval 5 minute';
+                    $sql = 'SELECT COUNT(*) from requests WHERE email=:email and status=1 and created_at > now() - interval 5 minute';
                     $stmt = $this->db->prepare($sql);
                     $stmt->bindParam(":email", $email);
                     if ($stmt->execute()) {
                         $row_count = $stmt->fetchColumn();
                         if ($row_count == 0) {
-                            $sql = 'UPDATE requests SET token =:token,salt =:salt,createdAt=:createdAt,available=1 
+                            $sql = 'UPDATE requests SET token =:token,salt =:salt,created_at=:created_at,status=1 
                                     WHERE email=:email';
                             $stmt = $this->db->prepare($sql);
                             $stmt->bindParam(":email", $email);
                             $stmt->bindParam(":token", $token);
                             $stmt->bindParam(":salt", $salt);
-                            $createdAt = date("Y-m-d H:i:s");
-                            $stmt->bindParam(":createdAt", $createdAt);
+                            $created_at = date("Y-m-d H:i:s");
+                            $stmt->bindParam(":created_at", $created_at);
                             $this->db->beginTransaction();
                             if ($stmt->execute()) {
                                 $this->db->commit();
@@ -225,7 +226,7 @@ class UserService
     {
         $hash = password_hash($password, PASSWORD_BCRYPT);
         $user = new User(null, $email, $hash, null, null, null, null, null, null, null, null, null, null);
-        $sql = "UPDATE requests SET available=0 WHERE email=:email";
+        $sql = "UPDATE requests SET status=0 WHERE email=:email";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(":email", $email);
         $this->db->beginTransaction();
@@ -264,7 +265,7 @@ class UserService
 
     public function getUserByEmail($email){
         try{
-            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,firstorder,latitude,longitude,address FROM " . $this -> users . " where email=:email";
+            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,first_order,lat,long,address FROM " . $this -> users . " where email=:email";
             $stmt = $this -> db -> prepare($sql);
             $stmt -> bindParam(":email",$email);
             $stmt -> execute();
@@ -278,9 +279,9 @@ class UserService
                 "phone"=>$row["phone"],
                 "birthday"=>$row["birthday"],
                 "wallet"=>$row["wallet"],
-                "firstorder"=>$row["firstorder"],
-                "latitude"=>$row["latitude"],
-                "longitude"=>$row["longitude"],
+                "first_order"=>$row["first_order"],
+                "lat"=>$row["lat"],
+                "long"=>$row["long"],
                 "address"=>$row["address"]
             );
             return $data;
@@ -346,15 +347,15 @@ class UserService
         return 1001;
     }
 
-    public function updateLocation($email,$latitude,$longitude,$address){
+    public function updateLocation($email,$lat,$long,$address){
         try{
-            $sql = "UPDATE " . $this -> users ." SET latitude=:latitude,
-                                                    longitude=:longitude,
+            $sql = "UPDATE " . $this -> users ." SET lat=:lat,
+                                                    long=:long,
                                                     address=:address WHERE email=:email";
             $stmt = $this -> db -> prepare($sql);
 
-            $stmt -> bindParam(":latitude",$latitude);
-            $stmt -> bindParam(":longitude",$longitude);
+            $stmt -> bindParam(":lat",$lat);
+            $stmt -> bindParam(":long",$long);
             $stmt -> bindParam(":address",$address);
             $stmt -> bindParam(":email",$email);
 
@@ -373,11 +374,11 @@ class UserService
         return 1001;
     }
 
-    public function updateDeviceToken($email,$deviceToken){
+    public function updateDeviceToken($email,$device_token){
         try{
-            $sql = "UPDATE " . $this -> users ." SET devicetoken=:devicetoken WHERE email=:email";
+            $sql = "UPDATE " . $this -> users ." SET device_token=:device_token WHERE email=:email";
             $stmt = $this -> db -> prepare($sql);
-            $stmt -> bindParam(":devicetoken",$deviceToken);
+            $stmt -> bindParam(":device_token",$device_token);
             $stmt -> bindParam(":email",$email);
             $this -> db -> beginTransaction();
             if($stmt ->execute()){
