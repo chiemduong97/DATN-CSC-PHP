@@ -19,6 +19,7 @@ if (empty($_SESSION['email'])) {
 $currentPage = 1;
 $categoryId = 1;
 $branchId = 1;
+$limit = 10;
 
 if (!empty($_GET['categoryId'])) {
     if ($_GET['categoryId'] != "")
@@ -33,7 +34,7 @@ if (!empty($_GET['page'])) {
         $currentPage = $_GET['page'];
 }
 
-$products = $db->getProductsWithPageByCategoryAndBranch($categoryId, $branchId, $currentPage);
+$products = $db->getProducts($categoryId, $branchId, $currentPage, $limit);
 $totalPage =  $db->getTotalPages($categoryId, $branchId);
 
 $categories = $dbCategory->getAll();

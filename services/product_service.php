@@ -6,59 +6,11 @@ class ProductService
 {
     private $connection;
     private $tableName = "products";
-    private $totalPostInPage = 10;
+    // private $totalPostInPage = 10;
 
     public function __construct()
     {
         $this->connection = (new DatabaseConfig())->db_connect();
-    }
-
-    public function getByCategory($category_id,$branch_id)
-    {
-        try {
-            $query = "SELECT products.id,
-                             products.name, 
-                             products.avatar, 
-                             products.price, 
-                             products.description, 
-                             products.created_at, 
-                             products.updatedAt, 
-                             products.category_id,
-                             quantities.quantity
-                             FROM " . $this->tableName . 
-                             " INNER JOIN quantities ON products.id = quantities.product_id
-                             WHERE products.category_id = :category_id AND quantities.branch_id = :branch_id 
-                             AND products.status = 1 ORDER BY products.created_at DESC";
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(":category_id", $category_id);
-            $stmt->bindParam(":branch_id", $branch_id);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                $data = array();
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    extract($row);
-                    $each = array(
-                        "id" => $id,
-                        "name" => $name,
-                        "avatar" => $avatar,
-                        "price" => $price,
-                        "description" => $description,
-                        "created_at" => $created_at,
-                        "updatedAt" => $updatedAt,
-                        "category_id" => $category_id,
-                        "quantity" => $quantity
-                    );
-                    array_push($data, $each);
-                }
-                return $data;
-            }
-            return array();
-        } catch (Exception $e) {
-            //throw $th;
-            echo "products loi getAll(): " . $e->getMessage();
-            return null;
-        }
-        return null;
     }
 
     public function getByID($id)
@@ -107,7 +59,7 @@ class ProductService
         return false;
     }
 
-    public function insertItem($product_model,$category_id)
+    public function insertItem($product_model, $category_id)
     {
         try {
             $query = "insert into " . $this->tableName . " set name = :name, avatar = :avatar,
@@ -136,7 +88,7 @@ class ProductService
         return 1001;
     }
 
-    public function updateItem($product_model,$category_id)
+    public function updateItem($product_model, $category_id)
     {
         try {
             $query = "update " . $this->tableName . " set name = :name, avatar = :avatar,
@@ -205,24 +157,27 @@ class ProductService
         return false;
     }
 
-    public function getProductsWithPageByCategoryAndBranch($category_id = 1, $branch_id = 1,$page = 1)
+    public function getProducts($category_id = 1, $branch_id = 1, $page = 1, $limit = 10)
     {
         try {
             $page -= 1;
-            $start = $page * $this->totalPostInPage;
+            if($page < 0){
+                $page = 0;
+            }
+            $start = $page * $limit;
 
-            $query = 
-            "SELECT products.id, products.name, products.avatar, products.description, 
-                products.price, quantities.quantity
-                FROM  " . $this->tableName . " INNER JOIN quantities ON products.id = quantities.product_id
-                WHERE products.category_id = :category_id and quantities.branch_id = :branch_id and products.status = 1 
+            $query =
+                "SELECT products.id, products.name, products.avatar, products.description, 
+                products.price, warehouse.quantity
+                FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
+                WHERE products.category_id = :category_id and warehouse.branch_id = :branch_id and products.status = 1 
                 ORDER BY id DESC LIMIT :start , :total";
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
             $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
             $stmt->bindParam(':start', $start, PDO::PARAM_INT);
-            $stmt->bindParam(":total", $this->totalPostInPage, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -241,21 +196,23 @@ class ProductService
                 }
                 return $data;
             }
+            return [];
         } catch (Exception $e) {
-            echo "loi: " . $e->getMessage();
+            echo "loi service getProducts: " . $e->getMessage();
+            return [];
         }
-        return null;
+        return [];
     }
 
     public function getTotalPages($category_id = 1, $branch_id = 1)
     {
         try {
-            $query = "select COUNT(id) as total FROM " . $this->tableName ." 
-                INNER JOIN quantities ON products.id = quantities.product_id
-                WHERE products.category_id = :category_id and quantities.branch_id = :branch_id and products.status = 1 ";
+            $query = "select COUNT(id) as total FROM " . $this->tableName . " 
+                INNER JOIN warehouse ON products.id = warehouse.product_id
+                WHERE products.category_id = :category_id and warehouse.branch_id = :branch_id and products.status = 1 ";
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT); 
-            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT); 
+            $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -270,4 +227,3 @@ class ProductService
         return null;
     }
 }
-?>
