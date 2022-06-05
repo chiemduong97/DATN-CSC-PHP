@@ -112,7 +112,7 @@ FOREIGN KEY (`email`) REFERENCES users(`email`)
 CREATE TABLE IF NOT EXISTS `ratings` (
 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `rating` INT(1) NOT NULL,
-`content` VARCHAR(1024) NOT NULL,
+`content` VARCHAR(1025) NOT NULL,
 `created_at` DATETIME DEFAULT NOW() NOT NULL,
 `user_id` INT(11) NOT NULL,
 `product_id` INT(11) NOT NULL,
