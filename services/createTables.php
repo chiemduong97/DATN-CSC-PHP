@@ -52,7 +52,7 @@
                     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     `name` VARCHAR(255) NOT NULL,
                     `avatar` VARCHAR(255) NOT NULL,
-                    `description` VARCHAR(255) NOT NULL,
+                    `description` VARCHAR(1024) NOT NULL,
                     `price` REAL NOT NULL,
                     `created_at` DATETIME DEFAULT NOW() NOT NULL,
                     `updated_at` DATETIME,
@@ -72,7 +72,7 @@
                     CREATE TABLE IF NOT EXISTS `promotions` (
                     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     `avatar` VARCHAR(255) NOT NULL,
-                    `description` VARCHAR(255) NOT NULL,
+                    `description` VARCHAR(1024) NOT NULL,
                     `code` VARCHAR(255) NOT NULL,
                     `value` REAL NOT NULL,
                     `status` BIT DEFAULT 1 NOT NULL,
@@ -122,7 +122,7 @@
                     CREATE TABLE IF NOT EXISTS `ratings` (
                     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                     `rating` INT(1) NOT NULL,
-                    `content` VARCHAR NOT NULL,
+                    `content` VARCHAR(1024) NOT NULL,
                     `created_at` DATETIME DEFAULT NOW() NOT NULL,
                     `user_id` INT(11) NOT NULL,
                     `product_id` INT(11) NOT NULL,
