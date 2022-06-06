@@ -53,7 +53,7 @@ class UserController
                 return 1004;
             }
         }
-        return 1001;
+        return 1002;
     }
 
     public function sendRequest($email, $requestType)

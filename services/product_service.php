@@ -13,6 +13,52 @@ class ProductService
         $this->connection = (new DatabaseConfig())->db_connect();
     }
 
+    public function getProducts($category_id = 1, $branch_id = 1, $page = 1, $limit = 10)
+    {
+        try {
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+
+            $query =
+                "SELECT products.id, products.name, products.avatar, products.description, 
+                products.price, warehouse.quantity
+                FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
+                WHERE products.category_id = :category_id and warehouse.branch_id = :branch_id and products.status = 1 
+                ORDER BY id DESC LIMIT :start , :total";
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                $data = array();
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar,
+                        "description" => $description,
+                        "price" => $price,
+                        "quantity" => $quantity
+                    );
+                    array_push($data, $each);
+                }
+                return $data;
+            }
+            return [];
+        } catch (Exception $e) {
+            echo "loi service getProducts: " . $e->getMessage();
+            return [];
+        }
+    }
+
     public function getByID($id)
     {
         try {
@@ -30,15 +76,13 @@ class ProductService
                     "description" => $description,
                     "price" => $price
                 );
-
                 return $data;
-            } else {
-                return false;
             }
+            return 1001;
         } catch (Exception $e) {
             echo "loi getByID(): " . $e->getMessage();
+            return 1001;
         }
-        return false;
     }
 
     public function checkName($name)
@@ -84,8 +128,8 @@ class ProductService
             }
         } catch (Exception $e) {
             throw $e;
+            return 1001;
         }
-        return 1001;
     }
 
     public function updateItem($product_model, $category_id)
@@ -157,52 +201,7 @@ class ProductService
         return false;
     }
 
-    public function getProducts($category_id = 1, $branch_id = 1, $page = 1, $limit = 10)
-    {
-        try {
-            $page -= 1;
-            if($page < 0){
-                $page = 0;
-            }
-            $start = $page * $limit;
 
-            $query =
-                "SELECT products.id, products.name, products.avatar, products.description, 
-                products.price, warehouse.quantity
-                FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
-                WHERE products.category_id = :category_id and warehouse.branch_id = :branch_id and products.status = 1 
-                ORDER BY id DESC LIMIT :start , :total";
-
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
-            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
-            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
-            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
-                $data = array();
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    extract($row);
-                    $each = array(
-                        "id" => $id,
-                        "name" => $name,
-                        "avatar" => $avatar,
-                        "description" => $description,
-                        "price" => $price,
-                        "quantity" => $quantity
-                    );
-                    array_push($data, $each);
-                }
-                return $data;
-            }
-            return [];
-        } catch (Exception $e) {
-            echo "loi service getProducts: " . $e->getMessage();
-            return [];
-        }
-        return [];
-    }
 
     public function getTotalPages($category_id = 1, $branch_id = 1)
     {

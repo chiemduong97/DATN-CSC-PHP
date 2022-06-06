@@ -6,41 +6,11 @@ class CategoryService
 {
     private $connection;
     private $tableName = "categories";
-    private $totalPostInPage = 10;
+    // private $totalPostInPage = 10;
 
     public function __construct()
     {
         $this->connection = (new DatabaseConfig())->db_connect();
-    }
-
-    public function getAll()
-    {
-        try {
-            $query = "select id, name, avatar from " . $this->tableName . " where status = 1 ORDER BY id DESC";
-            $stmt = $this->connection->prepare($query);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                $data = array();
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    extract($row);
-                    $each = array(
-                        "id" => $id,
-                        "name" => $name,
-                        "avatar" => $avatar,
-                    );
-                    array_push($data, $each);
-                }
-                return $data;
-            }
-            else {
-                return null;
-            }
-        } catch (Exception $e) {
-            //throw $th;
-            echo "categories loi getAll(): " . $e->getMessage();
-            return null;
-        }
-        return null;
     }
 
     public function getByID($id)
@@ -176,17 +146,20 @@ class CategoryService
         return false;
     }
 
-    
-    public function getCategoriesWithPage($page = 1)
+    public function getCategoriesLevel_0($page = 1, $limit = 10)
     {
         try {
             $page -= 1;
-            $start = $page * $this->totalPostInPage;
-            $query = "select id, name, avatar from " . $this->tableName . " where status = 1 ORDER BY id DESC LIMIT :start , :total";
-
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+            $query = "select id, name, avatar from " . $this->tableName . " 
+                where status = 1  AND level = 0 ORDER BY id DESC LIMIT :start , :total";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':start', $start, PDO::PARAM_INT);
-            $stmt->bindParam(":total", $this->totalPostInPage, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
+
             $stmt->execute();
 
             if ($stmt->rowCount() > 0) {
@@ -202,16 +175,55 @@ class CategoryService
                 }
                 return $data;
             }
+            return [];
         } catch (Exception $e) {
             echo "loi: " . $e->getMessage();
+            return [];
         }
-        return null;
+    }
+
+    public function getCategoriesLevel_1($page = 1, $limit = 10, $category_id)
+    {
+        try {
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+            $query = "select id, name, avatar from " . $this->tableName . " 
+                where status = 1  AND level = 1 and category_id = :category_id 
+                ORDER BY id DESC LIMIT :start , :total";
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
+            $stmt->bindParam(":category_id", $category_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                $data = array();
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar
+                    );
+                    array_push($data, $each);
+                }
+                return $data;
+            }
+            return [];
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return [];
+        }
     }
 
     public function getTotalPagesCategories()
     {
         try {
-            $query = "select COUNT(id) as total FROM " . $this->tableName ." where status = 1";
+            $query = "select COUNT(id) as total FROM " . $this->tableName . " where status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
