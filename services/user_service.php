@@ -28,7 +28,7 @@ class UserService
                 $this->db->commit();
                 $sql = "insert into " . $this->users . " set email=:email,password=:password,fullname=:fullname,phone=:phone,permission=:permission";
                 $stmt = $this->db->prepare($sql);
-               
+
                 $stmt->bindParam(":email", $email);
                 $stmt->bindParam(":password", $password);
                 $stmt->bindParam(":fullname", $fullname);
@@ -66,6 +66,7 @@ class UserService
             }
         } catch (Exception $e) {
             throw $e;
+            return 1001;
         }
         return 1001;
     }
@@ -81,20 +82,20 @@ class UserService
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 extract(array($row));
                 $user = new User();
-                $user -> id = $row["id"];
-                $user -> email = $row["email"];
-                $user -> password = $row["password"];
-                $user -> avatar = $row["avatar"];
-                $user -> fullname = $row["fullname"];
-                $user -> birthday = $row["birthday"];
-                $user -> phone = $row["phone"];
-                $user -> status = $row["status"];
-                $user -> permission = $row["permission"];
-                $user -> first_order = $row["first_order"];
-                $user -> wallet = $row["wallet"];
-                $user -> csc_point = $row["csc_point"];
-                $user -> device_token = $row["device_token"];
-                $user -> created_at = $row["created_at"];
+                $user->id = $row["id"];
+                $user->email = $row["email"];
+                $user->password = $row["password"];
+                $user->avatar = $row["avatar"];
+                $user->fullname = $row["fullname"];
+                $user->birthday = $row["birthday"];
+                $user->phone = $row["phone"];
+                $user->status = $row["status"];
+                $user->permission = $row["permission"];
+                $user->first_order = $row["first_order"];
+                $user->wallet = $row["wallet"];
+                $user->csc_point = $row["csc_point"];
+                $user->device_token = $row["device_token"];
+                $user->created_at = $row["created_at"];
                 return $user;
             }
         } catch (Exception $e) {
@@ -258,138 +259,142 @@ class UserService
                 return 1001;
             }
         } catch (Exception $e) {
-            throw $e;
+            // throw $e;
+            return 1001;
         }
-        return 1001;
     }
 
-    public function getUserByEmail($email){
-        try{
-            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,first_order,lat,long,address FROM " . $this -> users . " where email=:email";
-            $stmt = $this -> db -> prepare($sql);
-            $stmt -> bindParam(":email",$email);
-            $stmt -> execute();
-            $row = $stmt -> fetch();
-            extract((array)$row);
-            $data = array(
-                "id"=>$row["id"],
-                "email"=>$row["email"],
-                "avatar"=>$row["avatar"],
-                "fullname"=>$row["fullname"],
-                "phone"=>$row["phone"],
-                "birthday"=>$row["birthday"],
-                "wallet"=>$row["wallet"],
-                "first_order"=>$row["first_order"],
-                "lat"=>$row["lat"],
-                "long"=>$row["long"],
-                "address"=>$row["address"]
-            );
-            return $data;
-
-        }catch(Throwable $e){
-            throw $e;
-        }
-        return null;
-    }
-
-    public function updateAvatar($user){
-        try{
-            $sql = "update " . $this -> users ." set avatar=:avatar where email=:email";
-            $stmt = $this -> db -> prepare($sql);
-            $avatar = $user -> avatar;
-            $email = $user -> email;
-            $stmt -> bindParam(":avatar",$avatar);
-            $stmt -> bindParam(":email",$email);
-
-            $this -> db -> beginTransaction();
-            if($stmt ->execute()){
-                $this -> db -> commit();
-                return 1000;
+    public function getUserByEmail($email)
+    {
+        try {
+            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,first_order,lat,long,address FROM " . $this->users . " where email=:email";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":email", $email);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract(array($row));
+                $data = array(
+                    "id" => $row["id"],
+                    "email" => $row["email"],
+                    "avatar" => $row["avatar"],
+                    "fullname" => $row["fullname"],
+                    "phone" => $row["phone"],
+                    "birthday" => $row["birthday"],
+                    "wallet" => $row["wallet"],
+                    "first_order" => $row["first_order"],
+                    "lat" => $row["lat"],
+                    "long" => $row["long"],
+                    "address" => $row["address"]
+                );
+                return $data;
             }
-            else{
-                $this -> db -> rollBack();
+            return 1001;
+        } catch (Throwable $e) {
+            throw $e;
+            return 1001;
+        }
+    }
+
+    public function updateAvatar($user)
+    {
+        try {
+            $sql = "update " . $this->users . " set avatar=:avatar where email=:email";
+            $stmt = $this->db->prepare($sql);
+            $avatar = $user->avatar;
+            $email = $user->email;
+            $stmt->bindParam(":avatar", $avatar);
+            $stmt->bindParam(":email", $email);
+
+            $this->db->beginTransaction();
+            if ($stmt->execute()) {
+                $this->db->commit();
+                return 1000;
+            } else {
+                $this->db->rollBack();
                 return 1001;
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
+            return 1001;
         }
         return 1001;
     }
 
-    public function updateInfo($user){
-        try{
-            $sql = "UPDATE " . $this -> users ." SET fullname=:fullname,
+    public function updateInfo($user)
+    {
+        try {
+            $sql = "UPDATE " . $this->users . " SET fullname=:fullname,
                                                     birthday=:birthday,
                                                     phone=:phone WHERE email=:email";
-            $stmt = $this -> db -> prepare($sql);
-            $fullname = $user -> fullname;
-            $birthday = $user -> birthday;
-            $phone = $user -> phone;
-            $email = $user -> email;
+            $stmt = $this->db->prepare($sql);
+            $fullname = $user->fullname;
+            $birthday = $user->birthday;
+            $phone = $user->phone;
+            $email = $user->email;
 
-            $stmt -> bindParam(":fullname",$fullname);
-            $stmt -> bindParam(":birthday",$birthday);
-            $stmt -> bindParam(":phone",$phone);
-            $stmt -> bindParam(":email",$email);
+            $stmt->bindParam(":fullname", $fullname);
+            $stmt->bindParam(":birthday", $birthday);
+            $stmt->bindParam(":phone", $phone);
+            $stmt->bindParam(":email", $email);
 
-            $this -> db -> beginTransaction();
-            if($stmt ->execute()){
-                $this -> db -> commit();
+            $this->db->beginTransaction();
+            if ($stmt->execute()) {
+                $this->db->commit();
                 return 1000;
-            }
-            else{
-                $this -> db -> rollBack();
+            } else {
+                $this->db->rollBack();
                 return 1001;
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
         }
         return 1001;
     }
 
-    public function updateLocation($email,$lat,$long,$address){
-        try{
-            $sql = "UPDATE " . $this -> users ." SET lat=:lat,
+    public function updateLocation($email, $lat, $long, $address)
+    {
+        try {
+            $sql = "UPDATE " . $this->users . " SET lat=:lat,
                                                     long=:long,
                                                     address=:address WHERE email=:email";
-            $stmt = $this -> db -> prepare($sql);
+            $stmt = $this->db->prepare($sql);
 
-            $stmt -> bindParam(":lat",$lat);
-            $stmt -> bindParam(":long",$long);
-            $stmt -> bindParam(":address",$address);
-            $stmt -> bindParam(":email",$email);
+            $stmt->bindParam(":lat", $lat);
+            $stmt->bindParam(":long", $long);
+            $stmt->bindParam(":address", $address);
+            $stmt->bindParam(":email", $email);
 
-            $this -> db -> beginTransaction();
-            if($stmt ->execute()){
-                $this -> db -> commit();
+            $this->db->beginTransaction();
+            if ($stmt->execute()) {
+                $this->db->commit();
                 return 1000;
-            }
-            else{
-                $this -> db -> rollBack();
+            } else {
+                $this->db->rollBack();
                 return 1001;
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
         }
         return 1001;
     }
 
-    public function updateDeviceToken($email,$device_token){
-        try{
-            $sql = "UPDATE " . $this -> users ." SET device_token=:device_token WHERE email=:email";
-            $stmt = $this -> db -> prepare($sql);
-            $stmt -> bindParam(":device_token",$device_token);
-            $stmt -> bindParam(":email",$email);
-            $this -> db -> beginTransaction();
-            if($stmt ->execute()){
-                $this -> db -> commit();
+    public function updateDeviceToken($email, $device_token)
+    {
+        try {
+            $sql = "UPDATE " . $this->users . " SET device_token=:device_token WHERE email=:email";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":device_token", $device_token);
+            $stmt->bindParam(":email", $email);
+            $this->db->beginTransaction();
+            if ($stmt->execute()) {
+                $this->db->commit();
                 return 1000;
-            }
-            else{
-                $this -> db -> rollBack();
+            } else {
+                $this->db->rollBack();
                 return 1001;
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
         }
         return 1001;

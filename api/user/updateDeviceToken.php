@@ -1,34 +1,34 @@
 <?php
-    include_once '../../config/configHeader.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/user_controller.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/authen/authen.php';
-    $authen = new Authen();
+include_once '../../config/configHeader.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/user_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 
-    (new CF_Header()) -> config("POST");
+(new CF_Header())->config("POST");
+$code = 1001;
+$data = [];
+$authen = new Authen();
 
-    if($authen -> checkToken()){
+if ($authen->checkToken()) {
+    if (
+        isset($_POST["email"])
+    ) {
         $email = $_POST["email"];
-        $device_token = isset($_POST["device_token"])?$_POST["device_token"]:null;
-        $data = (new UserController()) -> updateDeviceToken($email,$device_token);
-        if($data == 1000){
-            echo json_encode(array(
-                "status"=>true
-            ));
-        }
-        else{
-            echo json_encode(array(
-                "status"=>false,
-                "code"=>$data
-            ));
+        $device_token = isset($_POST["device_token"]) ? $_POST["device_token"] : null;
+        $data = (new UserController())->updateDeviceToken($email, $device_token);
+        if ($data == 1000) {
+            $code = 1000;
+        } else {
+            $code = $data;
         }
     }
-    else
-    {
-        echo json_encode(array(
-            "status"=>false,
-            "code"=>1001,
-        ));
-    }   
+} else {
+    $code = 401;
+}
 
-    
-?>
+echo (
+    (new Response(
+        $code,
+        $data,
+    ))->response()
+);

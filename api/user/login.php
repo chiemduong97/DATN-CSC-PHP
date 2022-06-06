@@ -1,38 +1,50 @@
 <?php
-    include_once '../../config/configHeader.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/user_controller.php';
-    use Firebase\JWT\JWT;
-    include_once $_SERVER['DOCUMENT_ROOT'].'/libs/php-jwt-master/src/BeforeValidException.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/libs/php-jwt-master/src/ExpiredException.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/libs/php-jwt-master/src/SignatureInvalidException.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/libs/php-jwt-master/src/JWT.php';
+include_once '../../config/configHeader.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/user_controller.php';
 
+use Firebase\JWT\JWT;
 
-    (new CF_Header()) -> config("POST");
+include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/php-jwt-master/src/BeforeValidException.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/php-jwt-master/src/ExpiredException.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/php-jwt-master/src/SignatureInvalidException.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/php-jwt-master/src/JWT.php';
+
+(new CF_Header())->config("POST");
+$code = 1001;
+$data = [];
+
+if (isset($_POST["email"]) && isset($_POST["password"])) {
     $email = $_POST["email"];
     $password = $_POST["password"];
 
     $token = array(
-        "iat"=>time(),
-        "iss"=>"http://localhost:8585",
-        "data"=> array(
-            "email"=>$email,
+        "iat" => time(),
+        "iss" => "http://localhost:8585",
+        "data" => array(
+            "email" => $email,
         )
     );
-    $jwt = JWT::encode($token,123);
+    $jwt = JWT::encode($token, 123);
 
-    $data = (new UserController()) -> login($email,$password);
+    $data = (new UserController())->login($email, $password);
 
-    if($data == 1000){
+    if ($data == 1000) {
         echo json_encode(array(
-            "status"=>true,
-            "accessToken"=>$jwt
+            "code" => 1000,
+            "accessToken" => $jwt
+        ));
+    } else {
+        echo json_encode(array(
+            "isError" => true,
+            "code" => $data,
+            "message" => "Login failed !"
         ));
     }
-    else{
-        echo json_encode(array(
-            "status"=>false,
-            "code"=>$data
-        ));
-    }
-?>
+} else {
+    echo json_encode(array(
+        "isError" => true,
+        "code" => 1013,
+        "message" => "Please fill out completely !"
+    ));
+}
+

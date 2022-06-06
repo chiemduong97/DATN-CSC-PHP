@@ -1,34 +1,36 @@
 <?php
-    include_once '../../config/configHeader.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/user_controller.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/authen/authen.php';
-    $authen = new Authen();
+include_once '../../config/configHeader.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/user_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 
-    (new CF_Header()) -> config("POST");
+(new CF_Header())->config("POST");
+$authen = new Authen();
+$code = 1001;
+$data = [];
 
-    if($authen -> checkToken()){
+if ($authen->checkToken()) {
+    if (
+        isset($_POST["email"]) && isset($_POST["avatar"])
+    ) {
         $email = $_POST["email"];
         $avatar = $_POST["avatar"];
-        $data = (new UserController()) -> updateAvatar($email,$avatar);
-        if($data == 1000){
-            echo json_encode(array(
-                "status"=>true
-            ));
+        $data = (new UserController())->updateAvatar($email, $avatar);
+        if ($data == 1000) {
+            $code = 1000;
+        } else {
+            $code = $data;
         }
-        else{
-            echo json_encode(array(
-                "status"=>false,
-                "code"=>$data
-            ));
-        }
+    } else {
+        $code = 1013;
     }
-    else
-    {
-        echo json_encode(array(
-            "status"=>false,
-            "code"=>1001,
-        ));
-    }   
+} else {
+    $code = 401;
+}
 
-    
-?>
+echo (
+    (new Response(
+        $code,
+        $data,
+    ))->response()
+);

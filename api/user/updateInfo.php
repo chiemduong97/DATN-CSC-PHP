@@ -1,32 +1,29 @@
 <?php
-    include_once '../../config/configHeader.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/user_controller.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/authen/authen.php';
-    $authen = new Authen();
+include_once '../../config/configHeader.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/user_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 
-    (new CF_Header()) -> config("POST");
+(new CF_Header())->config("POST");
+$code = 1001;
+$data = [];
+$authen = new Authen();
 
-    if($authen -> checkToken()){
-        $user = json_decode(file_get_contents('php://input'));
-        $data = (new UserController()) -> updateInfo($user);
-        if($data == 1000){
-            echo json_encode(array(
-                "status"=>true
-            ));
-        }
-        else{
-            echo json_encode(array(
-                "status"=>false,
-                "code"=>$data
-            ));
-        }
+if ($authen->checkToken()) {
+    $user = json_decode(file_get_contents('php://input'));
+    $data = (new UserController())->updateInfo($user);
+    if ($data == 1000) {
+        $code = 1000;
+    } else {
+        $code = $data;
     }
-    else{
-        echo json_encode(array(
-            "status"=>false,
-            "code"=>1001,
-        ));
-    }
+} else {
+    $code = 401;
+}
 
-   
-?>
+echo (
+    (new Response(
+        $code,
+        $data,
+    ))->response()
+);

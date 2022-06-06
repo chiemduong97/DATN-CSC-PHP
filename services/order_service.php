@@ -41,12 +41,11 @@ class OrderSerivce
                 }
                 return $data;
             }
-            return array();
+            return 1001;
         } catch (Exception $e) {
             echo "error: " . $e->getMessage();
-            return null;
+            return 1001;
         }
-        return null;
     }
 
     public function updateStatus($order_code,$status) {

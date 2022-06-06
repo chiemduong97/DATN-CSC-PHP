@@ -2,34 +2,37 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/config/configHeader.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/order_controller.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 
+(new CF_Header())->config("POST");
 $authen = new Authen();
-if ($authen->checkToken()) {
-    (new CF_Header())->config("POST");
+$code = 1001;
+$data = [];
 
-    $order_code = $_POST["order_code"];
-    $status = $_POST["status"];
-    if ($status != 0) {
-        echo json_encode(array(
-            "status" => false,
-            "code" => 1014
-        ));
-    } else {
-        $data = (new OrderController())->updateStatus($order_code, 4);
-        if ($data == 1000) {
-            echo json_encode(array(
-                "status" => true
-            ));
+if ($authen->checkToken()) {
+    if (isset($_POST["order_code"]) && isset($_POST["status"])) {
+        $order_code = $_POST["order_code"];
+        $status = $_POST["status"];
+        if ($status != 0) {
+            $code = 1014;
         } else {
-            echo json_encode(array(
-                "status" => false,
-                "code" => $data
-            ));
+            $data = (new OrderController())->updateStatus($order_code, 4);
+            if ($data == 1000) {
+                $code = 1000;
+            } else {
+                $code = 1001;
+            }
         }
+    } else {
+        $code = 1013;
     }
 } else {
-    echo json_encode(array(
-        "status" => false,
-        "code" => 1001
-    ));
+    $code = 401;
 }
+
+echo (
+    (new Response(
+        $code,
+        $data,
+    ))->response()
+);

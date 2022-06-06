@@ -9,7 +9,7 @@ $authen = new Authen();
 $body = json_decode(file_get_contents("php://input"));
 
 $code = 400;
-$data = array();
+$data = [];
 
 if ($authen->checkToken()) {
     if (property_exists($body, 'id')) {
@@ -17,7 +17,7 @@ if ($authen->checkToken()) {
         $data = (new ProductController())->getByID($id);
 
         if ($data != 1001) {
-            $code = 200;
+            $code = 1000;
         } else {
             $code = 1001;
         }

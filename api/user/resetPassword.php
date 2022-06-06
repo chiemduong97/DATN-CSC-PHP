@@ -1,19 +1,33 @@
 <?php
-    include_once '../../config/configHeader.php';
-    include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/user_controller.php';
-    (new CF_Header()) -> config("POST");
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    $data = (new UserController()) -> resetPassword($email,$password);
-    if($data == 1000){
-        echo json_encode(array(
-            "status"=>true
-        ));
+include_once '../../config/configHeader.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/user_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
+
+(new CF_Header())->config("POST");
+$authen = new Authen();
+$code = 1001;
+$data = [];
+
+if ($authen->checkToken()) {
+    if (
+        isset($_POST["email"]) && isset($_POST["password"])
+    ) {
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        $data = (new UserController())->resetPassword($email, $password);
+        $data == 1000 ?  $code = 1000 :   $code = $data;
+
+    } else {
+        $code = 1013;
     }
-    else{
-        echo json_encode(array(
-            "status"=>false,
-            "code"=>$data
-        ));
-    }
-?>
+} else {
+    $code = 401;
+}
+
+echo (
+    (new Response(
+        $code,
+        $data,
+    ))->response()
+);

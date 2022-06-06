@@ -1,29 +1,30 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT'].'/config/configHeader.php'; 
-include_once $_SERVER['DOCUMENT_ROOT'].'/controllers/order_controller.php';
-include_once $_SERVER['DOCUMENT_ROOT'].'/authen/authen.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/config/configHeader.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/order_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 
-    $authen = new Authen();
-    if ($authen->checkToken()) {
-        (new CF_Header()) -> config("POST");
+(new CF_Header())->config("POST");
+$orderParam = json_decode(file_get_contents("php://input"));
 
-        $orderParam = json_decode(file_get_contents("php://input"));    
-        $data = (new OrderController()) -> insertItem($orderParam);
-        if($data != null){
-            echo json_encode(array(
-                "status"=>true,
-                "order_code"=>$data
-            ));
-        }
-        else{
-            echo json_encode(array(
-                "status"=>false,
-                "code"=>1001
-            ));
-        }
+$authen = new Authen();
+$code = 1001;
+$data = array();
+
+if ($authen->checkToken()) {
+    $data = (new OrderController())->insertItem($orderParam);
+    if ($data != null) {
+        $code = 1000;
     } else {
-        echo json_encode(array(
-            "status"=>false,
-            "code"=>1001
-        ));
+        $code = 1001;
     }
+} else {
+    $code = 401;
+}
+
+echo (
+    (new Response(
+        $code,
+        $data,
+    ))->response()
+);

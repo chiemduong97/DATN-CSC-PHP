@@ -34,13 +34,12 @@ class OrderDetailService
                 }
                 return $data;
             }
-            return array();
+            return 1001;
         } catch (Exception $e) {
             //throw $th;
             echo "loi getAll(): " . $e->getMessage();
-            return null;
+            return 1001;
         }
-        return null;
     }
 
 
