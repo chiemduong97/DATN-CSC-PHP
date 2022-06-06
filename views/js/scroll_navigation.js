@@ -1,23 +1,26 @@
 window.onload=function(){
-//javascript for navigation bar effect on scroll
-window.addEventListener("scroll", function () {
-  var header = document.querySelector("header");
-  header.classList.toggle('sticky', window.scrollY > 0);
-});
-
-//javascript for responsive navigation sidebar menu
-var menu = document.querySelector('.menu');
-var menuBtn = document.querySelector('.menu-btn');
-var closeBtn = document.querySelector('.close-btn');
-
-
-  menuBtn.addEventListener("click", () => {
-    menu.classList.add('active');
-  });
-
-
-  closeBtn.addEventListener("click", () => {
-    menu.classList.remove('active');
-  });
-
-}
+    //Javacript for the scroll indicator bar
+    window.addEventListener("scroll", () => {
+  
+      const indicatorBar = document.querySelector(".scroll-indicator-bar");
+  
+      const pageScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollValue = (pageScroll / height) * 100;
+  
+      indicatorBar.style.width = scrollValue + "%";
+    });
+  
+    //Responsive navigation menu toggle
+    const menuBtn = document.querySelector('.nav-menu-btn');
+    const closeBtn = document.querySelector(".nav-close-btn");
+    const navigation = document.querySelector(".navigation");
+  
+    menuBtn.addEventListener("click", () => {
+      navigation.classList.add("active");
+    });
+  
+    closeBtn.addEventListener("click", () => {
+      navigation.classList.remove("active");
+    });
+  }
