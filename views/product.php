@@ -37,7 +37,7 @@ if (!empty($_GET['page'])) {
 $products = $db->getProducts($categoryId, $branchId, $currentPage, $limit);
 $totalPage =  $db->getTotalPages($categoryId, $branchId);
 
-// $categories = $dbCategory->getAll();
+// $categories = $dbCategory->getCategoriesLevel_0();
 $branches = $dbBranch->getAll();
 
 

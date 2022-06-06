@@ -203,10 +203,10 @@ class ProductService
 
 
 
-    public function getTotalPages($category_id = 1, $branch_id = 1)
+    public function getTotalPages($category_id = 1, $branch_id = 1, $limit = 10)
     {
         try {
-            $query = "select COUNT(id) as total FROM " . $this->tableName . " 
+            $query = "select COUNT(*) as total FROM " . $this->tableName . " 
                 INNER JOIN warehouse ON products.id = warehouse.product_id
                 WHERE products.category_id = :category_id and warehouse.branch_id = :branch_id and products.status = 1 ";
             $stmt = $this->connection->prepare($query);
@@ -217,7 +217,7 @@ class ProductService
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 extract($row);
                 $count = $row['total'];
-                $totalPage = ceil($count / $this->totalPostInPage);
+                $totalPage = ceil($count / $limit);
                 return $totalPage;
             }
         } catch (Exception $e) {
