@@ -220,9 +220,10 @@ class ProductService
                 $totalPage = ceil($count / $limit);
                 return $totalPage;
             }
+            return 1;
         } catch (Exception $e) {
             echo "loi: " . $e->getMessage();
+            return 1;
         }
-        return null;
     }
 }

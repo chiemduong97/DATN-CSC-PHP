@@ -15,7 +15,8 @@ class BranchService
     public function getAll()
     {
         try {
-            $query = "select id, name, lat, long, address from " . $this->tableName . " where status = 1 ORDER BY id DESC";
+            $query = "select * from " . $this->tableName . 
+                " where status = 1 ORDER BY id DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
