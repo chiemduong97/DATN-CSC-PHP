@@ -268,7 +268,7 @@ class UserService
     public function getUserByEmail($email)
     {
         try {
-            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,first_order,lat,long,address FROM " . $this->users . " where email=:email";
+            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,csc_point,first_order,lat,long,address FROM " . $this->users . " where email=:email";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":email", $email);
             $stmt->execute();
@@ -283,6 +283,7 @@ class UserService
                     "phone" => $row["phone"],
                     "birthday" => $row["birthday"],
                     "wallet" => $row["wallet"],
+                    "csc_point" => $row["csc_point"],
                     "first_order" => $row["first_order"],
                     "lat" => $row["lat"],
                     "long" => $row["long"],

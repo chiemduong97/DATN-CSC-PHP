@@ -17,6 +17,6 @@ if (isset($_GET["email"])) {
 echo (
     (new Response(
         $code,
-        $data,
+        null,
     ))->response()
 );
