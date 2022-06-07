@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS `categories` (
 `status` INT(1) DEFAULT 1 NOT NULL,
 `created_at` DATETIME DEFAULT NOW() NOT NULL,
 `category_id` INT(11),
-`level` BIT DEFAULT 0 NOT NULL,
 FOREIGN KEY (`category_id`) REFERENCES categories(`id`)
 );
 CREATE TABLE IF NOT EXISTS `branches` (

@@ -155,7 +155,7 @@ class CategoryService
             }
             $start = $page * $limit;
             $query = "select id, name, avatar from " . $this->tableName . " 
-                where status = 1  AND level = 0 ORDER BY id DESC LIMIT :start , :total";
+                where status = 1   and category_id IS NULL ORDER BY id DESC LIMIT :start , :total";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':start', $start, PDO::PARAM_INT);
             $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
@@ -191,7 +191,7 @@ class CategoryService
             }
             $start = $page * $limit;
             $query = "select id, name, avatar from " . $this->tableName . " 
-                where status = 1  AND level = 1 and category_id = :category_id 
+                where status = 1  AND category_id = :category_id 
                 ORDER BY id DESC LIMIT :start , :total";
 
             $stmt = $this->connection->prepare($query);
