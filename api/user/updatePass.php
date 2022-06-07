@@ -30,6 +30,6 @@ if ($authen->checkToken()) {
 echo (
     (new Response(
         $code,
-        $data,
+        null,
     ))->response()
 );

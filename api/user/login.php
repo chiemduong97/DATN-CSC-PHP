@@ -36,6 +36,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
         );
     } else {
         $code =  $data;
+        $data = null;
     }
 } else {
     $code = 1013;

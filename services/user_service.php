@@ -268,7 +268,7 @@ class UserService
     public function getUserByEmail($email)
     {
         try {
-            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,csc_point,first_order,lat,long,address FROM " . $this->users . " where email=:email";
+            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,csc_point,first_order,lat,lng,address FROM " . $this->users . " where email=:email";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":email", $email);
             $stmt->execute();
@@ -286,15 +286,15 @@ class UserService
                     "csc_point" => $row["csc_point"],
                     "first_order" => $row["first_order"],
                     "lat" => $row["lat"],
-                    "long" => $row["long"],
+                    "lng" => $row["lng"],
                     "address" => $row["address"]
                 );
                 return $data;
             }
-            return 1001;
+            return null;
         } catch (Throwable $e) {
             throw $e;
-            return 1001;
+            return null;
         }
     }
 

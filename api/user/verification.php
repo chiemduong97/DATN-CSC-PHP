@@ -20,6 +20,6 @@ if (
 echo (
     (new Response(
         $code,
-        $data,
+        null,
     ))->response()
 );

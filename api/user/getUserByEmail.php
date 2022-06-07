@@ -13,7 +13,7 @@ if ($authen->checkToken()) {
     if (isset($_GET["email"])) {
         $email = $_GET["email"];
         $data = (new UserController())->getUserByEmail($email);
-        $data == 1001 ?  $code = 1001 :  $code = 1000;
+        $data == null ?  $code = 1001 :  $code = 1000;
     } else {
         $code = 1013;
     }
