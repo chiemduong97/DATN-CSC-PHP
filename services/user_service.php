@@ -12,6 +12,7 @@ class UserService
         $this->db = (new DatabaseConfig())->db_connect();
     }
 
+    // dang co loi: dang ky sdt da ton tai se crash -> kiem tra sdt va email trong controller truoc
     public function register($user)
     {
         try {
@@ -48,8 +49,8 @@ class UserService
             }
         } catch (Exception $e) {
             throw $e;
+            return 1001;
         }
-        return 1001;
     }
 
     public function checkEmail($email)
