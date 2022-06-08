@@ -11,7 +11,6 @@ if (isset($_GET["email"])) {
     $email = $_GET["email"];
     $data = (new UserController())->checkEmail($email);
     $data == 1000 ? $code = 1000 :  $code =  $data;
-    $data = null;
 } else {
     $code = 1013;
 }

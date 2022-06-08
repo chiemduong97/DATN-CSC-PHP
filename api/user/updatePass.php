@@ -20,7 +20,6 @@ if ($authen->checkToken()) {
 
         $data = (new UserController())->updatePass($email, $oldpassword, $newpassword);
         $data == 1000 ?  $code = 1000 :   $code = $data;
-        $data = null;
     } else {
         $code = 1013;
     }

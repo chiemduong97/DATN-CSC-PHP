@@ -17,7 +17,6 @@ if ($authen->checkToken()) {
     } else {
         $code = $data;
     }
-    $data = null;
 } else {
     $code = 401;
 }

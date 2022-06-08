@@ -13,11 +13,7 @@ $authen = new Authen();
 
 if ($authen->checkToken()) {
     $data = (new BranchController())->getAll();
-    if ($data) {
-        $code = 1000;
-    } else {
-        $code = 1001;
-    }
+    $data == null ?  $code = 1001 :  $code = 1000;
 } else {
     $code = 401;
 }

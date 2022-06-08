@@ -14,7 +14,6 @@ if (
     $code = $_POST["code"];
     $data = (new UserController())->verification($email, $code);
     $data == 1000 ?  $code = 1000 :   $code = $data;
-    $data = null;
 } else {
     $code = 1013;
 }
