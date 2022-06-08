@@ -62,12 +62,12 @@ class BranchService
                 );
                 return $data;
             } 
-            return array();
+            return null;
         } catch (Exception $e) {
             echo "loi getByID(): " . $e->getMessage();
             return null;
         }
-        return null;
+       
     }
 
     public function checkName($name)

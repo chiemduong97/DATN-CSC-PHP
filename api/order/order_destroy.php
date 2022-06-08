@@ -7,7 +7,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 (new CF_Header())->config("POST");
 $authen = new Authen();
 $code = 1001;
-$data = [];
+$data = null;
 
 if ($authen->checkToken()) {
     if (isset($_POST["order_code"]) && isset($_POST["status"])) {
@@ -21,6 +21,7 @@ if ($authen->checkToken()) {
                 $code = 1000;
             } else {
                 $code = 1001;
+                $data = null;
             }
         }
     } else {

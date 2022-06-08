@@ -34,6 +34,7 @@ if ($authen->checkToken()) {
         } else {
             $code = 1001;
         }
+        $data = null;
     } else {
         $code = 1013;
     }

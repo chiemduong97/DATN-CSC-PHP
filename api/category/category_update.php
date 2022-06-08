@@ -24,7 +24,9 @@ if ($authen->checkToken()) {
             $code = 1000;
         } else {
             $code = 1001;
+           
         }
+        $data = null;
     } else {
         $code = 1013;
     }
