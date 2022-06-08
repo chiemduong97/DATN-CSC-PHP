@@ -3,7 +3,7 @@
         public $id;
         public $name;
         public $lat;
-        public $long;
+        public $lng;
         public $address;
     }
 

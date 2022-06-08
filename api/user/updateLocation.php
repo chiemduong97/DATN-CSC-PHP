@@ -12,14 +12,14 @@ $data = [];
 if ($authen->checkToken()) {
     if (
         isset($_POST["email"]) && isset($_POST["lat"]) &&
-        isset($_POST["long"]) && isset($_POST["address"])
+        isset($_POST["lng"]) && isset($_POST["address"])
     ) {
         $email = $_POST["email"];
         $lat = $_POST["lat"];
-        $long = $_POST["long"];
+        $lng = $_POST["lng"];
         $address = $_POST["address"];
 
-        $data = (new UserController())->updateLocation($email, $lat, $long, $address);
+        $data = (new UserController())->updateLocation($email, $lat, $lng, $address);
         $data == 1000 ?  $code = 1000 :   $code = $data;
        
     } else {

@@ -49,14 +49,14 @@
                 }
                 $order -> amount = $amount;
                 $order -> lat = $orderParam -> lat;
-                $order -> long = $orderParam -> long;
+                $order -> lng = $orderParam -> lng;
                 $order -> address = $orderParam -> address;
                 $order -> phone = $orderParam -> phone;
                 $order -> shipping_fee = $orderParam -> shipping_fee;
                 $order -> promotion_code = isset($orderParam -> promotion_code)?$orderParam -> promotion_code:null;
                 $order -> promotion_value = isset($orderParam -> promotion_value)?$orderParam -> promotion_value:null;
                 $order -> branch_lat = $orderParam -> branch_lat;
-                $order -> branch_long = $orderParam -> branch_long;
+                $order -> branch_lng = $orderParam -> branch_lng;
                 $order -> branch_address = $orderParam -> branch_address;
                 $result = $this -> service -> insertItem($order);
                 if ($result) {

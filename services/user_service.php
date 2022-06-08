@@ -354,16 +354,16 @@ class UserService
         return 1001;
     }
 
-    public function updateLocation($email, $lat, $long, $address)
+    public function updateLocation($email, $lat, $lng, $address)
     {
         try {
             $sql = "UPDATE " . $this->users . " SET lat=:lat,
-                                                    long=:long,
+                                                    lng=:lng,
                                                     address=:address WHERE email=:email";
             $stmt = $this->db->prepare($sql);
 
             $stmt->bindParam(":lat", $lat);
-            $stmt->bindParam(":long", $long);
+            $stmt->bindParam(":lng", $lng);
             $stmt->bindParam(":address", $address);
             $stmt->bindParam(":email", $email);
 

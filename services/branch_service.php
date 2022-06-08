@@ -27,7 +27,7 @@ class BranchService
                         "id" => $id,
                         "name" => $name,
                         "lat" => $lat,
-                        "long" => $long,
+                        "lng" => $lng,
                         "address" => $address,
                     );
                     array_push($data, $each);
@@ -46,7 +46,7 @@ class BranchService
     public function getById($id)
     {
         try {
-            $query = "select id, name, lat,long,address from " . $this->tableName . " where id=:id";
+            $query = "select id, name, lat,lng,address from " . $this->tableName . " where id=:id";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -57,7 +57,7 @@ class BranchService
                     "id" => $id,
                     "name" => $name,
                     "lat" => $lat,
-                    "long" => $long,
+                    "lng" => $lng,
                     "address" => $address
                 );
                 return $data;

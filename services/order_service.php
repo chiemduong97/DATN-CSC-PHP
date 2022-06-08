@@ -110,10 +110,10 @@ class OrderSerivce
                 $query = "UPDATE " . $this->orders . " SET amount = :amount,
                                                     phone = :phone,
                                                     lat = :lat,
-                                                    long = :long,
+                                                    lng = :lng,
                                                     address = :address,
                                                     branch_lat = :branch_lat,
-                                                    branch_long = :branch_long,
+                                                    branch_lng = :branch_lng,
                                                     branch_address = :branch_address,
                                                     shipping_fee = :shipping_fee,
                                                     promotion_code = :promotion_code,
@@ -122,10 +122,10 @@ class OrderSerivce
                 $phone = $order->phone;
                 $amount = $order->amount;
                 $lat = $order->lat;
-                $long = $order->long;
+                $lng = $order->lng;
                 $address = $order->address;
                 $branch_lat = $order->branch_lat;
-                $branch_long = $order->branch_long;
+                $branch_lng = $order->branch_lng;
                 $branch_address = $order->branch_address;
                 $shipping_fee = $order->shipping_fee;
                 $promotion_code = $order->promotion_code;
@@ -136,10 +136,10 @@ class OrderSerivce
                 $stmt->bindParam(":amount", $amount);
                 $stmt->bindParam(":phone", $phone);
                 $stmt->bindParam(":lat", $lat);
-                $stmt->bindParam(":long", $long);
+                $stmt->bindParam(":lng", $lng);
                 $stmt->bindParam(":address", $address);
                 $stmt->bindParam(":branch_lat", $branch_lat);
-                $stmt->bindParam(":branch_long", $branch_long);
+                $stmt->bindParam(":branch_lng", $branch_lng);
                 $stmt->bindParam(":branch_address", $branch_address);
                 $stmt->bindParam(":shipping_fee", $shipping_fee);
                 $stmt->bindParam(":promotion_code", $promotion_code);

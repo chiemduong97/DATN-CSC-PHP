@@ -126,8 +126,8 @@ class UserController
         return $this -> service -> updateInfo($user);
     }
 
-    public function updateLocation($email,$lat,$long,$address){
-        return $this -> service -> updateLocation($email,$lat,$long,$address);
+    public function updateLocation($email,$lat,$lng,$address){
+        return $this -> service -> updateLocation($email,$lat,$lng,$address);
     }
 
     public function updatePass($email,$oldpassword,$newpassword){
