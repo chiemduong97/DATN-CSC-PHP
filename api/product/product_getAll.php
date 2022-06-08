@@ -8,7 +8,7 @@ $authen = new Authen();
 (new CF_Header())->config("GET");
 
 $code = 1001;
-$data = [];
+$data = null;
 $load_more = false;
 
 if ($authen->checkToken()) {
@@ -28,22 +28,26 @@ if ($authen->checkToken()) {
         }
 
         $total = (new ProductController())->getTotalPages($category_id, $branch_id, $limit);
+
         if ($total > $page) {
             $load_more = true;
+// ---------------------------------------------------
+            $data = (new ProductController())->getProducts($category_id, $branch_id, $page, $limit);
+            $data ? $code = 1000 : $code = 1001;
         } else if ($total == $page) {
             $load_more = false;
+// ---------------------------------------------------
+            $data = (new ProductController())->getProducts($category_id, $branch_id, $page, $limit);
+            $data ? $code = 1000 : $code = 1001;
         } else if ($total < $page) {
             $load_more = false;
-            return;
         }
-        $data = (new ProductController())->getProducts($category_id, $branch_id, $page, $limit);
-        $data ? $code = 1000 : $code = 1001;
     } else {
         $code = 1013;
     }
 } else {
     $code = 401;
-}
+};
 
 echo (
     (new Response(
