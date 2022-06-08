@@ -17,11 +17,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 `created_at` DATETIME DEFAULT NOW() NOT NULL,
 `lat` REAL DEFAULT 0 NOT NULL,
 `lng` REAL DEFAULT 0 NOT NULL,
-<<<<<<< HEAD
-`address` VARCHAR(255),
-=======
 `address` VARCHAR(255) NOT NULL
->>>>>>> e753ea09d1224f09e05eb8ef2b7a63a759d69022
 );
 CREATE TABLE IF NOT EXISTS `categories` (
 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -141,6 +137,11 @@ insert into `branches` (`name`, `address`) values
 ('CSC 2', '350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp'),
 ('CSC 3', '350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp'),
 ('CSC 4', '350/56/21A Nguyễn Văn Lượng p16, Quận Gò Vấp');
+
+INSERT INTO `warehouse` (`id`, `quantity`, `created_at`, `product_id`, `branch_id`) VALUES 
+(NULL, '100', current_timestamp(), '1', '1'), 
+(NULL, '99', current_timestamp(), '2', '1'),
+(NULL, '101', current_timestamp(), '3', '1');
 
 insert into `products` ( `name`, `avatar`,`description`,`price`,`category_id`) values 
 

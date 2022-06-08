@@ -34,13 +34,12 @@ class BranchService
                 }
                 return $data;
             }
-            return array();
+            return null;
         } catch (Exception $e) {
             //throw $th;
             echo "loi getAll(): " . $e->getMessage();
             return null;
         }
-        return null;
     }
 
     public function getById($id)
