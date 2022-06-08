@@ -7,13 +7,19 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 (new CF_Header())->config("GET");
 $authen = new Authen();
 $code = 1001;
-$data = [];
+$data = null;
 
 if ($authen->checkToken()) {
     if (isset($_GET['order_code'])) {
         $order_code = $_GET["order_code"];
         $data = (new OrderController())->getByorder_code($order_code);
-        $data == 1001 ?  $code = 1001 :  $code = 1000;
+     
+        if ($data == 1001) {
+            $code = 1001;
+            $data = null;
+        } else {
+            $code = 1000;
+        }
     } else {
         $code = 1013;
     }

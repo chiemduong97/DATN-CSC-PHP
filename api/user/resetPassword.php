@@ -17,7 +17,7 @@ if ($authen->checkToken()) {
         $password = $_POST["password"];
         $data = (new UserController())->resetPassword($email, $password);
         $data == 1000 ?  $code = 1000 :   $code = $data;
-
+        $data = null;
     } else {
         $code = 1013;
     }

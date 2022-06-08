@@ -21,7 +21,7 @@ if ($authen->checkToken()) {
 
         $data = (new UserController())->updateLocation($email, $lat, $lng, $address);
         $data == 1000 ?  $code = 1000 :   $code = $data;
-       
+        $data = null;
     } else {
         $code = 1013;
     }

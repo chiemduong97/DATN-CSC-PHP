@@ -10,15 +10,16 @@ $body = json_decode(file_get_contents("php://input"));
 
 
 $code = 400;
-$data = array();
+$data = null;
 
 if ($authen->checkToken()) {
     if (property_exists($body, 'id')) {
         $data = (new CategoryController())->getByID($id);
         if ($data != 1001) {
-            $code = 200;
+            $code = 1000;
         } else {
             $code = 1001;
+            $data = null;
         }
     } else {
         $code = 1013;

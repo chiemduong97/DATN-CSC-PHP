@@ -80,7 +80,6 @@ class CategoryService
             throw $e;
             return 1001;
         }
-        return 1001;
     }
 
     public function updateItem($category)
@@ -105,8 +104,8 @@ class CategoryService
             }
         } catch (Exception $e) {
             throw $e;
+            return 1001;
         }
-        return 1001;
     }
 
     public function removeItem($id)

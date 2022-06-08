@@ -9,7 +9,7 @@ $orderParam = json_decode(file_get_contents("php://input"));
 
 $authen = new Authen();
 $code = 1001;
-$data = array();
+$data = null;
 
 if ($authen->checkToken()) {
     $data = (new OrderController())->insertItem($orderParam);
@@ -17,6 +17,7 @@ if ($authen->checkToken()) {
         $code = 1000;
     } else {
         $code = 1001;
+        $data = null;
     }
 } else {
     $code = 401;

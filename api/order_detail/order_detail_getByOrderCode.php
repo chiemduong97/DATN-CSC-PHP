@@ -13,7 +13,14 @@ if ($authen->checkToken()) {
     if (isset($_GET["order_code"])) {
         $order_code = $_GET["order_code"];
         $data = (new OrderDetailController())->getByOrderCode($order_code);
-        $data == 1001 ?  $code = 1001 :  $code = 1000;
+        // $data == 1001 ?  $code = 1001 :  $code = 1000;
+        
+        if ($data == 1001) {
+            $code = 1001;
+            $data = null;
+        } else {
+            $code = 1000;
+        }
     } else {
         $code = 1013;
     }

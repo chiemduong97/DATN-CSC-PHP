@@ -5,8 +5,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
 
 (new CF_Header())->config("DELETE");
-$code = 400;
-$data = 1001;
+$code = 1001;
+$data = null;
 $authen = new Authen();
 
 $body = json_decode(file_get_contents("php://input"));
@@ -21,7 +21,9 @@ if ($authen->checkToken()) {
             $code = 1000;
         } else {
             $code = 1001;
+          
         }
+        $data = null;
     } else {
         $code = 1013;
     }
