@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 `device_token` VARCHAR(255),
 `created_at` DATETIME DEFAULT NOW() NOT NULL,
 `lat` REAL DEFAULT 0 NOT NULL,
-`long` REAL DEFAULT 0 NOT NULL,
+`lng` REAL DEFAULT 0 NOT NULL,
 `address` VARCHAR(255) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `categories` (
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `branches` (
 `name` VARCHAR(255) NOT NULL UNIQUE,
 `avatar` VARCHAR(255) NOT NULL,
 `lat` REAL NOT NULL,
-`long` REAL NOT NULL,
+`lng` REAL NOT NULL,
 `address` VARCHAR(255) NOT NULL,
 `status` INT(1) DEFAULT 1 NOT NULL,
 `created_at` DATETIME DEFAULT NOW() NOT NULL
@@ -77,10 +77,10 @@ CREATE TABLE IF NOT EXISTS `orders` (
 `created_at` DATETIME DEFAULT NOW() NOT NULL,
 `phone` VARCHAR(255) NOT NULL,
 `lat` REAL NOT NULL,
-`long` REAL NOT NULL,
+`lng` REAL NOT NULL,
 `address` VARCHAR(255) NOT NULL,
 `branch_lat` REAL NOT NULL,
-`branch_long` REAL NOT NULL,
+`branch_lng` REAL NOT NULL,
 `branch_address` VARCHAR(255) NOT NULL,
 `shipping_fee` REAL NOT NULL,
 `promotion_code` VARCHAR(255),
