@@ -24,7 +24,8 @@ if ($authen->checkToken()) {
     }
    
     $data = (new CategoryController()) -> getCategoriesLevel_0($page, $limit);
-    $code = 1000;
+    
+    $data ? $code = 1000 : $code = 1001;
     
 } else {
     $code = 401;

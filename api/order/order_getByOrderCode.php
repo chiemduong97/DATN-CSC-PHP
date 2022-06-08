@@ -14,9 +14,8 @@ if ($authen->checkToken()) {
         $order_code = $_GET["order_code"];
         $data = (new OrderController())->getByorder_code($order_code);
      
-        if ($data == 1001) {
+        if ($data == null) {
             $code = 1001;
-            $data = null;
         } else {
             $code = 1000;
         }

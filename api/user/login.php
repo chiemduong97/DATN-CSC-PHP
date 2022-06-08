@@ -32,7 +32,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
     if ($data == 1000) {
         $code = 1000;
         $data = array(
-            "accessToken" => $jwt
+            "access_token" => $jwt
         );
     } else {
         $code =  $data;

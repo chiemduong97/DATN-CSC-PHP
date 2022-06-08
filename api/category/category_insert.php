@@ -20,7 +20,7 @@ if ($authen->checkToken()) {
         if ($data == 1000) {
             $code = 1000;
         } else {
-            $code = 1001;
+            $code = $data;
         }
         $data = null;
     } else {

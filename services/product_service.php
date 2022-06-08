@@ -52,10 +52,10 @@ class ProductService
                 }
                 return $data;
             }
-            return [];
+            return null;
         } catch (Exception $e) {
             echo "loi service getProducts: " . $e->getMessage();
-            return [];
+            return null;
         }
     }
 
@@ -78,10 +78,10 @@ class ProductService
                 );
                 return $data;
             }
-            return 1001;
+            return null;
         } catch (Exception $e) {
             echo "loi getByID(): " . $e->getMessage();
-            return 1001;
+            return null;
         }
     }
 
@@ -160,8 +160,8 @@ class ProductService
             }
         } catch (Exception $e) {
             throw $e;
+            return 1001;
         }
-        return 1001;
     }
 
     public function removeItem($id)
@@ -179,8 +179,8 @@ class ProductService
             }
         } catch (Exception $e) {
             throw $e;
+            return 1001;
         }
-        return 1001;
     }
 
     public function checkRemove($id)

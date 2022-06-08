@@ -31,13 +31,12 @@ class CategoryService
 
                 return $data;
             } else {
-                return 1001;
+                return null;
             }
         } catch (Exception $e) {
             echo "loi getByID(): " . $e->getMessage();
-            return 1001;
+            return null;
         }
-        return 1001;
     }
 
     public function checkName($id = 0, $name)
@@ -123,8 +122,8 @@ class CategoryService
             }
         } catch (Exception $e) {
             throw $e;
+            return 1001;
         }
-        return 1001;
     }
 
     public function checkRemove($id)
@@ -174,10 +173,10 @@ class CategoryService
                 }
                 return $data;
             }
-            return [];
+            return null;
         } catch (Exception $e) {
             echo "loi: " . $e->getMessage();
-            return [];
+            return null;
         }
     }
 
@@ -212,10 +211,10 @@ class CategoryService
                 }
                 return $data;
             }
-            return [];
+            return null;
         } catch (Exception $e) {
             echo "loi: " . $e->getMessage();
-            return [];
+            return null;
         }
     }
 

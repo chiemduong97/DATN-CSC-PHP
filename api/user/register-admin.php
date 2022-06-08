@@ -34,18 +34,18 @@ if (
     if ($data == 1000) {
         echo json_encode(array(
             "status" => true,
-            "accessToken" => $jwt
+            "access_token" => $jwt
         ));
     } else {
         echo json_encode(array(
-            "isError" => true,
+            "is_error" => true,
             "code" => $data,
             "message" => "Login failed !"
         ));
     }
 } else {
     echo json_encode(array(
-        "isError" => true,
+        "is_error" => true,
         "code" => 1013,
         "message" => "Please fill out completely !"
     ));

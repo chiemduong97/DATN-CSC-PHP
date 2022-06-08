@@ -41,10 +41,10 @@ class OrderSerivce
                 }
                 return $data;
             }
-            return 1001;
+            return null;
         } catch (Exception $e) {
             echo "error: " . $e->getMessage();
-            return 1001;
+            return null;
         }
     }
 
@@ -95,12 +95,11 @@ class OrderSerivce
                 );
                 return $data;
             }
-            return array();
+            return null;
         } catch (Exception $e) {
             echo "error: " . $e->getMessage();
             return null;
         }
-        return null;
     }
     public function insertItem($order)
     {

@@ -13,11 +13,13 @@ $data = null;
 
 if ($authen->checkToken()) {
     $data = (new OrderController())->insertItem($orderParam);
-    if ($data != null) {
-        $code = 1000;
-    } else {
+    if ($data == null) {
         $code = 1001;
-        $data = null;
+    } else {
+        $code = 1000;
+        $data = array(
+            "oderCode" => $data
+        );
     }
 } else {
     $code = 401;
