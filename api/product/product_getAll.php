@@ -9,6 +9,7 @@ $authen = new Authen();
 
 $code = 1001;
 $data = [];
+$load_more = false;
 
 if ($authen->checkToken()) {
     if (
@@ -25,8 +26,18 @@ if ($authen->checkToken()) {
         if (isset($_GET['limit'])) {
             $limit = $_GET['limit'];
         }
+
+        $total = (new ProductController())->getTotalPages($category_id, $branch_id, $limit);
+        if ($total > $page) {
+            $load_more = true;
+        } else if ($total == $page) {
+            $load_more = false;
+        } else if ($total < $page) {
+            $load_more = false;
+            return;
+        }
         $data = (new ProductController())->getProducts($category_id, $branch_id, $page, $limit);
-        $code = 1000;
+        $data ? $code = 1000 : $code = 1001;
     } else {
         $code = 1013;
     }
@@ -38,5 +49,6 @@ echo (
     (new Response(
         $code,
         $data,
+        $load_more
     ))->response()
 );

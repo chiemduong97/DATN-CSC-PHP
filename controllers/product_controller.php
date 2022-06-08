@@ -58,8 +58,8 @@ class ProductController
     {
         return $this->service->getProducts($category_id, $branch, $page, $limit);
     }
-    public function getTotalPages($category_id, $branch)
+    public function getTotalPages($category_id, $branch, $limit)
     {
-        return $this->service->getTotalPages($category_id, $branch);
+        return $this->service->getTotalPages($category_id, $branch, $limit);
     }
 }

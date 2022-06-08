@@ -5,12 +5,14 @@ class Response
     private $data;
     private $is_error;
     private $message;
+    private $load_more;
 
-    public function __construct($code = 400, $data = [])
+    public function __construct($code = 400, $data = [], $load_more = false)
     {
         $this->code = $code;
         $this->data = $data;
         $this->is_error = true;
+        $this->load_more = $load_more;
         $this->message = "Something went wrong";
     }
 
@@ -49,9 +51,10 @@ class Response
 
         return json_encode(array(
             "code" => $this->code,
-            "data" => $this->data,
             "is_error" => $this->is_error,
-            "message" =>  $this->message
+            "message" =>  $this->message,
+            "load_more" =>  $this->load_more,
+            "data" => $this->data,
         ));
     }
 }

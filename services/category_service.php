@@ -221,7 +221,7 @@ class CategoryService
     public function getTotalPagesCategories()
     {
         try {
-            $query = "select COUNT(id) as total FROM " . $this->tableName . " where status = 1";
+            $query = "select COUNT(*) as total FROM " . $this->tableName . " where status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
@@ -231,9 +231,11 @@ class CategoryService
                 $totalPage = ceil($count / $this->totalPostInPage);
                 return $totalPage;
             }
+            return null;
         } catch (Exception $e) {
             echo "loi: " . $e->getMessage();
+            return null;
         }
-        return null;
+       
     }
 }

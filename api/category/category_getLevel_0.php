@@ -6,7 +6,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 
 (new CF_Header()) -> config("GET");
 
-$code = 400;
+$code = 1001;
 $data = [];
 
 $authen = new Authen();
