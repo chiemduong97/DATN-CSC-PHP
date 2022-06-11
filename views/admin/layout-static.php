@@ -2,6 +2,7 @@
 include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/product_controller.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/category_controller.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/branch_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/category_model.php';
 
 $db = new ProductController();
 $dbCategory = new CategoryController();
@@ -38,8 +39,14 @@ $products = $db->getProducts($categoryId, $branchId, $currentPage, $limit);
 $totalPage =  $db->getTotalPages($categoryId, $branchId, $limit);
 
 $categories1 = $dbCategory->getCategoriesLevel_0(1, 10);
+$categories2 = $dbCategory->getCategoriesLevel_1(1, 10, 0);
 $branches = $dbBranch->getAll();
 
+$temp = array(
+    "id" => null,
+    "name" => "Chọn danh mục"
+);
+array_push($categories1, $temp);
 
 ?>
 
@@ -64,7 +71,11 @@ include('./includes/navbar.php');
                 <?php if (!empty($categories1)) : ?>
                     <?php foreach ($categories1 as $category) : ?>
                         <?php if ($category['id'] != $categoryId) : ?>
-                            <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                            <?php if ($category['id'] == null) : ?>
+                                <option value="<?= $category['id'] ?>" selected><?= $category['name'] ?></option>
+                            <?php else : ?>
+                                <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                            <?php endif; ?>
                         <?php else : ?>
                             <option value="<?= $category['id'] ?>" selected><?= $category['name'] ?></option>
                         <?php endif; ?>
@@ -76,7 +87,31 @@ include('./includes/navbar.php');
             </a>
         </div>
 
+        <div class="selectCategory2">
+            <label for="category2">Danh mục 2</label>
+            <select name="category2" id="category2">
+                <?php if (!empty($categories2)) : ?>
+                    <?php foreach ($categories2 as $category) : ?>
+                        <option value="<?= $category['id'] ?>" selected><?= $category['name'] ?></option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
+            <a class="add-category-1">
+                <i class="fa-solid fa-circle-plus"></i>
+            </a>
+        </div>
 
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <div class="container-form">
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Title</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Content</label>
+                <textarea class="form-control content-area" id="exampleFormControlTextarea1" rows="5"></textarea>
+            </div>
+        </div>
     </div>
 </main>
 
@@ -84,3 +119,12 @@ include('./includes/navbar.php');
 include './includes/script.php';
 include './includes/footer.php'
 ?>
+<script src="./js/ckeditor5/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.getElementById('exampleFormControlTextarea1'))
+        .catch(error => {
+            console.log(error);
+        })
+    // CKEDITOR.replace('exampleFormControlTextarea1');
+</script>

@@ -1,8 +1,9 @@
-.selectCategory1 {
+.selectCategory1, .selectCategory2 {
   margin: 50px 25px;
 
 }
 .selectCategory1 label,
+.selectCategory2 label,
 .selectBranch label {
   color: rgba(0, 0, 0, 0.8);
   font-weight: bold;
@@ -13,7 +14,9 @@
 }
 
 .selectCategory1 select,
+.selectCategory2 select,
 .selectBranch select {
+  width: 200px;
   margin: 15px;
   padding: 5px;
   border-radius: 6px;
@@ -23,4 +26,8 @@
 }
 .add-category-1 i{
     background: #136af2;
+}
+.container-form{
+  margin: 20px;
+  padding-bottom: 20px;
 }
