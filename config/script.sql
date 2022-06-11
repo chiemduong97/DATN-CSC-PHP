@@ -300,5 +300,40 @@ thủ với sự pha trộn hoàn hảo của hiệu năng và màu sắc sống
 'Với thời gian phản hồi MPRT 1ms nhanh. màn hình mang lại ảnh mượt mà, mà không bị vệt, mờ hoặc bóng mờ. Thời gian phản hồi nhanh phù hợp để chơi các tựa game cường độ cao nhất về đồ họa và cung cấp chất lượng hình ảnh tuyệt vời khi xem phim 
 thể thao hoặc hành động',5290000, 9);
 
-
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,1,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,2,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,3,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,4,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,5,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,6,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,7,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,8,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,9,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,10,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,11,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,12,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,13,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,14,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,15,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,16,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,17,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,18,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,19,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,20,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,21,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,22,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,23,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,24,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,25,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,26,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,27,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,28,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,29,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,30,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,31,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,32,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,33,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,34,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,35,1);
+insert into warehouse (quantity, product_id, branch_id) VALUES (100,36,1);
 
