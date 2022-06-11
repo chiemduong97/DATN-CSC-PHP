@@ -1,11 +1,14 @@
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\OAuth;
+use League\OAuth2\Client\Provider\Google;
 
+include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/vendor/autoload.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/services/user_service.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/PHPMailer-master/src/PHPMailer.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/PHPMailer-master/src/SMTP.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/PHPMailer-master/src/Exception.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/vendor/phpmailer/phpmailer/src/PHPMailer.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/vendor/phpmailer/phpmailer/src/SMTP.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/vendor/phpmailer/phpmailer/src/Exception.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/user_model.php';
 
 
@@ -17,23 +20,25 @@ class UserController
         $this->service = new UserService();
     }
 
-    public function checkEmail($email){
-        return $this -> service -> checkEmail($email);
+    public function checkEmail($email)
+    {
+        return $this->service->checkEmail($email);
     }
 
-    public function getUserByEmail($email){
-        return $this -> service -> getUserByEmail($email);
+    public function getUserByEmail($email)
+    {
+        return $this->service->getUserByEmail($email);
     }
 
-    public function register($fullname,$phone, $email, $password, $permission)
+    public function register($fullname, $phone, $email, $password, $permission)
     {
         $hash = password_hash($password, PASSWORD_BCRYPT);
         $user = new User();
-        $user -> email = $email;
-        $user -> password = $hash;
-        $user -> fullname = $fullname;
-        $user -> phone = $phone;
-        $user -> permission = $permission;
+        $user->email = $email;
+        $user->password = $hash;
+        $user->fullname = $fullname;
+        $user->phone = $phone;
+        $user->permission = $permission;
         $result = $this->service->register($user);
         return $result;
     }
@@ -67,37 +72,50 @@ class UserController
             return $code;
         }
         if ($code != null) {
-            $mail = new PHPMailer(true);
+            $mail = new PHPMailer();
             try {
-                $mail->SMTPDebug = 0;  // 0,1,2: chế độ debug. khi mọi cấu hình đều tớt thì chỉnh lại 0 nhé
                 $mail->isSMTP();
-                $mail->CharSet  = "utf-8";
-                $mail->Host = 'smtp.gmail.com';  //SMTP servers
-                $mail->SMTPAuth = true; // Enable authentication
+                $mail->SMTPDebug = 0;
+                $mail->Host = 'smtp.gmail.com';
+                $mail->Port = 465;
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                $mail->SMTPAuth = true;
+                $mail->AuthType = 'XOAUTH2';
+                $mail->SMTPSecure = 'ssl'; 
                 $from = 'chiemduong01@gmail.com';
-                $pass = 'emtenduong97';
+                $clientId = '260730311274-42j6eu5hek5vbaej9ml64l2am316t79c.apps.googleusercontent.com';
+                $clientSecret = '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';
+                $refreshToken = '1//0eE4HEd_6qQgvCgYIARAAGA4SNwF-L9Irfz5SKXuf6xsmhhXrLNB5LHQFgD_XHoRiuO0kf6h4PBTdUxQlGgRiL04suLjU6RbR4qQ';
+                $provider = new Google(
+                    [
+                        'clientId' => $clientId,
+                        'clientSecret' => $clientSecret,
+                    ]
+                );
+                $mail->setOAuth(
+                    new OAuth(
+                        [
+                            'provider' => $provider,
+                            'clientId' => $clientId,
+                            'clientSecret' => $clientSecret,
+                            'refreshToken' => $refreshToken,
+                            'userName' => $from,
+                        ]
+                    )
+                );
                 $from_name = 'Đỗ Chiếm Dương';
-                $mail->Username = $from; // SMTP username
-                $mail->Password = $pass;   // SMTP password
-                $mail->SMTPSecure = 'ssl';  // encryption TLS/SSL 
-                $mail->Port = 465;  // port to connect to                
                 $mail->setFrom($from, $from_name);
-                $to = $email;
-                $to_name = $email;
-                $mail->addAddress($to, $to_name); //mail và tên người nhận  
+                $mail->addAddress($email, $email);
                 $mail->isHTML(true);  // Set email format to HTML
                 $mail->Subject = $requestType . " Request";
-                $description = "Chào " . $to . "!<br>Mã xác nhận của bạn là <b>" . $code  . "</b>.<br>Mã khả dụng trong 5 phút.<br>Cảm ơn!";
+                $mail->CharSet = PHPMailer::CHARSET_UTF8;
+                $description = "Chào " . $email . "!<br>Mã xác nhận của bạn là <b>" . $code  . "</b>.<br>Mã khả dụng trong 5 phút.<br>Cảm ơn!";
                 $mail->Body = $description;
-                $mail->smtpConnect(array(
-                    "ssl" => array(
-                        "verify_peer" => false,
-                        "verify_peer_name" => false,
-                        "allow_self_signed" => true
-                    )
-                ));
-                $mail->send();
-                return 1000;
+                if (!$mail->send()) {
+                    return 1001;
+                } else {
+                    return 1000;
+                }
             } catch (Exception $e) {
                 throw $e;
             }
@@ -115,42 +133,44 @@ class UserController
         return $this->service->resetPassword($email, $password);
     }
 
-    public function updateAvatar($email,$avatar){
+    public function updateAvatar($email, $avatar)
+    {
         $user = new User();
-        $user -> email = $email;
-        $user -> avatar = $avatar;
-        return $this -> service -> updateAvatar($user);
+        $user->email = $email;
+        $user->avatar = $avatar;
+        return $this->service->updateAvatar($user);
     }
 
-    public function updateInfo($user){
-        return $this -> service -> updateInfo($user);
+    public function updateInfo($user)
+    {
+        return $this->service->updateInfo($user);
     }
 
-    public function updateLocation($email,$lat,$lng,$address){
-        return $this -> service -> updateLocation($email,$lat,$lng,$address);
+    public function updateLocation($email, $lat, $lng, $address)
+    {
+        return $this->service->updateLocation($email, $lat, $lng, $address);
     }
 
-    public function updatePass($email,$oldpassword,$newpassword){
-        $user = $this -> service -> getByEmail($email);
-        if($user){
-            $check = password_verify($oldpassword,$user -> password);
-            if($check){
-                $hash = password_hash($newpassword,PASSWORD_BCRYPT);
+    public function updatePass($email, $oldpassword, $newpassword)
+    {
+        $user = $this->service->getByEmail($email);
+        if ($user) {
+            $check = password_verify($oldpassword, $user->password);
+            if ($check) {
+                $hash = password_hash($newpassword, PASSWORD_BCRYPT);
                 $user = new User();
-                $user -> email = $email;
-                $user -> password = $hash;
-                return $this -> service -> updatePass($user);
-            }
-            else{
+                $user->email = $email;
+                $user->password = $hash;
+                return $this->service->updatePass($user);
+            } else {
                 return 1006;
             }
         }
         return 1001;
     }
 
-    public function updateDeviceToken($email,$device_token){
-        return $this -> service -> updateDeviceToken($email,$device_token);
+    public function updateDeviceToken($email, $device_token)
+    {
+        return $this->service->updateDeviceToken($email, $device_token);
     }
-
-    
 }
