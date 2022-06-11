@@ -128,3 +128,30 @@ include './includes/footer.php'
         })
     // CKEDITOR.replace('exampleFormControlTextarea1');
 </script>
+
+<script type="text/javascript">
+    // function findByCategoryAndBranch() {
+    //     var category = document.getElementById('category').value;
+    //     var branch = document.getElementById('branch').value;
+    //     window.location.assign("http://192.168.1.4:8585/views/product.php?categoryId=" + category +
+    //         "&branchId=" + branch);
+    // }
+
+    // function remove($id) {
+    //     var url = 'http://192.168.1.4:8585/api/product/product_remove.php';
+    //     var formData = new FormData();
+    //     formData.append('id', $id);
+
+    //     fetch(url, {
+    //             method: 'POST',
+    //             body: formData
+    //         })
+    //         .then(function(response) {
+    //             return response.text();
+    //         })
+    //         .then(function(body) {
+    //             console.log(body);
+    //         });
+    //      window.location.reload();   
+    // }
+</script>
