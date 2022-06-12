@@ -9,19 +9,15 @@ $authen = new Authen();
 $code = 1001;
 $data = [];
 
-if ($authen->checkToken()) {
-    if (
-        isset($_POST["email"]) && isset($_POST["password"])
-    ) {
-        $email = $_POST["email"];
-        $password = $_POST["password"];
-        $data = (new UserController())->resetPassword($email, $password);
-        $data == 1000 ?  $code = 1000 :   $code = $data;
-    } else {
-        $code = 1013;
-    }
+if (
+    isset($_POST["email"]) && isset($_POST["password"])
+) {
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    $data = (new UserController())->resetPassword($email, $password);
+    $data == 1000 ?  $code = 1000 :   $code = $data;
 } else {
-    $code = 401;
+    $code = 1013;
 }
 
 echo (

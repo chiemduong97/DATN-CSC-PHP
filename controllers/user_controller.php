@@ -149,6 +149,10 @@ class UserController
 
     public function updateInfo($user)
     {
+        $checkEmail = $this->service-> checkEmail($user->phone);
+        if ($checkEmail == 1000) {
+            return 1015;
+        }
         return $this->service->updateInfo($user);
     }
 
