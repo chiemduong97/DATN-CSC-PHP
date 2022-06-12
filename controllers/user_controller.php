@@ -61,11 +61,17 @@ class UserController
         return 1002;
     }
 
-    public function sendRequest($email, $requestType)
+    public function sendRequest($email, $phone, $requestType)
     {
         $checkEmail = $this->service->checkEmail($email);
-        if ($requestType == "REGISTER" && $checkEmail == 1000) {
-            return 1003;
+        $checkPhone = $this->service->checkPhone($phone);
+        if ($requestType == "REGISTER") {
+            if ($checkEmail == 1000) {
+                return 1003;
+            }
+            if ($checkPhone == 1000) {
+                return 1015;
+            }  
         }
         $code = $this->service->createRequest($email);
         if ($code == 1010) {

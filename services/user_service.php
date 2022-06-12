@@ -29,7 +29,6 @@ class UserService
                 $this->db->commit();
                 $sql = "insert into " . $this->users . " set email=:email,password=:password,fullname=:fullname,phone=:phone,permission=:permission";
                 $stmt = $this->db->prepare($sql);
-
                 $stmt->bindParam(":email", $email);
                 $stmt->bindParam(":password", $password);
                 $stmt->bindParam(":fullname", $fullname);
@@ -56,15 +55,32 @@ class UserService
     public function checkEmail($email)
     {
         try {
-            $sql = "select id,email from " . $this->users . " where email=:email";
+            $sql = "select id from " . $this->users . " where email=:email";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":email", $email);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 return 1000;
-            } else {
-                return 1002;
-            }
+            } 
+            return 1002;
+        } catch (Exception $e) {
+            throw $e;
+            return 1001;
+        }
+        return 1001;
+    }
+
+    public function checkPhone($phone)
+    {
+        try {
+            $sql = "select id from " . $this->users . " where phone=:phone";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":phone", $phone);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                return 1000;
+            } 
+            return 1015;
         } catch (Exception $e) {
             throw $e;
             return 1001;

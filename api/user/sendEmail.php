@@ -8,11 +8,12 @@ $code = 1001;
 $data = [];
 
 if (
-    isset($_GET["email"]) && isset($_GET["requestType"])
+    isset($_GET["email"]) && isset($_GET["requestType"]) && isset($_GET["phone"])
 ) {
     $email = $_GET["email"];
+    $phone = $_GET["phone"];
     $requestType = $_GET["requestType"];
-    $data = (new UserController())->sendRequest($email, $requestType);
+    $data = (new UserController())->sendRequest($email, $phone, $requestType);
     if ($data == 1000) {
         $code = 1000;
     } else {
