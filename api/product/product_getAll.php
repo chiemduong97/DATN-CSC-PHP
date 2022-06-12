@@ -31,16 +31,18 @@ if ($authen->checkToken()) {
 
         if ($total > $page) {
             $load_more = true;
-// ---------------------------------------------------
+            // ---------------------------------------------------
             $data = (new ProductController())->getProducts($category_id, $branch_id, $page, $limit);
             $data ? $code = 1000 : $code = 1001;
         } else if ($total == $page) {
             $load_more = false;
-// ---------------------------------------------------
+            // ---------------------------------------------------
             $data = (new ProductController())->getProducts($category_id, $branch_id, $page, $limit);
             $data ? $code = 1000 : $code = 1001;
         } else if ($total < $page) {
             $load_more = false;
+            $code = 1000;
+            $data = [];
         }
     } else {
         $code = 1013;
