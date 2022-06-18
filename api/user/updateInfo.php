@@ -10,8 +10,8 @@ $data = [];
 $authen = new Authen();
 
 if ($authen->checkToken()) {
-    $user = json_decode(file_get_contents('php://input'));
-    $data = (new UserController())->updateInfo($user);
+    $body = json_decode(file_get_contents('php://input'));
+    $data = (new UserController())->updateInfo($body);
     if ($data == 1000) {
         $code = 1000;
     } else {

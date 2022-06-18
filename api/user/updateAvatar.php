@@ -10,19 +10,12 @@ $code = 1001;
 $data = [];
 
 if ($authen->checkToken()) {
-    if (
-        isset($_POST["email"]) && isset($_POST["avatar"])
-    ) {
-        $email = $_POST["email"];
-        $avatar = $_POST["avatar"];
-        $data = (new UserController())->updateAvatar($email, $avatar);
-        if ($data == 1000) {
-            $code = 1000;
-        } else {
-            $code = $data;
-        }
+    $body = json_decode(file_get_contents('php://input'));
+    $data = (new UserController())->updateAvatar($body);
+    if ($data == 1000) {
+        $code = 1000;
     } else {
-        $code = 1013;
+        $code = $data;
     }
 } else {
     $code = 401;

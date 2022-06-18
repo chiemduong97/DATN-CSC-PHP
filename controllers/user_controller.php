@@ -139,21 +139,21 @@ class UserController
         return $this->service->resetPassword($email, $password);
     }
 
-    public function updateAvatar($email, $avatar)
+    public function updateAvatar($body)
     {
         $user = new User();
-        $user->email = $email;
-        $user->avatar = $avatar;
+        $user->email = $body->email;
+        $user->avatar = $body->avatar;
         return $this->service->updateAvatar($user);
     }
 
-    public function updateInfo($user)
+    public function updateInfo($body)
     {
-        $checkEmail = $this->service-> checkEmail($user->phone);
+        $checkEmail = $this->service-> checkEmail($body->phone);
         if ($checkEmail == 1000) {
             return 1015;
         }
-        return $this->service->updateInfo($user);
+        return $this->service->updateInfo($body);
     }
 
     public function updateLocation($email, $lat, $lng, $address)
@@ -161,15 +161,15 @@ class UserController
         return $this->service->updateLocation($email, $lat, $lng, $address);
     }
 
-    public function updatePass($email, $oldpassword, $newpassword)
+    public function updatePass($body)
     {
-        $user = $this->service->getByEmail($email);
+        $user = $this->service->getByEmail($body->email);
         if ($user) {
-            $check = password_verify($oldpassword, $user->password);
+            $check = password_verify($body->old_password, $user->password);
             if ($check) {
-                $hash = password_hash($newpassword, PASSWORD_BCRYPT);
+                $hash = password_hash($body->new_password, PASSWORD_BCRYPT);
                 $user = new User();
-                $user->email = $email;
+                $user->email = $body->email;
                 $user->password = $hash;
                 return $this->service->updatePass($user);
             } else {

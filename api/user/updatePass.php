@@ -10,18 +10,12 @@ $code = 1001;
 $data = [];
 
 if ($authen->checkToken()) {
-    if (
-        isset($_POST["email"]) && isset($_POST["oldpassword"]) &&
-        isset($_POST["newpassword"])
-    ) {
-        $email = $_POST["email"];
-        $oldpassword = $_POST["oldpassword"];
-        $newpassword = $_POST["newpassword"];
-
-        $data = (new UserController())->updatePass($email, $oldpassword, $newpassword);
-        $data == 1000 ?  $code = 1000 :   $code = $data;
+    $body = json_decode(file_get_contents('php://input'));
+    $data = (new UserController())->updatePass($body);
+    if ($data == 1000) {
+        $code = 1000;
     } else {
-        $code = 1013;
+        $code = $data;
     }
 } else {
     $code = 401;

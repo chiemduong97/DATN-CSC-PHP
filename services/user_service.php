@@ -339,17 +339,17 @@ class UserService
         return 1001;
     }
 
-    public function updateInfo($user)
+    public function updateInfo($body)
     {
         try {
             $sql = "UPDATE " . $this->users . " SET fullname=:fullname,
                                                     birthday=:birthday,
                                                     phone=:phone WHERE email=:email";
             $stmt = $this->db->prepare($sql);
-            $fullname = $user->fullname;
-            $birthday = $user->birthday;
-            $phone = $user->phone;
-            $email = $user->email;
+            $fullname = $body->fullname;
+            $birthday = $body->birthday;
+            $phone = $body->phone;
+            $email = $body->email;
 
             $stmt->bindParam(":fullname", $fullname);
             $stmt->bindParam(":birthday", $birthday);
