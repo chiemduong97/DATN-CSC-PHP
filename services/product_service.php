@@ -24,7 +24,7 @@ class ProductService
 
             $query =
                 "SELECT products.id, products.name, products.avatar, products.description, 
-                products.price, warehouse.quantity
+                products.price, products.category_id, warehouse.quantity
                 FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
                 WHERE products.category_id = :category_id and warehouse.branch_id = :branch_id and products.status = 1 
                 ORDER BY id DESC LIMIT :start , :total";
@@ -46,7 +46,8 @@ class ProductService
                         "avatar" => $avatar,
                         "description" => $description,
                         "price" => $price,
-                        "quantity" => $quantity
+                        "quantity" => $quantity,
+                        "category_id" => $category_id
                     );
                     array_push($data, $each);
                 }
