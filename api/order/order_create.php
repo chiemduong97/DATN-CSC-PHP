@@ -18,7 +18,7 @@ if ($authen->checkToken()) {
     } else {
         $code = 1000;
         $data = array(
-            "oder_code" => $data
+            "order_code" => $data
         );
     }
 } else {
