@@ -47,20 +47,20 @@ class OrderDetailService
     {
         try {
             $query = "insert into " . $this->order_details . " set quantity = :quantity,
-                                                               amount = :amount,
+                                                               price = :price,
                                                                name = :name,
                                                                order_code = :order_code,
                                                                product_id = :product_id";
 
             $quantity = $orderdetail->quantity;
-            $amount = $orderdetail->amount;
+            $price = $orderdetail->price;
             $name = $orderdetail->name;
             $order_code = $orderdetail->order_code;
             $product_id = $orderdetail->product_id;
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":quantity", $quantity);
-            $stmt->bindParam(":amount", $amount);
+            $stmt->bindParam(":price", $price);
             $stmt->bindParam(":name", $name);
             $stmt->bindParam(":order_code", $order_code);
             $stmt->bindParam(":product_id", $product_id);

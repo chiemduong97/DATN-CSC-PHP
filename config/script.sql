@@ -97,6 +97,7 @@ CREATE TABLE IF NOT EXISTS `order_details` (
 `price` REAL NOT NULL,
 `order_code` VARCHAR(6) NOT NULL,
 `product_id` INT(11) NOT NULL,
+`name` VARCHAR(255) NOT NULL,
 FOREIGN KEY (`order_code`) REFERENCES orders(`order_code`),
 FOREIGN KEY (`product_id`) REFERENCES products(`id`)
 );

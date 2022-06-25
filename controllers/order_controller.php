@@ -22,42 +22,43 @@
             return $this -> service -> updateStatus($order_code,$status);
         }
 
-        public function insertItem($orderParam) {
-            $order_details = $orderParam -> order_details;
+        public function insertItem($body) {
+            $order_details = $body -> order_details;
             $order = new Order();
             $order -> order_code = strtoupper(substr(md5(microtime()),rand(0,26),6));
-            $order -> user_id = $orderParam -> user_id;
-            $order -> branch_id = $orderParam -> branch_id;
-            $order -> promotion_id = isset($orderParam -> promotion_id) ? $orderParam -> promotion_id : null;
+            $order -> user_id = $body -> user_id;
+            $order -> branch_id = $body -> branch_id;
+            $order -> promotion_id = isset($body -> promotion_id) ? $body -> promotion_id : null;
             $result = $this -> service -> insertItem($order);
             if($result) {
                 $amount = 0;
                 for ($i = 0; $i < count($order_details); $i++) {
                     $quantity = $order_details[$i] -> quantity;
                     $product_id = $order_details[$i] -> product_id;
+                    $price = $order_details[$i] -> price;
                     $orderdetail = new OrderDetail();
-                    $orderdetail -> price = (int)$quantity * ((new ProductService()) -> getByID($product_id))["price"];
+                    $orderdetail -> price = $price;
                     $orderdetail -> quantity = $quantity;
                     $orderdetail -> order_code = $order -> order_code;
                     $orderdetail -> product_id = $product_id;
                     $orderdetail -> name = $order_details[$i] -> name;
-                    $amount += ($orderdetail -> price * (int)$quantity);
+                    $amount += ($price * (int)$quantity);
                     $result = (new OrderDetailService) -> insertItem($orderdetail);
                     if (!$result) {
                         return null;
                     }
                 }
                 $order -> amount = $amount;
-                $order -> lat = $orderParam -> lat;
-                $order -> lng = $orderParam -> lng;
-                $order -> address = $orderParam -> address;
-                $order -> phone = $orderParam -> phone;
-                $order -> shipping_fee = $orderParam -> shipping_fee;
-                $order -> promotion_code = isset($orderParam -> promotion_code)?$orderParam -> promotion_code:null;
-                $order -> promotion_value = isset($orderParam -> promotion_value)?$orderParam -> promotion_value:null;
-                $order -> branch_lat = $orderParam -> branch_lat;
-                $order -> branch_lng = $orderParam -> branch_lng;
-                $order -> branch_address = $orderParam -> branch_address;
+                $order -> lat = $body -> lat;
+                $order -> lng = $body -> lng;
+                $order -> address = $body -> address;
+                $order -> phone = $body -> phone;
+                $order -> shipping_fee = $body -> shipping_fee;
+                $order -> promotion_code = isset($body -> promotion_code)?$body -> promotion_code:null;
+                $order -> promotion_value = isset($body -> promotion_value)?$body -> promotion_value:null;
+                $order -> branch_lat = $body -> branch_lat;
+                $order -> branch_lng = $body -> branch_lng;
+                $order -> branch_address = $body -> branch_address;
                 $result = $this -> service -> insertItem($order);
                 if ($result) {
                     return $order -> order_code;

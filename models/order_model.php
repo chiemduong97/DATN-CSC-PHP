@@ -2,7 +2,7 @@
     class Order{
         public $order_code;
         public $amount;
-        public $createAt;
+        public $create_at;
         public $status;
         public $user_id;
         public $lat;

@@ -12,9 +12,9 @@ class CategoryController
         $this->service = new CategoryService();
     }
 
-    public function getCategoriesLevel_0($page, $limit)
+    public function getCategoriesLevel_0()
     {
-        return $this->service->getCategoriesLevel_0($page, $limit);
+        return $this->service->getCategoriesLevel_0();
     }
     public function getCategoriesLevel_1($page, $limit, $category_id)
     {
