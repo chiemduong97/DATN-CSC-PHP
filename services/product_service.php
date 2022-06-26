@@ -111,7 +111,7 @@ class ProductService
              description = :description, price = :price, category_id = :category_id";
 
             $name = $product_model->name;
-            $avatar = $product_model->avtar;
+            $avatar = $product_model->avatar;
             $description = $product_model->description;
             $price = $product_model->price;
 
