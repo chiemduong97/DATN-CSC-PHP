@@ -24,6 +24,7 @@ if ($authen->checkToken()) {
         if (isset($_GET['limit'])) {
             $limit = $_GET['limit'];
         }
+
         $total = (new OrderController())->getTotalPages($limit);
 
         if ($total > $page) {

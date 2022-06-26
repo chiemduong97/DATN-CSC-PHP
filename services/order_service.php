@@ -15,7 +15,7 @@ class OrderSerivce
     public function getTotalPages($limit = 10)
     {
         try {
-            $query = "select COUNT(*) as total FROM " . $this->tableName;
+            $query = "select COUNT(*) as total FROM " . $this->orders;
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
@@ -37,11 +37,12 @@ class OrderSerivce
             $page -= 1;
             $page < 0 ? $page = 0 : $page;
             $start = $page * $limit;
-
+            $status = "";
+            if ($limit == 1) $status = " status != 3 and status != 4 and ";
             $query = "SELECT order_code,status,amount,address,
             shipping_fee,promotion_code,promotion_value,user_id,branch_id,
             promotion_id,created_at,branch_address from " . $this->orders . " 
-            WHERE user_id = :user_id ORDER BY created_at DESC LIMIT :start , :total";
+            WHERE " . $status . " user_id = :user_id ORDER BY created_at DESC LIMIT :start , :total";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":user_id", $user_id);
             $stmt->bindParam(':start', $start, PDO::PARAM_INT);
@@ -232,8 +233,8 @@ class OrderSerivce
     public function getTotalOderCountByUser($user_id)
     {
         try {
-            $query = "select COUNT(*) as total FROM " . $this->tableName .
-                " where status != 3 or status != 4  and user_id = :user_id";
+            $query = "select COUNT(*) as total FROM " . $this->orders .
+                " where status != 3 and status != 4  and user_id = :user_id";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":user_id", $user_id);
             $stmt->execute();
@@ -241,8 +242,7 @@ class OrderSerivce
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 extract($row);
                 $count = $row['total'];
-                $totalPage = ceil($count / $limit);
-                return $totalPage;
+                return $count;
             }
             return 0;
         } catch (Exception $e) {
