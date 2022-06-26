@@ -12,12 +12,40 @@ class OrderSerivce
     {
         $this->connection = (new DatabaseConfig())->db_connect();
     }
-
-    public function getByUser($user_id) {
+    public function getTotalPages($limit = 10)
+    {
         try {
-            $query = "SELECT order_code,status,amount,address,shipping_fee,promotion_code,promotion_value,user_id,branch_id,promotion_id,created_at,branch_address from " . $this ->orders . " WHERE user_id = :user_id ORDER BY created_at DESC";
+            $query = "select COUNT(*) as total FROM " . $this->tableName;
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $limit);
+                return $totalPage;
+            }
+            return 1;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return 1;
+        }
+    }
+    public function getByUser($user_id, $page, $limit)
+    {
+        try {
+            $page -= 1;
+            $page < 0 ? $page = 0 : $page;
+            $start = $page * $limit;
+
+            $query = "SELECT order_code,status,amount,address,
+            shipping_fee,promotion_code,promotion_value,user_id,branch_id,
+            promotion_id,created_at,branch_address from " . $this->orders . " 
+            WHERE user_id = :user_id ORDER BY created_at DESC LIMIT :start , :total";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":user_id", $user_id);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $data = array();
@@ -48,31 +76,32 @@ class OrderSerivce
         }
     }
 
-    public function updateStatus($order_code,$status) {
-        try{
-            $sql = "UPDATE " . $this -> orders ." SET status=:status WHERE order_code=:order_code";
-            $stmt = $this -> connection -> prepare($sql);
-            $stmt -> bindParam(":order_code",$order_code);
-            $stmt -> bindParam(":status",$status);
-            $this -> connection -> beginTransaction();
-            if($stmt ->execute()){
-                $this -> connection -> commit();
+    public function updateStatus($order_code, $status)
+    {
+        try {
+            $sql = "UPDATE " . $this->orders . " SET status=:status WHERE order_code=:order_code";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(":order_code", $order_code);
+            $stmt->bindParam(":status", $status);
+            $this->connection->beginTransaction();
+            if ($stmt->execute()) {
+                $this->connection->commit();
                 return 1000;
-            }
-            else{
-                $this -> connection -> rollBack();
+            } else {
+                $this->connection->rollBack();
                 return 1001;
             }
-        }catch(Exception $e){
+        } catch (Exception $e) {
             throw $e;
         }
         return 1001;
     }
 
 
-    public function getByorder_code($order_code) {
+    public function getByorder_code($order_code)
+    {
         try {
-            $query = "SELECT order_code,status,amount,address,shipping_fee,promotion_code,promotion_value,user_id,branch_id,promotion_id,created_at,branch_address from " . $this ->orders . " WHERE order_code = :order_code";
+            $query = "SELECT order_code,status,amount,address,shipping_fee,promotion_code,promotion_value,user_id,branch_id,promotion_id,created_at,branch_address from " . $this->orders . " WHERE order_code = :order_code";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":order_code", $order_code);
             $stmt->execute();
@@ -105,7 +134,7 @@ class OrderSerivce
     {
 
         try {
-            if($this -> checkorder_code($order -> order_code)) {
+            if ($this->checkorder_code($order->order_code)) {
                 $query = "UPDATE " . $this->orders . " SET amount = :amount,
                                                     phone = :phone,
                                                     lat = :lat,
@@ -129,7 +158,7 @@ class OrderSerivce
                 $shipping_fee = $order->shipping_fee;
                 $promotion_code = $order->promotion_code;
                 $promotion_value = $order->promotion_value;
-                $order_code = $order -> order_code;
+                $order_code = $order->order_code;
 
                 $stmt = $this->connection->prepare($query);
                 $stmt->bindParam(":amount", $amount);
@@ -153,7 +182,7 @@ class OrderSerivce
                     return false;
                 }
             } else {
-                $query = "INSERT INTO " . $this -> orders . " SET order_code =:order_code,
+                $query = "INSERT INTO " . $this->orders . " SET order_code =:order_code,
                                                               user_id = :user_id,
                                                               branch_id = :branch_id,
                                                               promotion_id = :promotion_id";
@@ -176,8 +205,6 @@ class OrderSerivce
                     return false;
                 }
             }
-            
-            
         } catch (Exception $e) {
             throw $e;
         }
@@ -187,7 +214,7 @@ class OrderSerivce
     public function checkorder_code($order_code)
     {
         try {
-            $query = "SELECT order_code from " . $this ->orders . " WHERE order_code = :order_code";
+            $query = "SELECT order_code from " . $this->orders . " WHERE order_code = :order_code";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":order_code", $order_code);
             $stmt->execute();
@@ -201,6 +228,26 @@ class OrderSerivce
         }
         return false;
     }
-    
 
+    public function getTotalOderCountByUser($user_id)
+    {
+        try {
+            $query = "select COUNT(*) as total FROM " . $this->tableName .
+                " where status != 3 or status != 4  and user_id = :user_id";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":user_id", $user_id);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $limit);
+                return $totalPage;
+            }
+            return 0;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return 0;
+        }
+    }
 }
