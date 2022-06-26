@@ -2,13 +2,13 @@
   margin: 50px 25px;
 
 }
-.selectCategory1 label,
+/* .selectCategory1 label,
 .selectCategory2 label,
 .selectBranch label {
   color: rgba(0, 0, 0, 0.8);
   font-weight: bold;
   font-size: 20px;
-}
+} */
 .selectBranch {
   margin: 90px 350px -120px;
 }

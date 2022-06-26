@@ -206,6 +206,8 @@ class CategoryService
                         array_push($data, $each);
                     }
                     return $data;
+                }else{
+                    return [];
                 }
             }
 
@@ -235,10 +237,10 @@ class CategoryService
                 }
                 return $data;
             }
-            return null;
+            return [];
         } catch (Exception $e) {
             echo "loi: " . $e->getMessage();
-            return null;
+            return [];
         }
     }
 

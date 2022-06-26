@@ -38,8 +38,7 @@ if (!empty($_GET['page'])) {
 $products = $db->getProducts($categoryId, $branchId, $currentPage, $limit);
 $totalPage =  $db->getTotalPages($categoryId, $branchId, $limit);
 
-$categories1 = $dbCategory->getCategoriesLevel_0(1, 10);
-$categories2 = $dbCategory->getCategoriesLevel_1(1, 10, 0);
+$categories1 = $dbCategory->getCategoriesLevel_1(1, 10, 0);
 $branches = $dbBranch->getAll();
 
 $temp = array(
@@ -65,8 +64,9 @@ include('./includes/navbar.php');
     </div>
 
     <div>
+
         <div class="selectCategory1">
-            <label for="category1">Danh mục 1</label>
+            <label for="category1" class="form-label fs-2 fw-bold">Danh mục</label>
             <select name="category1" id="category1">
                 <?php if (!empty($categories1)) : ?>
                     <?php foreach ($categories1 as $category) : ?>
@@ -87,31 +87,31 @@ include('./includes/navbar.php');
             </a>
         </div>
 
-        <div class="selectCategory2">
-            <label for="category2">Danh mục 2</label>
-            <select name="category2" id="category2">
-                <?php if (!empty($categories2)) : ?>
-                    <?php foreach ($categories2 as $category) : ?>
-                        <option value="<?= $category['id'] ?>" selected><?= $category['name'] ?></option>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </select>
-            <a class="add-category-1">
-                <i class="fa-solid fa-circle-plus"></i>
-            </a>
-        </div>
-
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         <div class="container-form">
+            <div class="file-field">
+                <div class="mb-3">
+                    <img src="https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg" width="150" height="150" class="rounded-circle z-depth-1-half avatar-pic" alt="example placeholder avatar">
+                </div>
+                <div class="d-flex">
+                    <div class="btn btn-mdb-color btn-rounded float-left">
+                        <span>Add photo</span>
+                        <input type="file">
+                    </div>
+                </div>
+            </div>
+
             <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Title</label>
-                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                <label for="NameProduct" class="form-label fs-2 fw-bold">Name</label>
+                <input type="text" class="form-control" id="NameProduct" placeholder="Product 1">
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Content</label>
                 <textarea class="form-control content-area" id="exampleFormControlTextarea1" rows="5"></textarea>
             </div>
         </div>
+        <button type="button" class="btn btn-primary" onclick="insertProduct()">Save</button>
+
     </div>
 </main>
 
@@ -137,21 +137,42 @@ include './includes/footer.php'
     //         "&branchId=" + branch);
     // }
 
-    // function remove($id) {
-    //     var url = 'http://192.168.1.4:8585/api/product/product_remove.php';
-    //     var formData = new FormData();
-    //     formData.append('id', $id);
+    function insertProduct() {
+        console.log("insertProduct");
+        var url = 'http://127.0.0.1:8686/api/product/product_insert.php';
+        // var formData = new FormData();
+        const categoryId = document.getElementById('category1').value;
+        const name = document.getElementById('NameProduct').value;
+        const img = "https://cdn.pixabay.com/photo/2017/02/12/10/11/dog-2059668__340.jpg";
+        const desc = document.getElementById('exampleFormControlTextarea1').value;
 
-    //     fetch(url, {
-    //             method: 'POST',
-    //             body: formData
-    //         })
-    //         .then(function(response) {
-    //             return response.text();
-    //         })
-    //         .then(function(body) {
-    //             console.log(body);
-    //         });
-    //      window.location.reload();   
-    // }
+        // formData.append('name', name);
+        // formData.append('avatar', img);
+        // formData.append('description', desc);
+        // formData.append('price', '0000');
+        // formData.append('category', categoryId);
+
+        fetch(url, {
+                method: 'POST',
+                body: JSON.stringify({
+                    'name': name,
+                    'avatar': img,
+                    'description': desc,
+                    'price': "000",
+                    'category': 1,
+                }),
+                headers: {
+                    "dimpcommon": "true",
+                    "Content-Type": "application/json",
+                    Accept: "application/json"
+                },
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(body) {
+                console.log(body);
+            });
+        // window.location.reload();
+    }
 </script>
