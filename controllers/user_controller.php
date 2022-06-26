@@ -81,7 +81,7 @@ class UserController
             $mail = new PHPMailer();
             try {
                 $mail->isSMTP();
-                $mail->SMTPDebug = 1;
+                $mail->SMTPDebug = 0;
                 $mail->Host = 'smtp.gmail.com';
                 $mail->Port = 465;
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
