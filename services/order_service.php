@@ -12,11 +12,12 @@ class OrderSerivce
     {
         $this->connection = (new DatabaseConfig())->db_connect();
     }
-    public function getTotalPages($limit = 10)
+    public function getTotalPages($limit = 10, $user_id)
     {
         try {
-            $query = "select COUNT(*) as total FROM " . $this->orders;
+            $query = "select COUNT(*) as total FROM " . $this->orders . " WHERE user_id = :user_id";
             $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":user_id", $user_id);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);

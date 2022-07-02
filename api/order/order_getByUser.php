@@ -25,7 +25,7 @@ if ($authen->checkToken()) {
             $limit = $_GET['limit'];
         }
 
-        $total = (new OrderController())->getTotalPages($limit);
+        $total = (new OrderController())->getTotalPages($limit, $user_id);
 
         if ($total > $page) {
             $load_more = true;

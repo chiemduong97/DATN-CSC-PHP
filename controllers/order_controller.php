@@ -21,9 +21,9 @@ class OrderController
         return $this->service->getByUser($user_id, $page, $limit);
     }
 
-    public function getTotalPages($limit)
+    public function getTotalPages($limit, $user_id)
     {
-        return $this->service->getTotalPages($limit);
+        return $this->service->getTotalPages($limit, $user_id);
     }
 
     public function updateStatus($order_code, $status)
