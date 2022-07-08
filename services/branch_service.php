@@ -19,8 +19,8 @@ class BranchService
                 " where status = 1 ORDER BY id DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
+            $data = array();
             if ($stmt->rowCount() > 0) {
-                $data = array();
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     extract($row);
                     $each = array(
@@ -32,9 +32,8 @@ class BranchService
                     );
                     array_push($data, $each);
                 }
-                return $data;
             }
-            return null;
+            return $data;
         } catch (Exception $e) {
             //throw $th;
             echo "loi getAll(): " . $e->getMessage();

@@ -13,12 +13,8 @@ if ($authen->checkToken()) {
     if (isset($_GET['id'])) {
         $id = $_GET["id"];
         $data = (new BranchController())->getById($id);
+        is_null($data) ? $code = 1001 : $code = 1000;
 
-        if ($data) {
-            $code = 1000;
-        } else {
-            $code = 1001;
-        }
     } else {
         $code = 1013;
     }

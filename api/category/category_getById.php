@@ -16,11 +16,7 @@ if ($authen->checkToken()) {
     if (property_exists($body, 'id')) {
         $id = $body->id;
         $data = (new CategoryController())->getByID($id);
-        if ($data) {
-            $code = 1000;
-        } else {
-            $code = 1001;
-        }
+        is_null($data) ? $code = 1001 : $code = 1000;
     } else {
         $code = 1013;
     }

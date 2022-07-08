@@ -16,11 +16,8 @@ if ($authen->checkToken()) {
         $id = $body->id;
         $data = (new ProductController())->getByID($id);
 
-        if ($data == null) {
-            $code = 1001;
-        } else {
-            $code = 1000;
-        }
+        is_null($data) ? $code = 1001 : $code = 1000;
+
     } else {
         $code = 1013;
     }

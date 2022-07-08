@@ -49,8 +49,8 @@ class OrderSerivce
             $stmt->bindParam(':start', $start, PDO::PARAM_INT);
             $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
             $stmt->execute();
+            $data = array();
             if ($stmt->rowCount() > 0) {
-                $data = array();
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     extract($row);
                     $each = array(
@@ -69,9 +69,8 @@ class OrderSerivce
                     );
                     array_push($data, $each);
                 }
-                return $data;
             }
-            return null;
+            return $data;
         } catch (Exception $e) {
             echo "error: " . $e->getMessage();
             return null;

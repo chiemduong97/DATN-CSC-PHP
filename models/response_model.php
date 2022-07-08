@@ -25,7 +25,7 @@ class Response
                 break;
             case '1001':
                 $this->is_error = true;
-                $this->message =  "Failed by data = " . $this->data;
+                $this->message =  "Failed" ;
                 break;
             case '1002':
                 $this->is_error = true;

@@ -35,9 +35,8 @@ class ProductService
             $stmt->bindParam(':start', $start, PDO::PARAM_INT);
             $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
             $stmt->execute();
-
+            $data = array();
             if ($stmt->rowCount() > 0) {
-                $data = array();
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     extract($row);
                     $each = array(
@@ -51,9 +50,8 @@ class ProductService
                     );
                     array_push($data, $each);
                 }
-                return $data;
             }
-            return null;
+            return $data;
         } catch (Exception $e) {
             echo "loi service getProducts: " . $e->getMessage();
             return null;

@@ -25,17 +25,19 @@ if ($authen->checkToken()) {
             $limit = $_GET['limit'];
         }
 
-        $total = (new OrderController())->getTotalPages($limit, $user_id);
+        $total = (new OrderController())->getTotalPages(10, $user_id);
 
         if ($total > $page) {
             $load_more = true;
             $data = (new OrderController())->getByUser($user_id,$page, $limit);
-            $data ? $code = 1000 : $code = 1001;
-        } else if ($total == $page) {
+            is_null($data) ? $code = 1001 : $code = 1000;
+        }  
+        if ($total == $page) {
             $load_more = false;
             $data = (new OrderController())->getByUser($user_id,$page, $limit);
-            $data ? $code = 1000 : $code = 1001;
-        } else if ($total < $page) {
+            is_null($data) ? $code = 1001 : $code = 1000;
+        } 
+        if ($total < $page) {
             $load_more = false;
             $code = 1000;
             $data = [];
