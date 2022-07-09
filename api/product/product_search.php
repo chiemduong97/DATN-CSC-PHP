@@ -12,7 +12,7 @@ $data = null;
 $load_more = false;
 
 if ($authen->checkToken()) {
-    if (isset($_GET['branch_id'])) {
+    if (isset($_GET['query'])) {
         $query = $_GET['query'];
         $page = 1;
         $limit = 10;

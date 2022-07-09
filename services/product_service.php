@@ -74,7 +74,6 @@ class ProductService
                 ORDER BY id DESC LIMIT :start , :total";
 
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
             $stmt->bindParam(':start', $start, PDO::PARAM_INT);
             $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
             $stmt->execute();
