@@ -41,7 +41,7 @@ class OrderSerivce
             $status = "";
             if ($limit == 1) $status = " status != 3 and status != 4 and ";
             $query = "SELECT order_code,status,amount,address,
-            shipping_fee,promotion_code,promotion_value,user_id,branch_id,
+            shipping_fee,promotion_code,promotion_value,payment_method,user_id,branch_id,
             promotion_id,created_at,branch_address from " . $this->orders . " 
             WHERE " . $status . " user_id = :user_id ORDER BY created_at DESC LIMIT :start , :total";
             $stmt = $this->connection->prepare($query);
@@ -64,6 +64,7 @@ class OrderSerivce
                         "user_id" => $user_id,
                         "branch_id" => $branch_id,
                         "promotion_id" => $promotion_id,
+                        "payment_method" => $payment_method,
                         "created_at" => $created_at,
                         "branch_address" => $branch_address
                     );
@@ -102,7 +103,7 @@ class OrderSerivce
     public function getByorder_code($order_code)
     {
         try {
-            $query = "SELECT order_code,status,amount,address,shipping_fee,promotion_code,promotion_value,user_id,branch_id,promotion_id,created_at,branch_address from " . $this->orders . " WHERE order_code = :order_code";
+            $query = "SELECT order_code,status,amount,address,shipping_fee,promotion_code,promotion_value,user_id,branch_id,promotion_id,payment_method,created_at,branch_address from " . $this->orders . " WHERE order_code = :order_code";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":order_code", $order_code);
             $stmt->execute();
@@ -122,6 +123,7 @@ class OrderSerivce
                     "promotion_id" => $promotion_id,
                     "created_at" => $created_at,
                     "branch_address" => $branch_address,
+                    "payment_method" => $payment_method,
                 );
                 return $data;
             }
@@ -146,8 +148,9 @@ class OrderSerivce
                                                     branch_address = :branch_address,
                                                     shipping_fee = :shipping_fee,
                                                     promotion_code = :promotion_code,
-                                                    promotion_value = :promotion_value
-                                                    WHERE order_code =:order_code";
+                                                    promotion_value = :promotion_value,
+                                                    payment_method = :payment_method
+                                                    WHERE order_code = :order_code";
                 $phone = $order->phone;
                 $amount = $order->amount;
                 $lat = $order->lat;
@@ -159,6 +162,7 @@ class OrderSerivce
                 $shipping_fee = $order->shipping_fee;
                 $promotion_code = $order->promotion_code;
                 $promotion_value = $order->promotion_value;
+                $payment_method = $order->payment_method;
                 $order_code = $order->order_code;
 
                 $stmt = $this->connection->prepare($query);
@@ -173,6 +177,7 @@ class OrderSerivce
                 $stmt->bindParam(":shipping_fee", $shipping_fee);
                 $stmt->bindParam(":promotion_code", $promotion_code);
                 $stmt->bindParam(":promotion_value", $promotion_value);
+                $stmt->bindParam(":payment_method", $payment_method);
                 $stmt->bindParam(":order_code", $order_code);
                 $this->connection->beginTransaction();
                 if ($stmt->execute()) {

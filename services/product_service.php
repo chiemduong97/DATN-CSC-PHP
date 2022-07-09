@@ -58,6 +58,50 @@ class ProductService
         }
     }
 
+    public function getProductsSearch($branch_id = 1, $page = 1, $limit = 10, $filter)
+    {
+        try {
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+
+            $query =
+                "SELECT products.id, products.name, products.avatar, products.description, 
+                products.price, products.category_id, warehouse.quantity
+                FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
+                WHERE warehouse.branch_id = :branch_id and products.status = 1 and products.name like '%$filter%'
+                ORDER BY id DESC LIMIT :start , :total";
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            $data = array();
+            if ($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar,
+                        "description" => $description,
+                        "price" => $price,
+                        "quantity" => $quantity,
+                        "category_id" => $category_id
+                    );
+                    array_push($data, $each);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            echo "loi service getProducts: " . $e->getMessage();
+            return null;
+        }
+    }
+
     public function getByID($id)
     {
         try {
@@ -210,6 +254,29 @@ class ProductService
                 WHERE products.category_id = :category_id and warehouse.branch_id = :branch_id and products.status = 1 ";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $limit);
+                return $totalPage;
+            }
+            return 1;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return 1;
+        }
+    }
+
+    public function getTotalPagesSearch($branch_id = 1, $limit = 10, $filter)
+    {
+        try {
+            $query = "select COUNT(*) as total FROM " . $this->tableName . " 
+                INNER JOIN warehouse ON products.id = warehouse.product_id
+                WHERE warehouse.branch_id = :branch_id and products.status = 1 and products.name like '%$filter%' ";
+            $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {

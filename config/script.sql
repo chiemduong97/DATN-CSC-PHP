@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 `shipping_fee` REAL NOT NULL,
 `promotion_code` VARCHAR(255),
 `promotion_value` REAL,
+`payment_method` VARCHAR(255) NOT NULL,
 `user_id` INT(11) NOT NULL,
 `branch_id` INT(11) NOT NULL,
 `promotion_id` INT(11),

@@ -17,4 +17,5 @@
         public $promotion_code;
         public $promotion_value;
         public $shipping_fee;  
+        public $payment_method;
     }

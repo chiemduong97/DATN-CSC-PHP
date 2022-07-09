@@ -12,12 +12,10 @@ $code = 400;
 $data = [];
 
 if ($authen->checkToken()) {
-    if (property_exists($body, 'id')) {
-        $id = $body->id;
+    if (isset($_GET['id'])) {
+        $id = $_GET["id"];
         $data = (new ProductController())->getByID($id);
-
         is_null($data) ? $code = 1001 : $code = 1000;
-
     } else {
         $code = 1013;
     }

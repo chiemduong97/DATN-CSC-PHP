@@ -13,7 +13,7 @@ $data = null;
 
 if ($authen->checkToken()) {
     $data = (new OrderController())->insertItem($body);
-    if ($data == null) {
+    if (is_null($data)) {
         $code = 1001;
     } else {
         $code = 1000;

@@ -41,6 +41,7 @@ class OrderController
         $order->promotion_id = isset($body->promotion_id) ? $body->promotion_id : null;
         $result = $this->service->insertItem($order);
         if ($result) {
+
             $amount = 0;
             for ($i = 0; $i < count($order_details); $i++) {
                 $quantity = $order_details[$i]->quantity;
@@ -64,6 +65,7 @@ class OrderController
             $order->address = $body->address;
             $order->phone = $body->phone;
             $order->shipping_fee = $body->shipping_fee;
+            $order->payment_method = $body->payment_method;
             $order->promotion_code = isset($body->promotion_code) ? $body->promotion_code : null;
             $order->promotion_value = isset($body->promotion_value) ? $body->promotion_value : null;
             $order->branch_lat = $body->branch_lat;

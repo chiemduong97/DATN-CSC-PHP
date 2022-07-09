@@ -58,8 +58,17 @@ class ProductController
     {
         return $this->service->getProducts($category_id, $branch, $page, $limit);
     }
+    public function getProductsSearch($branch, $page, $limit, $query)
+    {
+        return $this->service->getProductsSearch($branch, $page, $limit, $query);
+    }
     public function getTotalPages($category_id, $branch, $limit)
     {
         return $this->service->getTotalPages($category_id, $branch, $limit);
+    }
+
+    public function getTotalPagesSearch($branch, $limit, $query)
+    {
+        return $this->service->getTotalPagesSearch($branch, $limit, $query);
     }
 }
