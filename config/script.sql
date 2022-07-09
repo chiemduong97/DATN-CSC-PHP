@@ -55,9 +55,7 @@ CREATE TABLE IF NOT EXISTS `warehouse` (
 `quantity` INT(11) NOT NULL,
 `created_at` DATETIME DEFAULT NOW() NOT NULL,
 `product_id` INT(11) NOT NULL,
-`branch_id` INT(11) NOT NULL,
-FOREIGN KEY (`product_id`) REFERENCES products(`id`),
-FOREIGN KEY (`branch_id`) REFERENCES branches(`id`)
+FOREIGN KEY (`product_id`) REFERENCES products(`id`)
 );
 CREATE TABLE IF NOT EXISTS `promotions` (
 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -12,8 +12,7 @@ $data = null;
 $load_more = false;
 
 if ($authen->checkToken()) {
-    if (isset($_GET['branch_id']) && isset($_GET['query'])) {
-        $branch_id = $_GET['branch_id'];
+    if (isset($_GET['branch_id'])) {
         $query = $_GET['query'];
         $page = 1;
         $limit = 10;
@@ -25,18 +24,18 @@ if ($authen->checkToken()) {
             $limit = $_GET['limit'];
         }
 
-        $total = (new ProductController())->getTotalPagesSearch($branch_id, $limit, $query);
+        $total = (new ProductController())->getTotalPagesSearch($limit, $query);
 
         if ($total > $page) {
             $load_more = true;
             // ---------------------------------------------------
-            $data = (new ProductController())->getProductsSearch($branch_id, $page, $limit, $query);
+            $data = (new ProductController())->getProductsSearch($page, $limit, $query);
             is_null($data) ? $code = 1001 : $code = 1000;
         }
         if ($total == $page) {
             $load_more = false;
             // ---------------------------------------------------
-            $data = (new ProductController())->getProductsSearch($branch_id, $page, $limit, $query);
+            $data = (new ProductController())->getProductsSearch($page, $limit, $query);
             is_null($data) ? $code = 1001 : $code = 1000;
         }
         if ($total < $page) {

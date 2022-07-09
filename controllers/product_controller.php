@@ -54,21 +54,21 @@ class ProductController
         }
     }
 
-    public function getProducts($category_id, $branch, $page, $limit)
+    public function getProducts($category_id, $page, $limit)
     {
-        return $this->service->getProducts($category_id, $branch, $page, $limit);
+        return $this->service->getProducts($category_id, $page, $limit);
     }
-    public function getProductsSearch($branch, $page, $limit, $query)
+    public function getProductsSearch($page, $limit, $query)
     {
-        return $this->service->getProductsSearch($branch, $page, $limit, $query);
+        return $this->service->getProductsSearch($page, $limit, $query);
     }
-    public function getTotalPages($category_id, $branch, $limit)
+    public function getTotalPages($branch, $limit)
     {
-        return $this->service->getTotalPages($category_id, $branch, $limit);
+        return $this->service->getTotalPages($branch, $limit);
     }
 
-    public function getTotalPagesSearch($branch, $limit, $query)
+    public function getTotalPagesSearch($limit, $query)
     {
-        return $this->service->getTotalPagesSearch($branch, $limit, $query);
+        return $this->service->getTotalPagesSearch($limit, $query);
     }
 }

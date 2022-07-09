@@ -13,7 +13,7 @@ class ProductService
         $this->connection = (new DatabaseConfig())->db_connect();
     }
 
-    public function getProducts($category_id = 1, $branch_id = 1, $page = 1, $limit = 10)
+    public function getProducts($category_id = 1, $page = 1, $limit = 10)
     {
         try {
             $page -= 1;
@@ -26,12 +26,11 @@ class ProductService
                 "SELECT products.id, products.name, products.avatar, products.description, 
                 products.price, products.category_id, warehouse.quantity
                 FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
-                WHERE products.category_id = :category_id and warehouse.branch_id = :branch_id and products.status = 1 
+                WHERE products.category_id = :category_id and products.status = 1 
                 ORDER BY id DESC LIMIT :start , :total";
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
-            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
             $stmt->bindParam(':start', $start, PDO::PARAM_INT);
             $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
             $stmt->execute();
@@ -58,7 +57,7 @@ class ProductService
         }
     }
 
-    public function getProductsSearch($branch_id = 1, $page = 1, $limit = 10, $filter)
+    public function getProductsSearch($page = 1, $limit = 10, $filter)
     {
         try {
             $page -= 1;
@@ -71,7 +70,7 @@ class ProductService
                 "SELECT products.id, products.name, products.avatar, products.description, 
                 products.price, products.category_id, warehouse.quantity
                 FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
-                WHERE warehouse.branch_id = :branch_id and products.status = 1 and products.name like '%$filter%'
+                WHERE products.status = 1 and products.name like '%$filter%'
                 ORDER BY id DESC LIMIT :start , :total";
 
             $stmt = $this->connection->prepare($query);
@@ -246,15 +245,14 @@ class ProductService
 
 
 
-    public function getTotalPages($category_id = 1, $branch_id = 1, $limit = 10)
+    public function getTotalPages($category_id = 1, $limit = 10)
     {
         try {
             $query = "select COUNT(*) as total FROM " . $this->tableName . " 
                 INNER JOIN warehouse ON products.id = warehouse.product_id
-                WHERE products.category_id = :category_id and warehouse.branch_id = :branch_id and products.status = 1 ";
+                WHERE products.category_id = :category_id and products.status = 1 ";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
-            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -270,14 +268,13 @@ class ProductService
         }
     }
 
-    public function getTotalPagesSearch($branch_id = 1, $limit = 10, $filter)
+    public function getTotalPagesSearch($limit = 10, $filter)
     {
         try {
             $query = "select COUNT(*) as total FROM " . $this->tableName . " 
                 INNER JOIN warehouse ON products.id = warehouse.product_id
-                WHERE warehouse.branch_id = :branch_id and products.status = 1 and products.name like '%$filter%' ";
+                WHERE products.status = 1 and products.name like '%$filter%' ";
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':branch_id', $branch_id, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
