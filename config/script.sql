@@ -430,4 +430,12 @@ insert into warehouse (quantity, product_id) VALUES (100,30);
 insert into warehouse (quantity, product_id) VALUES (100,31);
 insert into warehouse (quantity, product_id) VALUES (100,32);
 
+insert into promotions (code, value, start, end) VALUES ('PROMOTION1',10000,'2022-07-01','2022-07-31');
+insert into promotions (code, value, start, end) VALUES ('PROMOTION2',20000,'2022-07-01','2022-07-31');
+insert into promotions (code, value, start, end) VALUES ('PROMOTION3',30000,'2022-07-01','2022-07-31');
+insert into promotions (code, value, start, end) VALUES ('PROMOTION4',40000,'2022-07-01','2022-07-31');
+insert into promotions (code, value, start, end) VALUES ('PROMOTION5',50000,'2022-07-01','2022-07-31');
+insert into promotions (code, value, start, end) VALUES ('PROMOTION6',60000,'2022-07-01','2022-07-31');
+insert into promotions (code, value, start, end) VALUES ('PROMOTION7',70000,'2022-07-01','2022-07-31');
+
 
