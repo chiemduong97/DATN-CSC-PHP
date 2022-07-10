@@ -151,11 +151,10 @@ class CategoryService
             $query = "select id, name, avatar from " . $this->tableName . " 
                 where status = 1   and category_id IS NULL";
             $stmt = $this->connection->prepare($query);
-
             $stmt->execute();
+            $data = array();
 
             if ($stmt->rowCount() > 0) {
-                $data = array();
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     extract($row);
                     $each = array(
@@ -165,67 +164,26 @@ class CategoryService
                     );
                     array_push($data, $each);
                 }
-                return $data;
             }
-            return null;
+            return $data;
         } catch (Exception $e) {
             echo "loi: " . $e->getMessage();
             return null;
         }
     }
 
-    public function getCategoriesLevel_1($page = 1, $limit = 10, $category_id = 0)
+    public function getCategoriesLevel_1($category_id = 0)
     {
         try {
-            $page -= 1;
-            if ($page < 0) {
-                $page = 0;
-            }
-            $start = $page * $limit;
-
-
-            if ($category_id == 0) {
-                $query = "select id, name, avatar from " . $this->tableName . " 
-                where status = 1  AND  category_id IS NOT NULL 
-                ORDER BY id DESC LIMIT :start , :total";
-
-                $stmt = $this->connection->prepare($query);
-                $stmt->bindParam(':start', $start, PDO::PARAM_INT);
-                $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
-                $stmt->execute();
-
-                if ($stmt->rowCount() > 0) {
-                    $data = array();
-                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        extract($row);
-                        $each = array(
-                            "id" => $id,
-                            "name" => $name,
-                            "avatar" => $avatar
-                        );
-                        array_push($data, $each);
-                    }
-                    return $data;
-                }else{
-                    return [];
-                }
-            }
-
-            if ($category_id > 0) {
-                $query = "select id, name, avatar from " . $this->tableName . " 
-                where status = 1  AND category_id = :category_id 
-                ORDER BY id DESC LIMIT :start , :total";
-
-                $stmt = $this->connection->prepare($query);
-                $stmt->bindParam(':start', $start, PDO::PARAM_INT);
-                $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
-                $stmt->bindParam(":category_id", $category_id, PDO::PARAM_INT);
-                $stmt->execute();
-            }
-
+           
+            $query = "select id, name, avatar from " . $this->tableName . " 
+                where category_id = :category_id and status = 1";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":category_id", $category_id);
+            $stmt->execute();
+            $data = array();
 
             if ($stmt->rowCount() > 0) {
-                $data = array();
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     extract($row);
                     $each = array(
@@ -235,12 +193,11 @@ class CategoryService
                     );
                     array_push($data, $each);
                 }
-                return $data;
             }
-            return [];
+            return $data;
         } catch (Exception $e) {
             echo "loi: " . $e->getMessage();
-            return [];
+            return null;
         }
     }
 

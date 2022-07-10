@@ -16,9 +16,9 @@ class CategoryController
     {
         return $this->service->getCategoriesLevel_0();
     }
-    public function getCategoriesLevel_1($page, $limit, $category_id)
+    public function getCategoriesLevel_1($category_id)
     {
-        return $this->service->getCategoriesLevel_1($page, $limit, $category_id);
+        return $this->service->getCategoriesLevel_1($category_id);
     }
     public function getByID($id)
     {

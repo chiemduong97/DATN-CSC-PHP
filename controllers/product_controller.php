@@ -62,9 +62,9 @@ class ProductController
     {
         return $this->service->getProductsSearch($page, $limit, $query);
     }
-    public function getTotalPages($branch, $limit)
+    public function getTotalPages($category_id, $limit)
     {
-        return $this->service->getTotalPages($branch, $limit);
+        return $this->service->getTotalPages($category_id, $limit);
     }
 
     public function getTotalPagesSearch($limit, $query)

@@ -14,17 +14,7 @@ $authen = new Authen();
 if ($authen->checkToken()) {
     if (isset($_GET['category_id'])) {
         $category_id = $_GET['category_id'];
-        $page = 1;
-        $limit = 10;
-
-        if (isset($_GET['page'])) {
-            $page = $_GET['page'];
-        }
-        if (isset($_GET['limit'])) {
-            $limit = $_GET['limit'];
-        }
-
-        $data = (new CategoryController())->getCategoriesLevel_1($page, $limit, $category_id);
+        $data = (new CategoryController())->getCategoriesLevel_1($category_id);
         is_null($data) ? $code = 1001 : $code = 1000;
 
     } else {

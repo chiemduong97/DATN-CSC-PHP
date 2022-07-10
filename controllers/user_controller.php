@@ -91,7 +91,7 @@ class UserController
                 $from = 'chiemduong01@gmail.com';
                 $clientId = '260730311274-42j6eu5hek5vbaej9ml64l2am316t79c.apps.googleusercontent.com';
                 $clientSecret = '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';
-                $refreshToken = '1//0eE0c4UTwY8SoCgYIARAAGA4SNwF-L9IrRnltOV1rrbqq7bnpPZJjIFuxwxgFJ90FM3GOCT4f9Ybyav7D8ZdVOOBfLbWl8s0Arn0';
+                $refreshToken = '1//0eFYUruSZOxXUCgYIARAAGA4SNwF-L9IrAtDIzquBTdsto_5JeYFCayhiXlSsBBz-OV4beab9b9KCZIBvs-88eFTZpcfky4kmo1I';
                 $provider = new Google(
                     [
                         'clientId' => $clientId,
