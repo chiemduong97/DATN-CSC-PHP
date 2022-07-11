@@ -284,7 +284,7 @@ class UserService
     public function getUserByEmail($email)
     {
         try {
-            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,csc_point,first_order,lat,lng,address FROM " . $this->users . " where email=:email";
+            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,csc_point,first_order FROM " . $this->users . " where email=:email";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":email", $email);
             $stmt->execute();
@@ -300,10 +300,7 @@ class UserService
                     "birthday" => $row["birthday"],
                     "wallet" => $row["wallet"],
                     "csc_point" => $row["csc_point"],
-                    "first_order" => $row["first_order"],
-                    "lat" => $row["lat"],
-                    "lng" => $row["lng"],
-                    "address" => $row["address"]
+                    "first_order" => $row["first_order"]
                 );
                 return $data;
             }
@@ -354,33 +351,6 @@ class UserService
             $stmt->bindParam(":fullname", $fullname);
             $stmt->bindParam(":birthday", $birthday);
             $stmt->bindParam(":phone", $phone);
-            $stmt->bindParam(":email", $email);
-
-            $this->db->beginTransaction();
-            if ($stmt->execute()) {
-                $this->db->commit();
-                return 1000;
-            } else {
-                $this->db->rollBack();
-                return 1001;
-            }
-        } catch (Exception $e) {
-            throw $e;
-        }
-        return 1001;
-    }
-
-    public function updateLocation($email, $lat, $lng, $address)
-    {
-        try {
-            $sql = "UPDATE " . $this->users . " SET lat=:lat,
-                                                    lng=:lng,
-                                                    address=:address WHERE email=:email";
-            $stmt = $this->db->prepare($sql);
-
-            $stmt->bindParam(":lat", $lat);
-            $stmt->bindParam(":lng", $lng);
-            $stmt->bindParam(":address", $address);
             $stmt->bindParam(":email", $email);
 
             $this->db->beginTransaction();

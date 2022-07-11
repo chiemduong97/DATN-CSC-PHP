@@ -156,11 +156,6 @@ class UserController
         return $this->service->updateInfo($body);
     }
 
-    public function updateLocation($email, $lat, $lng, $address)
-    {
-        return $this->service->updateLocation($email, $lat, $lng, $address);
-    }
-
     public function updatePass($body)
     {
         $user = $this->service->getByEmail($body->email);
