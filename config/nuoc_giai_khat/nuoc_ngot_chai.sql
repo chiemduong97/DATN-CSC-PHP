@@ -79,16 +79,3 @@ Bảo quản: Để nơi khô ráo, thoáng mát, tránh ánh nắng trực ti�
 'Hương vị được ưa chuộng tại hơn 190 quôc gia và lọt top những nước giải khát được yêu thích nhất toàn cầu. Với vị chanh tươi mát cùng những bọt ga sảng khoái tê đầu lưỡi giúp bạn đập tan cơn khát ngay tức thì. Sản phẩm cam kết chính hãng, chất lượng và an toàn từ nhà Sprite',
 8000, 15
 );
-
-insert into warehouse (quantity, product_id) VALUES (100,33);
-insert into warehouse (quantity, product_id) VALUES (100,34);
-insert into warehouse (quantity, product_id) VALUES (100,35);
-insert into warehouse (quantity, product_id) VALUES (100,36);
-insert into warehouse (quantity, product_id) VALUES (100,37);
-insert into warehouse (quantity, product_id) VALUES (100,38);
-insert into warehouse (quantity, product_id) VALUES (100,39);
-insert into warehouse (quantity, product_id) VALUES (100,40);
-insert into warehouse (quantity, product_id) VALUES (100,41);
-insert into warehouse (quantity, product_id) VALUES (100,42);
-insert into warehouse (quantity, product_id) VALUES (100,43);
-insert into warehouse (quantity, product_id) VALUES (100,44);

@@ -154,25 +154,3 @@ Khoai tây 59,0 %, dầu thực vật, bột gia vị thịt nướng 6,0 % (đ�
 <Chú ý>: Sản phẩm không phù hợp cho người dị ứng với sữa, đậu nành',
 25000,24
 );
-
-insert into warehouse (quantity, product_id) VALUES (100,76);
-insert into warehouse (quantity, product_id) VALUES (100,77);
-insert into warehouse (quantity, product_id) VALUES (100,78);
-insert into warehouse (quantity, product_id) VALUES (100,79);
-insert into warehouse (quantity, product_id) VALUES (100,80);
-insert into warehouse (quantity, product_id) VALUES (100,81);
-insert into warehouse (quantity, product_id) VALUES (100,82);
-insert into warehouse (quantity, product_id) VALUES (100,83);
-insert into warehouse (quantity, product_id) VALUES (100,84);
-insert into warehouse (quantity, product_id) VALUES (100,85);
-insert into warehouse (quantity, product_id) VALUES (100,86);
-insert into warehouse (quantity, product_id) VALUES (100,87);
-insert into warehouse (quantity, product_id) VALUES (100,88);
-insert into warehouse (quantity, product_id) VALUES (100,89);
-insert into warehouse (quantity, product_id) VALUES (100,90);
-insert into warehouse (quantity, product_id) VALUES (100,91);
-insert into warehouse (quantity, product_id) VALUES (100,92);
-insert into warehouse (quantity, product_id) VALUES (100,93);
-insert into warehouse (quantity, product_id) VALUES (100,94);
-insert into warehouse (quantity, product_id) VALUES (100,95);
-insert into warehouse (quantity, product_id) VALUES (100,65);

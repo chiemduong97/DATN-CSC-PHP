@@ -329,35 +329,3 @@ Hướng dẫn sử dụng Lắc đều trước khi sử dụng. Ngon hơn khi 
 Bảo quản Để nơi khô ráo và thoáng mát, tránh ánh nắng trực tiếp hoặc nơi có nhiệt độ cao.',
 16000, 16
 );
-
-insert into warehouse (quantity, product_id) VALUES (100,45);
-insert into warehouse (quantity, product_id) VALUES (100,46);
-insert into warehouse (quantity, product_id) VALUES (100,47);
-insert into warehouse (quantity, product_id) VALUES (100,48);
-insert into warehouse (quantity, product_id) VALUES (100,49);
-insert into warehouse (quantity, product_id) VALUES (100,50);
-insert into warehouse (quantity, product_id) VALUES (100,51);
-insert into warehouse (quantity, product_id) VALUES (100,52);
-insert into warehouse (quantity, product_id) VALUES (100,53);
-insert into warehouse (quantity, product_id) VALUES (100,54);
-insert into warehouse (quantity, product_id) VALUES (100,55);
-insert into warehouse (quantity, product_id) VALUES (100,56);
-insert into warehouse (quantity, product_id) VALUES (100,57);
-insert into warehouse (quantity, product_id) VALUES (100,58);
-insert into warehouse (quantity, product_id) VALUES (100,59);
-insert into warehouse (quantity, product_id) VALUES (100,60);
-insert into warehouse (quantity, product_id) VALUES (100,61);
-insert into warehouse (quantity, product_id) VALUES (100,62);
-insert into warehouse (quantity, product_id) VALUES (100,63);
-insert into warehouse (quantity, product_id) VALUES (100,64);
-insert into warehouse (quantity, product_id) VALUES (100,65);
-insert into warehouse (quantity, product_id) VALUES (100,66);
-insert into warehouse (quantity, product_id) VALUES (100,67);
-insert into warehouse (quantity, product_id) VALUES (100,68);
-insert into warehouse (quantity, product_id) VALUES (100,69);
-insert into warehouse (quantity, product_id) VALUES (100,70);
-insert into warehouse (quantity, product_id) VALUES (100,71);
-insert into warehouse (quantity, product_id) VALUES (100,72);
-insert into warehouse (quantity, product_id) VALUES (100,73);
-insert into warehouse (quantity, product_id) VALUES (100,74);
-insert into warehouse (quantity, product_id) VALUES (100,75);

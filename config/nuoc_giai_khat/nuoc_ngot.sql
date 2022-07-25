@@ -225,35 +225,3 @@ Sản phẩm được đóng lon tiện lợi, dễ sử dụng và bảo quản
 8500, 14
 );
 
-insert into warehouse (quantity, product_id) VALUES (100,1);
-insert into warehouse (quantity, product_id) VALUES (100,2);
-insert into warehouse (quantity, product_id) VALUES (100,3);
-insert into warehouse (quantity, product_id) VALUES (100,4);
-insert into warehouse (quantity, product_id) VALUES (100,5);
-insert into warehouse (quantity, product_id) VALUES (100,6);
-insert into warehouse (quantity, product_id) VALUES (100,7);
-insert into warehouse (quantity, product_id) VALUES (100,8);
-insert into warehouse (quantity, product_id) VALUES (100,9);
-insert into warehouse (quantity, product_id) VALUES (100,10);
-insert into warehouse (quantity, product_id) VALUES (100,11);
-insert into warehouse (quantity, product_id) VALUES (100,12);
-insert into warehouse (quantity, product_id) VALUES (100,13);
-insert into warehouse (quantity, product_id) VALUES (100,14);
-insert into warehouse (quantity, product_id) VALUES (100,15);
-insert into warehouse (quantity, product_id) VALUES (100,16);
-insert into warehouse (quantity, product_id) VALUES (100,17);
-insert into warehouse (quantity, product_id) VALUES (100,18);
-insert into warehouse (quantity, product_id) VALUES (100,19);
-insert into warehouse (quantity, product_id) VALUES (100,20);
-insert into warehouse (quantity, product_id) VALUES (100,21);
-insert into warehouse (quantity, product_id) VALUES (100,22);
-insert into warehouse (quantity, product_id) VALUES (100,23);
-insert into warehouse (quantity, product_id) VALUES (100,24);
-insert into warehouse (quantity, product_id) VALUES (100,25);
-insert into warehouse (quantity, product_id) VALUES (100,26);
-insert into warehouse (quantity, product_id) VALUES (100,27);
-insert into warehouse (quantity, product_id) VALUES (100,28);
-insert into warehouse (quantity, product_id) VALUES (100,29);
-insert into warehouse (quantity, product_id) VALUES (100,30);
-insert into warehouse (quantity, product_id) VALUES (100,31);
-insert into warehouse (quantity, product_id) VALUES (100,32);
