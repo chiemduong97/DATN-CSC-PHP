@@ -44,32 +44,35 @@ class PromotionService
         }
     }
 
-    // public function getById($id)
-    // {
-    //     try {
-    //         $query = "select id, name, lat,lng,address from " . $this->tableName . " where id=:id";
-    //         $stmt = $this->connection->prepare($query);
-    //         $stmt->bindParam(":id", $id);
-    //         $stmt->execute();
-    //         if ($stmt->rowCount() > 0) {
-    //             $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    //             extract($row);
-    //             $data = array(
-    //                 "id" => $id,
-    //                 "name" => $name,
-    //                 "lat" => $lat,
-    //                 "lng" => $lng,
-    //                 "address" => $address
-    //             );
-    //             return $data;
-    //         } 
-    //         return null;
-    //     } catch (Exception $e) {
-    //         echo "loi getByID(): " . $e->getMessage();
-    //         return null;
-    //     }
+    public function getByCode($code)
+    {
+        try {
+            $query = "select * from " . $this->tableName . 
+            " where code=:code and status = 1 and start <= NOW()";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":code", $code);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                return array(
+                    "id" => $id,
+                    "avatar" => $avatar,
+                    "description" => $description,
+                    "code" => $code,
+                    "value" => $value,
+                    "created_at" => $created_at,
+                    "start" => $start,
+                    "end" => $end
+                );
+            } 
+            return null;
+        } catch (Exception $e) {
+            echo "loi getByID(): " . $e->getMessage();
+            return null;
+        }
        
-    // }
+    }
 
     // public function checkName($name)
     // {

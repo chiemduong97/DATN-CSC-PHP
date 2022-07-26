@@ -13,9 +13,9 @@
             return $this->service->getAll();
         }
 
-        // public function getById($id) {
-        //     return $this->service->getById($id);
-        // }
+        public function getByCode($code) {
+            return $this->service->getByCode($code);
+        }
     
 }
 ?> 

@@ -13,6 +13,136 @@ class ProductService
         $this->connection = (new DatabaseConfig())->db_connect();
     }
 
+    public function getProductsRecent($page = 1, $limit = 10, $user_id) {
+        try {
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+
+            $query =
+                "SELECT products.id, products.name, products.avatar, products.description, 
+                products.price, products.category_id, warehouse.quantity FROM " . $this->tableName . "
+                INNER JOIN warehouse ON products.id = warehouse.product_id 
+                INNER JOIN order_details ON products.id = order_details.product_id
+                INNER JOIN orders ON order_details.order_code = orders.order_code
+                WHERE orders.user_id =:user_id and orders.status = 3
+                ORDER BY orders.created_at DESC LIMIT :start , :total";
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
+            $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $data = array();
+            if ($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar,
+                        "description" => $description,
+                        "price" => $price,
+                        "quantity" => $quantity,
+                        "category_id" => $category_id
+                    );
+                    array_push($data, $each);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            echo "loi service getProducts: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function getProductsHighLight($page = 1, $limit = 10) {
+        try {
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+
+            $query =
+                "SELECT products.id, products.name, products.avatar, products.description, 
+                products.price, products.category_id, warehouse.quantity, 
+                (SELECT sum(quantity) from order_details WHERE product_id = products.id) as sold 
+                FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
+                WHERE products.status = 1 and (SELECT sum(quantity) from order_details WHERE product_id = products.id) is not null
+                ORDER BY sold DESC LIMIT :start , :total";
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            $data = array();
+            if ($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar,
+                        "description" => $description,
+                        "price" => $price,
+                        "quantity" => $quantity,
+                        "category_id" => $category_id
+                    );
+                    array_push($data, $each);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            echo "loi service getProducts: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function getProductsNew($page = 1, $limit = 10) {
+        try {
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+
+            $query =
+                "SELECT products.id, products.name, products.avatar, products.description, 
+                products.price, products.category_id, warehouse.quantity
+                FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
+                WHERE products.status = 1
+                ORDER BY products.created_at DESC LIMIT :start , :total";
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            $data = array();
+            if ($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar,
+                        "description" => $description,
+                        "price" => $price,
+                        "quantity" => $quantity,
+                        "category_id" => $category_id
+                    );
+                    array_push($data, $each);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            echo "loi service getProducts: " . $e->getMessage();
+            return null;
+        }
+    }
+
     public function getProducts($category_id = 1, $page = 1, $limit = 10)
     {
         try {
@@ -242,7 +372,75 @@ class ProductService
         return false;
     }
 
+    public function getTotalPagesRecent($limit = 10, $user_id)
+    {
+        try {
+            $query = "select COUNT(*) as total FROM " . $this->tableName . 
+            " INNER JOIN warehouse ON products.id = warehouse.product_id
+            INNER JOIN order_details ON products.id = order_details.product_id
+            INNER JOIN orders ON order_details.order_code = orders.order_code
+            WHERE orders.user_id =:user_id and orders.status = 3";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $limit);
+                return $totalPage;
+            }
+            return 1;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return 1;
+        }
+    }
 
+    public function getTotalPagesHighLight($limit = 10)
+    {
+        try {
+            $query = "select COUNT(*) as total FROM " . $this->tableName . 
+            " INNER JOIN warehouse ON products.id = warehouse.product_id
+            WHERE products.status = 1 and 
+            (SELECT sum(quantity) from order_details WHERE product_id = products.id) is not null";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $limit);
+                return $totalPage;
+            }
+            return 1;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return 1;
+        }
+    }
+
+    public function getTotalPagesNew($limit = 10)
+    {
+        try {
+            $query = "select COUNT(*) as total FROM " . $this->tableName . " 
+                INNER JOIN warehouse ON products.id = warehouse.product_id
+                WHERE products.status = 1 ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $limit);
+                return $totalPage;
+            }
+            return 1;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return 1;
+        }
+    }
 
     public function getTotalPages($category_id = 1, $limit = 10)
     {

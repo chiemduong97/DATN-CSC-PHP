@@ -54,6 +54,21 @@ class ProductController
         }
     }
 
+    public function getProductsRecent($page, $limit, $user_id)
+    {
+        return $this->service->getProductsRecent($page, $limit, $user_id);
+    }
+
+    public function getProductsHighLight($page, $limit)
+    {
+        return $this->service->getProductsHighLight($page, $limit);
+    }
+
+    public function getProductsNew($page, $limit)
+    {
+        return $this->service->getProductsNew($page, $limit);
+    }
+
     public function getProducts($category_id, $page, $limit)
     {
         return $this->service->getProducts($category_id, $page, $limit);
@@ -62,6 +77,22 @@ class ProductController
     {
         return $this->service->getProductsSearch($page, $limit, $query);
     }
+
+    public function getTotalPagesRecent($limit, $user_id)
+    {
+        return $this->service->getTotalPagesRecent($limit, $user_id);
+    }
+
+    public function getTotalPagesHighLight($limit)
+    {
+        return $this->service->getTotalPagesHighLight($limit);
+    }
+
+    public function getTotalPagesNew($limit)
+    {
+        return $this->service->getTotalPagesNew($limit);
+    }
+
     public function getTotalPages($category_id, $limit)
     {
         return $this->service->getTotalPages($category_id, $limit);
