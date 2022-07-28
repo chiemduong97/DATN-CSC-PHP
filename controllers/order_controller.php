@@ -1,10 +1,18 @@
 <?php
+
+use LDAP\Result;
+
 include_once $_SERVER['DOCUMENT_ROOT'] . '/services/order_service.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/order_model.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/services/order_detail_service.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/order_detail_model.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/services/product_service.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/services/branch_service.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/user_service.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/payment_service.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/models/transaction_model.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/transaction_service.php';
+
 
 class OrderController
 {
@@ -41,6 +49,45 @@ class OrderController
         $order->promotion_id = isset($body->promotion_id) ? $body->promotion_id : null;
         $result = $this->service->insertItem($order);
         if ($result) {
+
+            switch ($body -> payment_method) {
+                case "MOMO":
+                    $paymentService = new PaymentService();
+                    $partnerRefId = "CSCMomoPay" . time();
+                    $resultMomo = json_decode($paymentService -> payMomo($body -> customerNumber, $body -> appData, $body -> amount, $partnerRefId));
+                    if ($resultMomo -> status == 0) {
+                        $transaction = new Transaction();
+                        $transaction -> user_id = $body -> user_id;
+                        $transaction -> transid = $partnerRefId;
+                        $transaction -> transid_momo = $resultMomo -> transid;
+                        $transaction -> type = "paid";
+                        $transaction -> amount = $resultMomo -> amount;
+                        $transaction -> order_code = $order -> order_code;
+                        $transactionService = new TransactionService();
+                        $resultTransaction = $transactionService -> insertItem($transaction);
+                        if ($resultTransaction != 1000) return null;
+                    } else {
+                        return null;
+                    }
+                    break;
+                case "WALLET":
+                    $transid = "CSCWalletPay" . time();
+                    $transaction = new Transaction();
+                    $userService = new UserService();
+                    $resultUser = $userService -> updateWallet(-($body -> amount), $body -> user_id);
+                    if ($resultUser != 1000) $transaction -> status = 0;
+                    $transaction -> user_id = $body -> user_id;
+                    $transaction -> transid = $transid;
+                    $transaction -> transid_momo = null;
+                    $transaction -> type = "paid";
+                    $transaction -> amount = $body -> amount;
+                    $transactionService = new TransactionService();
+                    $transaction -> order_code = $order -> order_code;
+                    $resultTransaction = $transactionService -> insertItem($transaction);
+                    if ($resultTransaction != 1000) return null;
+                    break;
+            }
+
 
             $amount = 0;
             for ($i = 0; $i < count($order_details); $i++) {

@@ -336,6 +336,28 @@ class UserService
         return 1001;
     }
 
+    public function updateWallet($amount, $user_id)
+    {
+        try {
+            $sql = "update " . $this->users . " set wallet = wallet + :amount where id=:user_id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":amount", $amount);
+            $stmt->bindParam(":user_id", $user_id);
+            $this->db->beginTransaction();
+            if ($stmt->execute()) {
+                $this->db->commit();
+                return 1000;
+            } else {
+                $this->db->rollBack();
+                return 1001;
+            }
+        } catch (Exception $e) {
+            throw $e;
+            return 1001;
+        }
+        return 1001;
+    }
+
     public function updateInfo($body)
     {
         try {

@@ -4,9 +4,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/category_controller.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
 
-(new CF_Header())->config("POST");
+(new CF_Header())->config("GET");
 $authen = new Authen();
-$body = json_decode(file_get_contents("php://input"));
 
 
 $code = 400;

@@ -105,6 +105,18 @@ CREATE TABLE IF NOT EXISTS `requests` (
 `status` BIT DEFAULT 1 NOT NULL,
 `email` VARCHAR(255) NOT NULL
 );
+CREATE TABLE IF NOT EXISTS `transactions` (
+`transid` VARCHAR(255) NOT NULL PRIMARY KEY,
+`transid_momo` VARCHAR(255),
+`created_at` DATETIME DEFAULT NOW() NOT NULL,
+`type` VARCHAR(255) NOT NULL,
+`amount` REAL NOT NULL,
+`status` BIT DEFAULT 1 NOT NULL,
+`user_id` INT(11),
+`order_code` VARCHAR(6),
+FOREIGN KEY (`user_id`) REFERENCES users(`id`),
+FOREIGN KEY (`order_code`) REFERENCES orders(`order_code`)
+);
 CREATE TABLE IF NOT EXISTS `ratings` (
 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `rating` INT(1) NOT NULL,
