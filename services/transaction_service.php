@@ -43,6 +43,76 @@ class TransactionService
             return 1001;
         }
     }
+
+    public function getTransactions($type, $user_id, $page = 1, $limit = 10)
+    {
+        try {
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+
+            $type_string = ($type == "RECHARGE") ? " = 'recharge' " : " != 'recharge' AND transid_momo is null ";
+
+            $query =
+                "SELECT transid, transid_momo, created_at, type, 
+                amount, status, order_code, user_id
+                FROM  " . $this->tableName . " WHERE type $type_string AND user_id = :user_id
+                ORDER BY created_at DESC LIMIT :start , :total";
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            $data = array();
+            if ($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "transid" => $transid,
+                        "transid_momo" => $transid_momo,
+                        "created_at" => $created_at,
+                        "type" => $type,
+                        "amount" => $amount,
+                        "status" => $status,
+                        "order_code" => $order_code,
+                        "user_id" => $user_id
+                    );
+                    array_push($data, $each);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            echo "loi service getTransactions: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function getTotalPages($type, $user_id, $limit = 10)
+    {
+        try {
+            $type_string = ($type == "RECHARGE") ? " = 'recharge' " : " != 'recharge' AND transid_momo is null ";
+            $query =
+                "SELECT COUNT(*) as total FROM  " . $this->tableName . " 
+                WHERE type $type_string AND user_id = :user_id ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $limit);
+                return $totalPage;
+            }
+            return 1;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return 1;
+        }
+    }
 }
 
 

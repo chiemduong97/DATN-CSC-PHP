@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 `type` VARCHAR(255) NOT NULL,
 `amount` REAL NOT NULL,
 `status` BIT DEFAULT 1 NOT NULL,
-`user_id` INT(11),
+`user_id` INT(11) NOT NULL,
 `order_code` VARCHAR(6),
 FOREIGN KEY (`user_id`) REFERENCES users(`id`),
 FOREIGN KEY (`order_code`) REFERENCES orders(`order_code`)

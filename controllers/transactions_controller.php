@@ -29,5 +29,14 @@
             } 
             return 1016;
         }
+
+        public function getTransaction($type, $user_id, $page, $limit) {
+            return $this -> service -> getTransactions($type, $user_id, $page, $limit);
+        }
+
+        public function getTotalPages($type, $user_id, $limit)
+        {
+            return $this->service->getTotalPages($type, $user_id, $limit);
+        }
     }
 ?> 
