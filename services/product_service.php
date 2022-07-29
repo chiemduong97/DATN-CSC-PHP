@@ -28,6 +28,7 @@ class ProductService
                 INNER JOIN order_details ON products.id = order_details.product_id
                 INNER JOIN orders ON order_details.order_code = orders.order_code
                 WHERE orders.user_id =:user_id and orders.status = 3
+                GROUP BY products.id 
                 ORDER BY orders.created_at DESC LIMIT :start , :total";
 
             $stmt = $this->connection->prepare($query);
@@ -379,7 +380,8 @@ class ProductService
             " INNER JOIN warehouse ON products.id = warehouse.product_id
             INNER JOIN order_details ON products.id = order_details.product_id
             INNER JOIN orders ON order_details.order_code = orders.order_code
-            WHERE orders.user_id =:user_id and orders.status = 3";
+            WHERE orders.user_id =:user_id and orders.status = 3
+            GROUP BY products.id ";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
             $stmt->execute();
