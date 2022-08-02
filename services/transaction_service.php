@@ -56,7 +56,7 @@ class TransactionService
                 FROM  " . $this->tableName . " WHERE order_code = :order_code LIMIT 1";
 
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(":order_code", $order_code);
+            $stmt->bindParam(":order_code", $order_code, PDO::PARAM_STR_CHAR);
             $stmt->execute();
             $data = array();
             if ($stmt->rowCount() > 0) {
