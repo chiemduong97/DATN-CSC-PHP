@@ -16,7 +16,7 @@ class TransactionService
     {
         try {
             $query = "insert into " . $this->tableName . " set transid = :transid, transid_momo =:transid_momo, type = :type,
-             amount = :amount, user_id = :user_id, order_code = :order_code";
+             amount = :amount, user_id = :user_id, order_code = :order_code, phone = :phone";
 
             $transid = $transaction->transid;
             $transid_momo = $transaction->transid_momo;
@@ -24,6 +24,7 @@ class TransactionService
             $amount = $transaction->amount;
             $user_id = $transaction->user_id;
             $order_code = $transaction->order_code;
+            $phone = $transaction->phone;
 
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":transid", $transid);
@@ -32,6 +33,7 @@ class TransactionService
             $stmt->bindParam(":amount", $amount);
             $stmt->bindParam(":user_id", $user_id);
             $stmt->bindParam(":order_code", $order_code);
+            $stmt->bindParam(":phone", $phone);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 return 1000;
@@ -41,6 +43,42 @@ class TransactionService
         } catch (Exception $e) {
             throw $e;
             return 1001;
+        }
+    }
+
+    public function getTransaction($order_code)
+    {
+        try {
+            
+            $query =
+                "SELECT transid, transid_momo, created_at, type, 
+                amount, status, order_code, user_id, phone
+                FROM  " . $this->tableName . " WHERE order_code = :order_code AND type != 'refund'";
+
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':order_code', $order_code, PDO::PARAM_INT);
+            $stmt->execute();
+            $data = array();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $data = array(
+                    "transid" => $transid,
+                    "transid_momo" => $transid_momo,
+                    "created_at" => $created_at,
+                    "type" => $type,
+                    "amount" => $amount,
+                    "status" => $status,
+                    "order_code" => $order_code,
+                    "user_id" => $user_id,
+                    "phone" => $phone
+                );
+                return $data;
+            }
+            return null;
+        } catch (Exception $e) {
+            echo "loi service getTransaction: " . $e->getMessage();
+            return null;
         }
     }
 
@@ -57,7 +95,7 @@ class TransactionService
 
             $query =
                 "SELECT transid, transid_momo, created_at, type, 
-                amount, status, order_code, user_id
+                amount, status, order_code, user_id, phone
                 FROM  " . $this->tableName . " WHERE type $type_string AND user_id = :user_id
                 ORDER BY created_at DESC LIMIT :start , :total";
 
@@ -78,7 +116,8 @@ class TransactionService
                         "amount" => $amount,
                         "status" => $status,
                         "order_code" => $order_code,
-                        "user_id" => $user_id
+                        "user_id" => $user_id,
+                        "phone" => $phone
                     );
                     array_push($data, $each);
                 }
