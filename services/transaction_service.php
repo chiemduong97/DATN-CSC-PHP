@@ -53,10 +53,10 @@ class TransactionService
             $query =
                 "SELECT transid, transid_momo, created_at, type, 
                 amount, status, order_code, user_id, phone
-                FROM  " . $this->tableName . " WHERE order_code = :order_code AND type != 'refund'";
+                FROM  " . $this->tableName . " WHERE order_code = :order_code LIMIT 1";
 
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(':order_code', $order_code, PDO::PARAM_INT);
+            $stmt->bindParam(":order_code", $order_code);
             $stmt->execute();
             $data = array();
             if ($stmt->rowCount() > 0) {
