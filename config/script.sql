@@ -114,6 +114,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 `status` BIT DEFAULT 1 NOT NULL,
 `user_id` INT(11) NOT NULL,
 `order_code` VARCHAR(6),
+`phone` VARCHAR(255),
 FOREIGN KEY (`user_id`) REFERENCES users(`id`),
 FOREIGN KEY (`order_code`) REFERENCES orders(`order_code`)
 );

@@ -34,11 +34,11 @@ class OrderController
         return $this->service->getTotalPages($limit, $user_id);
     }
 
-    public function updateStatus($order_code, $status)
+    public function destroyOrder($order_code, $status)
     {
         $order = $this->service->getByorder_code($order_code);
         if ($order["payment_method"] == "WALLET") {
-            $transid = "CSCWalletPay" . time();
+            $transid = "CSCWalletRefund" . time();
             $transaction = new Transaction();
             $userService = new UserService();
             $resultUser = $userService -> updateWallet($order["amount"] + $order["shipping_fee"] - $order["promotion_value"], $order["user_id"]);
@@ -52,6 +52,27 @@ class OrderController
             $resultTransaction = $transactionService -> insertItem($transaction);
             if ($resultTransaction != 1000) return $resultTransaction;
         }
+
+        if ($order["payment_method"] == "MOMO") {
+            $transaction = (new TransactionService()) -> getTransaction($order_code);
+            if (!is_null($transaction)) {
+                $resultMomo = (new PaymentService()) -> confirmMomo($transaction["phone"], $transaction["transid"] , $transaction["transid_momo"] , "revertAuthorize");
+                if (json_decode($resultMomo) -> status == 0) {
+                    $transaction["type"] = "refund";
+                    $transaction["transid"] = "CSCMomoRefund" . time();
+                    $transactionService = new TransactionService();
+                    $resultTransaction = $transactionService -> insertItem((new Transaction()) -> toTransaction($transaction));
+                    if ($resultTransaction != 1000) return $resultTransaction;
+                }
+                else {
+                    return 1018;
+                }
+            }
+            else {
+                return 1019;
+            }
+        }
+
         return $this->service->updateStatus($order_code, $status);
     }
 
@@ -79,6 +100,7 @@ class OrderController
                         $transaction -> type = "paid";
                         $transaction -> amount = $resultMomo -> amount;
                         $transaction -> order_code = $order -> order_code;
+                        $transaction -> phone = $body -> customerNumber; 
                         $transactionService = new TransactionService();
                         $resultTransaction = $transactionService -> insertItem($transaction);
                         if ($resultTransaction != 1000) return null;

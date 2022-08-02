@@ -25,6 +25,7 @@
                 $transaction -> transid_momo = $result -> transid;
                 $transaction -> type = "recharge";
                 $transaction -> amount = $result -> amount;
+                $transaction -> phone = $body -> customerNumber;
                 return $this -> service -> insertItem($transaction);
             } 
             return 1016;
