@@ -16,11 +16,11 @@ if ($authen->checkToken()) {
         if ($status != 0) {
             $code = 1014;
         } else {
-            $data = (new OrderController())->updateStatus($order_code, 4);
+            $data = (new OrderController())->destroyOrder($order_code, 4);
             if ($data == 1000) {
                 $code = 1000;
             } else {
-                $code = 1001;
+                $code = $data;
             }
             $data = null;
         }

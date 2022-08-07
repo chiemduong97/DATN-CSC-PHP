@@ -172,12 +172,11 @@ class UserService
         return password_verify($password, $hash);
     }
 
-    public function createRequest($email)
+    public function createRequest($email, $code)
     {
         try {
             date_default_timezone_set('Asia/Ho_Chi_Minh');
-            $random_string = substr(str_shuffle(str_repeat("0123456789", 6)), 0, 6);
-            $hash = $this->getHash($random_string);
+            $hash = $this->getHash($code);
             $token = $hash["encrypted"];
             $salt = $hash["salt"];
             $sql = 'SELECT COUNT(*) from requests WHERE email=:email';
@@ -196,10 +195,10 @@ class UserService
                     $this->db->beginTransaction();
                     if ($stmt->execute()) {
                         $this->db->commit();
-                        return $random_string;
+                        return 1000;
                     } else {
                         $this->db->rollBack();
-                        return null;
+                        return 1001;
                     }
                 } else {
                     $sql = 'SELECT COUNT(*) from requests WHERE email=:email and status=1 and created_at > now() - interval 5 minute';
@@ -219,25 +218,25 @@ class UserService
                             $this->db->beginTransaction();
                             if ($stmt->execute()) {
                                 $this->db->commit();
-                                return $random_string;
+                                return 1000;
                             } else {
                                 $this->db->rollBack();
-                                return null;
+                                return 1001;
                             }
                         } else {
                             return 1010;
                         }
                     } else {
-                        return null;
+                        return 1001;
                     }
                 }
             } else {
-                return null;
+                return 1001;
             }
         } catch (Exception $e) {
             throw $e;
         }
-        return null;
+        return 1001;
     }
 
     public function resetPassword($email, $password)

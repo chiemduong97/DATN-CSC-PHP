@@ -73,58 +73,53 @@ class UserController
                 return 1015;
             }  
         }
-        $code = $this->service->createRequest($email);
-        if ($code == 1010) {
-            return $code;
-        }
-        if ($code != null) {
-            $mail = new PHPMailer();
-            try {
-                $mail->isSMTP();
-                $mail->SMTPDebug = 0;
-                $mail->Host = 'smtp.gmail.com';
-                $mail->Port = 465;
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                $mail->SMTPAuth = true;
-                $mail->AuthType = 'XOAUTH2';
-                $mail->SMTPSecure = 'ssl'; 
-                $from = 'chiemduong01@gmail.com';
-                $clientId = '260730311274-42j6eu5hek5vbaej9ml64l2am316t79c.apps.googleusercontent.com';
-                $clientSecret = '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';
-                $refreshToken = '1//0eFYUruSZOxXUCgYIARAAGA4SNwF-L9IrAtDIzquBTdsto_5JeYFCayhiXlSsBBz-OV4beab9b9KCZIBvs-88eFTZpcfky4kmo1I';
-                $provider = new Google(
+        $code = substr(str_shuffle(str_repeat("0123456789", 6)), 0, 6);
+        $mail = new PHPMailer();
+        try {
+            $mail->isSMTP();
+            $mail->SMTPDebug = 0;
+            $mail->Host = 'smtp.gmail.com';
+            $mail->Port = 465;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->SMTPAuth = true;
+            $mail->AuthType = 'XOAUTH2';
+            $mail->SMTPSecure = 'ssl'; 
+            $from = 'chiemduong01@gmail.com';
+            $clientId = '260730311274-42j6eu5hek5vbaej9ml64l2am316t79c.apps.googleusercontent.com';
+            $clientSecret = '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';
+            $refreshToken = '1//0evo-NS0AfAClCgYIARAAGA4SNwF-L9IrGzjsu-6efaOPoYMLfODUg-JXzo4MZZ4SU0Jij10Zp0QP2sh9DgPztDqwViNKTFrtLGY';
+            $provider = new Google(
+                [
+                    'clientId' => $clientId,
+                    'clientSecret' => $clientSecret,
+                ]
+            );
+            $mail->setOAuth(
+                new OAuth(
                     [
+                        'provider' => $provider,
                         'clientId' => $clientId,
                         'clientSecret' => $clientSecret,
+                        'refreshToken' => $refreshToken,
+                        'userName' => $from,
                     ]
-                );
-                $mail->setOAuth(
-                    new OAuth(
-                        [
-                            'provider' => $provider,
-                            'clientId' => $clientId,
-                            'clientSecret' => $clientSecret,
-                            'refreshToken' => $refreshToken,
-                            'userName' => $from,
-                        ]
-                    )
-                );
-                $from_name = 'Đỗ Chiếm Dương';
-                $mail->setFrom($from, $from_name);
-                $mail->addAddress($email, $email);
-                $mail->isHTML(true); 
-                $mail->Subject = $requestType . " Request";
-                $mail->CharSet = PHPMailer::CHARSET_UTF8;
-                $description = "Chào " . $email . "!<br>Mã xác nhận của bạn là <b>" . $code  . "</b>.<br>Mã khả dụng trong 5 phút.<br>Cảm ơn!";
-                $mail->Body = $description;
-                if (!$mail->send()) {
-                    return 1001;
-                } else {
-                    return 1000;
-                }
-            } catch (Exception $e) {
-                throw $e;
+                )
+            );
+            $from_name = 'Đỗ Chiếm Dương';
+            $mail->setFrom($from, $from_name);
+            $mail->addAddress($email, $email);
+            $mail->isHTML(true); 
+            $mail->Subject = $requestType . " Request";
+            $mail->CharSet = PHPMailer::CHARSET_UTF8;
+            $description = "Chào " . $email . "!<br>Mã xác nhận của bạn là <b>" . $code  . "</b>.<br>Mã khả dụng trong 5 phút.<br>Cảm ơn!";
+            $mail->Body = $description;
+            if (!$mail->send()) {
+                return 1001;
+            } else {
+                return $code = $this->service->createRequest($email, $code);
             }
+        } catch (Exception $e) {
+            throw $e;
         }
         return 1001;
     }
