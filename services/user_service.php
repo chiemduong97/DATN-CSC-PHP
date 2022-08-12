@@ -121,6 +121,39 @@ class UserService
         return null;
     }
 
+    public function getById($id)
+    {
+        try {
+            $sql = "SELECT id,email,password,avatar,fullname,phone,birthday,wallet,csc_point,status,permission,first_order,device_token,created_at FROM " . $this->users . " WHERE id=:id";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(":id", $id);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract(array($row));
+                $user = new User();
+                $user->id = $row["id"];
+                $user->email = $row["email"];
+                $user->password = $row["password"];
+                $user->avatar = $row["avatar"];
+                $user->fullname = $row["fullname"];
+                $user->birthday = $row["birthday"];
+                $user->phone = $row["phone"];
+                $user->status = $row["status"];
+                $user->permission = $row["permission"];
+                $user->first_order = $row["first_order"];
+                $user->wallet = $row["wallet"];
+                $user->csc_point = $row["csc_point"];
+                $user->device_token = $row["device_token"];
+                $user->created_at = $row["created_at"];
+                return $user;
+            }
+        } catch (Exception $e) {
+            throw $e;
+        }
+        return null;
+    }
+
     public function verification($email, $code)
     {
         try {

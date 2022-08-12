@@ -1,6 +1,9 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/order_model.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/branch_service.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/rating_service.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/order_detail_service.php';
 
 class OrderSerivce
 {
@@ -124,6 +127,9 @@ class OrderSerivce
                     "created_at" => $created_at,
                     "branch_address" => $branch_address,
                     "payment_method" => $payment_method,
+                    "branch" => (new BranchService()) -> getById($branch_id),
+                    "rating" => (new RatingService()) -> getByOrderCode($order_code),
+                    "order_details" => (new OrderDetailService()) -> getByOrderCode($order_code)
                 );
                 return $data;
             }

@@ -10,7 +10,7 @@ Sản xuất tại Việt Nam
 Loại sản phẩm: Nước uống vận động
 Dung tích: 390ml
 Hướng dẫn sử dụng: Lắc nhẹ trước khi uống, dùng ngay sau khi mở nắp. Ngon hơn khi uống lạnh.
-Bảo quản: Để nơi khô ráo, thoáng mát, tránh ánh sáng trực tiếp hoặc nơi có nhiệt độ cao.',8000, 15
+Bảo quản: Để nơi khô ráo, thoáng mát, tránh ánh sáng trực tiếp hoặc nơi có nhiệt độ cao.',8000, 17
 ),
 ( 
 'Nước Khoáng Vivant 5l',
@@ -23,13 +23,13 @@ Bảo quản: Để nơi khô ráo, thoáng mát, tránh ánh sáng trực tiế
 -Acid Silic: Giúp cho hệ thần kinh vận động tốt hơn.
 -Bicarbonat: Giảm độ acid trong dạ dày.
 Sản phẩm được sản xuất trên dây chuyền sản xuất tự động và tiên tiến nhất từ Mỹ, Ba Lan mang lại cho nhà tiêu dùng sản phẩm chất lượng tốt nhất.',
-29000, 15
+29000, 17
 ),
 ( 
 'Nước Tinh Khiết Number 1 500ml',
 'https://tea-3.lozi.vn/v1/ship/resized/product-avatar-nuoc-tinh-khiet-number-1-500ml-1655893561?w=960&type=s',
 'Sản phẩm nước uống chất lượng, chính hãng thương hiệu Number 1 được sản xuất với công nghệ hiện đại giúp giữ được hương vị tự nhiên của nước mà không hề chứa bất kì thành phần hóa học nào khác. Nước tinh khiết giúp loại bỏ các chất thừa cũng như độc tố ra khỏi cơ thể nếu uống đủ nước.',
-4000, 15
+4000, 17
 ),
 ( 
 'Nước Uống Ion Kiềm Saka 1.2l',
@@ -47,7 +47,7 @@ Giúp tăng độ thẩm thấu đến từng tế bào và tăng cường thanh
 KHÔNG DÙNG HOÁ CHẤT TĂNG ĐỘ PH
 Saka được sản xuất hoàn toàn dựa trên quá trình điện phân nước để tạo ra nước ion kiềm, một loại nước tốt cho sức khoẻ
 PHÒNG & HỖ TRỢ BỆNH
-Tiểu đường, béo phì, các bệnh về đường ruột như khó tiêu, ợ chua hay gout...',15000, 15
+Tiểu đường, béo phì, các bệnh về đường ruột như khó tiêu, ợ chua hay gout...',15000, 17
 ),
 ( 
 'Pocari Sweat Lon 330ml',
@@ -59,7 +59,7 @@ Sản xuất tại: Việt Nam
 Thể tích: 330ml
 Hướng dẫn sử dụng: Lắc nhẹ trước khi uống, dùng ngay sau khi mở nắp. Ngon hơn khi uống lạnh.
 Bảo quản: Để nơi khô ráo, thoáng mát, tránh ánh sáng trực tiếp hoặc nơi có nhiệt độ cao.',
-15000, 15
+15000, 17
 ),
 ( 
 'Pocari Sweat Chai 900ml ',
@@ -70,7 +70,7 @@ THỨC UỐNG TỐT CHO SỨC KHỎE ĐẾN TỪ NHẬT BẢN
 POCARI là sản phẩm của Tập đoàn Dược hàng đầu Nhật Bản, Otsuka. POCARI được 90% bác sĩ Nhật Bản khuyên dùng.
 GIÚP ÍCH CHO CÁC TRƯỜNG HỢP MẤT NƯỚC
 Có thể uống Pocari mọi lúc mọi nơi.',
-27000, 15
+27000, 17
 ),
 ( 
 'Pocari Sweat 350ml',
@@ -82,22 +82,5 @@ Sản xuất tại Việt Nam
 Thể tích 350ml
 Hướng dẫn sử dụng Lắc nhẹ trước khi uống, dùng ngay sau khi mở nắp. Ngon hơn khi uống lạnh.
 Bảo quản Để nơi khô ráo, thoáng mát, tránh ánh sáng trực tiếp hoặc nơi có nhiệt độ cao.',
-13000, 15
-),
-( 
-
-
-
-
-insert into warehouse (quantity, product_id) VALUES (100,33);
-insert into warehouse (quantity, product_id) VALUES (100,34);
-insert into warehouse (quantity, product_id) VALUES (100,35);
-insert into warehouse (quantity, product_id) VALUES (100,36);
-insert into warehouse (quantity, product_id) VALUES (100,37);
-insert into warehouse (quantity, product_id) VALUES (100,38);
-insert into warehouse (quantity, product_id) VALUES (100,39);
-insert into warehouse (quantity, product_id) VALUES (100,40);
-insert into warehouse (quantity, product_id) VALUES (100,41);
-insert into warehouse (quantity, product_id) VALUES (100,42);
-insert into warehouse (quantity, product_id) VALUES (100,43);
-insert into warehouse (quantity, product_id) VALUES (100,44);
+13000, 17
+);

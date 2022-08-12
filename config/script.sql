@@ -120,13 +120,19 @@ FOREIGN KEY (`order_code`) REFERENCES orders(`order_code`)
 );
 CREATE TABLE IF NOT EXISTS `ratings` (
 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`rating` INT(1) NOT NULL,
+`rating` VARCHAR(255) NOT NULL,
 `content` VARCHAR(1025) NOT NULL,
 `created_at` DATETIME DEFAULT NOW() NOT NULL,
 `user_id` INT(11) NOT NULL,
-`product_id` INT(11) NOT NULL,
+`order_code` VARCHAR(6) NOT NULL,
 FOREIGN KEY (`user_id`) REFERENCES users(`id`),
-FOREIGN KEY (`product_id`) REFERENCES products(`id`)
+FOREIGN KEY (`order_code`) REFERENCES orders(`order_code`)
+);
+
+CREATE TABLE IF NOT EXISTS `image_ratings` (
+`image` VARCHAR(1025) NOT NULL,
+`rating_id` INT(11) NOT NULL,
+FOREIGN KEY (`rating_id`) REFERENCES ratings(`id`)
 );
 
 insert into `categories` ( `name`, `avatar`) values 
@@ -279,3 +285,4 @@ insert into promotions (code, value, start, end) VALUES ('PROMOTION6',60000,'202
 insert into promotions (code, value, start, end) VALUES ('PROMOTION7',70000,'2022-07-01','2022-07-31');
 
 
+insert into warehouse(quantity,product_id) SELECT 100, id from products

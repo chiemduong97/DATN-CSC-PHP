@@ -67,15 +67,15 @@ class OrderDetailService
 
             if ($stmt->execute()) {
                 $this->connection->commit();
-                return 1000;
+                return true;
             } else {
                 $this->connection->rollBack();
-                return 1001;
+                return false;
             }
         } catch (Exception $e) {
             throw $e;
         }
-        return 1001;
+        return false;
     }
 
 }
