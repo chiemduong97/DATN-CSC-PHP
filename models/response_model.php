@@ -6,14 +6,16 @@ class Response
     private $is_error;
     private $message;
     private $load_more;
+    private $total;
 
-    public function __construct($code = 400, $data = [], $load_more = false)
+    public function __construct($code = 400, $data = [], $load_more = false, $total = 0)
     {
         $this->code = $code;
         $this->data = $data;
         $this->is_error = true;
         $this->load_more = $load_more;
         $this->message = "Something went wrong";
+        $this->total = $total;
     }
 
     public function response()
@@ -55,6 +57,7 @@ class Response
             "message" =>  $this->message,
             "load_more" =>  $this->load_more,
             "data" => $this->data,
+            "total" => $this->total
         ));
     }
 }

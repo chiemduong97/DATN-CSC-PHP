@@ -5,21 +5,26 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 
 (new CF_Header())->config("GET");
-$authen = new Authen();
+
 $code = 1001;
-$data = null;
+$data = [];
+$load_more = false;
+$authen = new Authen();
 
 if ($authen->checkToken()) {
-    if (isset($_GET['order_code']) && $_GET['order_code'] != "") {
-        $order_code = $_GET["order_code"];
-        $data = (new OrderController())->getByorder_code($order_code);
-        
-        is_null($data) ? $code = 1001 : $code = 1000;
+    $page = 1;
+    $limit = 10;
 
-        if ($data == 1021) $code = $data;
-    } else {
-        $code = 1013;
+    if (isset($_GET['page'])) {
+        $page = $_GET['page'];
     }
+    if (isset($_GET['limit'])) {
+        $limit = $_GET['limit'];
+    }
+
+    $total = (new OrderController())->getTotalPage($limit);
+    $data = (new OrderController())->getAll($page, $limit);
+    is_null($data) ? $code = 1001 : $code = 1000;
 } else {
     $code = 401;
 }
@@ -28,5 +33,7 @@ echo (
     (new Response(
         $code,
         $data,
+        $load_more,
+        $total != 0 ? $total : 1
     ))->response()
 );

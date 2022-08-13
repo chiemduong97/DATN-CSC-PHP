@@ -16,7 +16,7 @@ class CategoryService
     public function getByID($id)
     {
         try {
-            $query = "select id, name, avatar from " . $this->tableName . " where id=:id and status = 1";
+            $query = "select id, name, avatar,category_id from " . $this->tableName . " where id=:id and status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -26,7 +26,8 @@ class CategoryService
                 $data = array(
                     "id" => $id,
                     "name" => $name,
-                    "avatar" => $avatar
+                    "avatar" => $avatar,
+                    "category" => $this -> getByID($category_id)
                 );
 
                 return $data;

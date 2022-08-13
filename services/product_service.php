@@ -1,6 +1,8 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/product_model.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/category_service.php';
+
 
 class ProductService
 {
@@ -47,7 +49,7 @@ class ProductService
                         "description" => $description,
                         "price" => $price,
                         "quantity" => $quantity,
-                        "category_id" => $category_id
+                        "category" => (new CategoryService()) -> getByID($category_id)
                     );
                     array_push($data, $each);
                 }
@@ -90,7 +92,7 @@ class ProductService
                         "description" => $description,
                         "price" => $price,
                         "quantity" => $quantity,
-                        "category_id" => $category_id
+                        "category" => (new CategoryService()) -> getByID($category_id)
                     );
                     array_push($data, $each);
                 }
@@ -132,7 +134,7 @@ class ProductService
                         "description" => $description,
                         "price" => $price,
                         "quantity" => $quantity,
-                        "category_id" => $category_id
+                        "category" => (new CategoryService()) -> getByID($category_id)
                     );
                     array_push($data, $each);
                 }
@@ -176,7 +178,7 @@ class ProductService
                         "description" => $description,
                         "price" => $price,
                         "quantity" => $quantity,
-                        "category_id" => $category_id
+                        "category" => (new CategoryService()) -> getByID($category_id)
                     );
                     array_push($data, $each);
                 }
@@ -219,7 +221,7 @@ class ProductService
                         "description" => $description,
                         "price" => $price,
                         "quantity" => $quantity,
-                        "category_id" => $category_id
+                        "category" => (new CategoryService()) -> getByID($category_id)
                     );
                     array_push($data, $each);
                 }

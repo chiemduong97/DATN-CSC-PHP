@@ -21,7 +21,6 @@ class ProductController
         $product->avatar = $avatar;
         $product->description = $description;
         $product->price = $price;
-        $product->category_id = $category_id;
 
         if ($this->service->checkName($name)) {
             return 1011;
@@ -37,7 +36,6 @@ class ProductController
         $product->avatar = $avatar;
         $product->description = $description;
         $product->price = $price;
-        $product->category_id = $category_id;
 
         if ($this->service->checkName($name)) {
             return 1011;

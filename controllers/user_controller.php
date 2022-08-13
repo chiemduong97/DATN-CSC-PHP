@@ -173,4 +173,53 @@ class UserController
     {
         return $this->service->updateDeviceToken($email, $device_token);
     }
+
+    //admin
+
+    public function login_admin($email, $password)
+    {
+        $user = $this->service->getByEmail($email);
+        if ($user->permission < 1) return 1020;
+        if ($user) {
+            $check = password_verify($password, $user->password);
+            if ($check) {
+                if ($user->status == 0) {
+                    return 1005;
+                } else {
+                    return 1000;
+                }
+            } else {
+                return 1004;
+            }
+        }
+        return 1002;
+    }
+
+    public function getAll($permission,$page,$limit)
+    {
+        return $this->service->getAll($permission,$page,$limit);
+    }
+
+    public function getTotalPage($permission,$limit){
+        return $this -> service -> getTotalPage($permission,$limit);
+    }
+
+    public function search($permission,$page,$limit,$query)
+    {
+        return $this->service->search($permission,$page,$limit,$query);
+    }
+
+    public function getTotalPageSearch($permission,$limit,$query){
+        return $this -> service -> getTotalPageSearch($permission,$limit,$query);
+    }
+
+    public function updateStatus($email){
+        return $this -> service -> updateStatus($email);
+    }
+
+    public function updatePermission($email){
+        return $this -> service -> updatePermission($email);
+    }
+    
+
 }

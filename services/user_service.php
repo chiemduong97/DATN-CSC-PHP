@@ -316,7 +316,7 @@ class UserService
     public function getUserByEmail($email)
     {
         try {
-            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,csc_point,first_order FROM " . $this->users . " where email=:email";
+            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,csc_point,first_order,permission FROM " . $this->users . " where email=:email";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":email", $email);
             $stmt->execute();
@@ -332,7 +332,8 @@ class UserService
                     "birthday" => $row["birthday"],
                     "wallet" => $row["wallet"],
                     "csc_point" => $row["csc_point"],
-                    "first_order" => $row["first_order"]
+                    "first_order" => $row["first_order"],
+                    "permission" => $row["permission"]
                 );
                 return $data;
             }
@@ -371,7 +372,7 @@ class UserService
     public function updateWallet($amount, $user_id)
     {
         try {
-            $sql = "update " . $this->users . " set wallet = wallet + :amount where id=:user_id";
+            $sql = "UPDATE " . $this->users . " SET wallet = wallet + :amount WHERE id=:user_id";
             $stmt = $this->db->prepare($sql);
             $stmt->bindParam(":amount", $amount);
             $stmt->bindParam(":user_id", $user_id);
@@ -440,5 +441,182 @@ class UserService
             throw $e;
         }
         return 1001;
+    }
+
+
+    //admin
+
+    public function getAll($permission,$page,$limit){
+        try{
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+
+            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,csc_point,
+                    first_order,permission,device_token,status FROM " . $this -> users . " 
+                    WHERE permission < :permission ORDER BY id ASC LIMIT :start , :total";
+            $stmt = $this -> db -> prepare($sql);
+            $stmt -> bindParam(":permission", $permission);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
+            $stmt -> execute();
+            $data = array();
+            if($stmt -> rowCount() > 0){
+                while($row = $stmt -> fetch(PDO::FETCH_ASSOC)){
+                    extract($row);
+                    $each = array(
+                        "id" => $row["id"],
+                        "email" => $row["email"],
+                        "avatar" => $row["avatar"],
+                        "fullname" => $row["fullname"],
+                        "phone" => $row["phone"],
+                        "birthday" => $row["birthday"],
+                        "wallet" => $row["wallet"],
+                        "csc_point" => $row["csc_point"],
+                        "first_order" => $row["first_order"],
+                        "device_token" => $row["device_token"],
+                        "status" => $row["status"],
+                        "permission" => $row["permission"]
+                    );
+                    array_push($data,$each);
+                }
+            }
+            return $data;
+        }catch(Exception $e){
+            throw $e;
+        }
+        return null;
+
+    }
+
+    public function getTotalPage($permission,$limit = 10)
+    {
+        try {
+            $query = "SELECT count(*) as total FROM " . $this -> users . " 
+            WHERE permission < :permission";
+            $stmt = $this->db->prepare($query);
+            $stmt -> bindParam(":permission", $permission);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $limit);
+                return $totalPage;
+            }
+            return 1;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return 1;
+        }
+    }
+
+    public function updateStatus($email){
+        try{
+            $sql = "UPDATE " . $this -> users ." SET status = !status WHERE email = :email";
+            $stmt = $this -> db -> prepare($sql);
+            $stmt -> bindParam(":email",$email);
+            $this -> db -> beginTransaction();
+            if($stmt ->execute()){
+                $this -> db -> commit();
+                return 1000;
+            }
+            else{
+                $this -> db -> rollBack();
+                return 1001;
+            }
+        }catch(Exception $e){
+            throw $e;
+        }
+        return 1001;
+    }
+    public function updatePermission($email){
+        try{
+            $sql = "UPDATE " . $this -> users ." SET permission = !permission WHERE email = :email";
+            $stmt = $this -> db -> prepare($sql);
+            $stmt -> bindParam(":email",$email);
+            $this -> db -> beginTransaction();
+            if($stmt ->execute()){
+                $this -> db -> commit();
+                return 1000;
+            }
+            else{
+                $this -> db -> rollBack();
+                return 1001;
+            }
+        }catch(Exception $e){
+            throw $e;
+        }
+        return 1001;
+    }
+
+
+    public function search($permission,$page,$limit,$query){
+        try{
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+
+            $sql = "SELECT id,email,avatar,fullname,phone,birthday,wallet,csc_point,
+                    first_order,permission,device_token,status FROM " . $this -> users . " 
+                    WHERE permission < :permission AND (email like '%$query%' OR phone like '%$query%') ORDER BY id ASC LIMIT :start , :total";
+            $stmt = $this -> db -> prepare($sql);
+            $stmt -> bindParam(":permission", $permission);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":total", $limit, PDO::PARAM_INT);
+            $stmt -> execute();
+            $data = array();
+            if($stmt -> rowCount() > 0){
+                while($row = $stmt -> fetch(PDO::FETCH_ASSOC)){
+                    extract($row);
+                    $each = array(
+                        "id" => $row["id"],
+                        "email" => $row["email"],
+                        "avatar" => $row["avatar"],
+                        "fullname" => $row["fullname"],
+                        "phone" => $row["phone"],
+                        "birthday" => $row["birthday"],
+                        "wallet" => $row["wallet"],
+                        "csc_point" => $row["csc_point"],
+                        "first_order" => $row["first_order"],
+                        "device_token" => $row["device_token"],
+                        "status" => $row["status"],
+                        "permission" => $row["permission"]
+                    );
+                    array_push($data,$each);
+                }
+            }
+            return $data;
+        }catch(Exception $e){
+            throw $e;
+        }
+        return null;
+
+    }
+
+    public function getTotalPageSearch($permission,$limit = 10,$query)
+    {
+        try {
+            $sql = "SELECT count(*) as total FROM " . $this -> users . " 
+            WHERE permission < :permission AND (email like '%$query%' OR phone like '%$query%')";
+            $stmt = $this->db->prepare($sql);
+            $stmt -> bindParam(":permission", $permission);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $limit);
+                return $totalPage;
+            }
+            return 1;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return 1;
+        }
     }
 }

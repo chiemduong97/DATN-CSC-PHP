@@ -29,9 +29,9 @@ class OrderController
         return $this->service->getByUser($user_id, $page, $limit);
     }
 
-    public function getTotalPages($limit, $user_id)
+    public function getTotalPageByUser($limit, $user_id)
     {
-        return $this->service->getTotalPages($limit, $user_id);
+        return $this->service->getTotalPageByUser($limit, $user_id);
     }
 
     public function destroyOrder($order_code, $status)
@@ -40,35 +40,34 @@ class OrderController
         if ($order["payment_method"] == "WALLET") {
             $transid = "CSCWalletRefund" . time();
             $transaction = new Transaction();
-            $userService = new UserService();
-            $resultUser = $userService -> updateWallet($order["amount"] + $order["shipping_fee"] - $order["promotion_value"], $order["user_id"]);
-            if ($resultUser != 1000) $transaction -> status = 0;
-            $transaction -> user_id = $order["user_id"];
-            $transaction -> transid = $transid;
-            $transaction -> type = "refund";
-            $transaction -> amount = $order["amount"] + $order["shipping_fee"] - $order["promotion_value"];
             $transactionService = new TransactionService();
-            $transaction -> order_code = $order_code;
-            $resultTransaction = $transactionService -> insertItem($transaction);
+            $userService = new UserService();
+            $amount = ($transactionService->getTransaction($order_code))["amount"];
+            $resultUser = $userService->updateWallet($amount, $order["user"]->id);
+            if ($resultUser != 1000) $transaction->status = 0;
+            $transaction->user_id = $order["user"]->id;
+            $transaction->transid = $transid;
+            $transaction->type = "refund";
+            $transaction->amount = $amount;
+            $transaction->order_code = $order_code;
+            $resultTransaction = $transactionService->insertItem($transaction);
             if ($resultTransaction != 1000) return $resultTransaction;
         }
 
         if ($order["payment_method"] == "MOMO") {
-            $transaction = (new TransactionService()) -> getTransaction($order_code);
+            $transaction = (new TransactionService())->getTransaction($order_code);
             if (!is_null($transaction)) {
-                $resultMomo = (new PaymentService()) -> confirmMomo($transaction["phone"], $transaction["transid"] , $transaction["transid_momo"] , "revertAuthorize");
-                if (json_decode($resultMomo) -> status == 0) {
+                $resultMomo = (new PaymentService())->confirmMomo($transaction["phone"], $transaction["transid"], $transaction["transid_momo"], "revertAuthorize");
+                if (json_decode($resultMomo)->status == 0) {
                     $transaction["type"] = "refund";
                     $transaction["transid"] = "CSCMomoRefund" . time();
                     $transactionService = new TransactionService();
-                    $resultTransaction = $transactionService -> insertItem((new Transaction()) -> toTransaction($transaction));
+                    $resultTransaction = $transactionService->insertItem((new Transaction())->toTransaction($transaction));
                     if ($resultTransaction != 1000) return $resultTransaction;
-                }
-                else {
+                } else {
                     return 1018;
                 }
-            }
-            else {
+            } else {
                 return 1019;
             }
         }
@@ -87,22 +86,22 @@ class OrderController
         $result = $this->service->insertItem($order);
         if ($result) {
 
-            switch ($body -> payment_method) {
+            switch ($body->payment_method) {
                 case "MOMO":
                     $paymentService = new PaymentService();
                     $partnerRefId = "CSCMomoPay" . time();
-                    $resultMomo = json_decode($paymentService -> payMomo($body -> customerNumber, $body -> appData, $body -> amount, $partnerRefId));
-                    if ($resultMomo -> status == 0) {
+                    $resultMomo = json_decode($paymentService->payMomo($body->customerNumber, $body->appData, $body->amount, $partnerRefId));
+                    if ($resultMomo->status == 0) {
                         $transaction = new Transaction();
-                        $transaction -> user_id = $body -> user_id;
-                        $transaction -> transid = $partnerRefId;
-                        $transaction -> transid_momo = $resultMomo -> transid;
-                        $transaction -> type = "paid";
-                        $transaction -> amount = $resultMomo -> amount;
-                        $transaction -> order_code = $order -> order_code;
-                        $transaction -> phone = $body -> customerNumber; 
+                        $transaction->user_id = $body->user_id;
+                        $transaction->transid = $partnerRefId;
+                        $transaction->transid_momo = $resultMomo->transid;
+                        $transaction->type = "paid";
+                        $transaction->amount = $resultMomo->amount;
+                        $transaction->order_code = $order->order_code;
+                        $transaction->phone = $body->customerNumber;
                         $transactionService = new TransactionService();
-                        $resultTransaction = $transactionService -> insertItem($transaction);
+                        $resultTransaction = $transactionService->insertItem($transaction);
                         if ($resultTransaction != 1000) return null;
                     } else {
                         return null;
@@ -112,15 +111,15 @@ class OrderController
                     $transid = "CSCWalletPay" . time();
                     $transaction = new Transaction();
                     $userService = new UserService();
-                    $resultUser = $userService -> updateWallet(-($body -> amount), $body -> user_id);
-                    if ($resultUser != 1000) $transaction -> status = 0;
-                    $transaction -> user_id = $body -> user_id;
-                    $transaction -> transid = $transid;
-                    $transaction -> type = "paid";
-                    $transaction -> amount = $body -> amount;
+                    $resultUser = $userService->updateWallet(- ($body->amount), $body->user_id);
+                    if ($resultUser != 1000) $transaction->status = 0;
+                    $transaction->user_id = $body->user_id;
+                    $transaction->transid = $transid;
+                    $transaction->type = "paid";
+                    $transaction->amount = $body->amount;
                     $transactionService = new TransactionService();
-                    $transaction -> order_code = $order -> order_code;
-                    $resultTransaction = $transactionService -> insertItem($transaction);
+                    $transaction->order_code = $order->order_code;
+                    $resultTransaction = $transactionService->insertItem($transaction);
                     if ($resultTransaction != 1000) return null;
                     break;
             }
@@ -129,14 +128,13 @@ class OrderController
             $amount = 0;
             for ($i = 0; $i < count($order_details); $i++) {
                 $quantity = $order_details[$i]->quantity;
-                $product_id = $order_details[$i]->product_id;
+                $product_id = $order_details[$i]->product->id;
                 $price = $order_details[$i]->price;
                 $orderdetail = new OrderDetail();
                 $orderdetail->price = $price;
                 $orderdetail->quantity = $quantity;
                 $orderdetail->order_code = $order->order_code;
                 $orderdetail->product_id = $product_id;
-                $orderdetail->name = $order_details[$i]->name;
                 $amount += ($price * (int)$quantity);
                 $result = (new OrderDetailService)->insertItem($orderdetail);
                 if (!$result) {
@@ -144,17 +142,10 @@ class OrderController
                 }
             }
             $order->amount = $amount;
-            $order->lat = $body->lat;
-            $order->lng = $body->lng;
             $order->address = $body->address;
-            $order->phone = $body->phone;
             $order->shipping_fee = $body->shipping_fee;
             $order->payment_method = $body->payment_method;
-            $order->promotion_code = isset($body->promotion_code) ? $body->promotion_code : null;
-            $order->promotion_value = isset($body->promotion_value) ? $body->promotion_value : null;
-            $order->branch_lat = $body->branch_lat;
-            $order->branch_lng = $body->branch_lng;
-            $order->branch_address = $body->branch_address;
+            $order->distance = $body->distance;
             $result = $this->service->insertItem($order);
             if ($result) {
                 return $order->order_code;
@@ -170,5 +161,22 @@ class OrderController
     public function getTotalOderCountByUser($user_id)
     {
         return $this->service->getTotalOderCountByUser($user_id);
+    }
+
+    // admin
+
+    public function getAll($page, $limit)
+    {
+        return $this->service->getAll($page, $limit);
+    }
+
+    public function getTotalPage($limit)
+    {
+        return $this->service->getTotalPage($limit);
+    }
+
+    public function updateStatus($order_code, $status)
+    {
+        return $this->service->updateStatus($order_code, $status + 1);
     }
 }
