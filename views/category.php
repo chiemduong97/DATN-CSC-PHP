@@ -1,13 +1,14 @@
-<?php 
-    include('header.php'); 
-    include_once $_SERVER['DOCUMENT_ROOT'].'/config/errorcode.php';
+<?php
+include('header.php');
+include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
 
 ?>
 <!DOCTYPE html>
 <html>
+
 <body>
 
-   
+
     <!-- MENU SECTION END-->
 
     <div class="content-wrapper">
@@ -17,7 +18,7 @@
                     <h4 class="header-line">CATEGORIES</h4>
                     <button class="btn btn-success" data-toggle="modal" data-target="#addCategory">
                         <i class="fa fa-plus-square"></i>
-                        ADD
+                        Thêm
                     </button>
                 </div>
             </div>
@@ -31,18 +32,39 @@
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
-                                <table class="table table-hover" id="table">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                       
-                                    </tbody>
-                                </table>
+                                <div class="form-inline">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label>Tìm kiếm: <input type="search" placeholder="Tên thể loại" class="form-control input-sm" id="search"></label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div id="page">Page 1 of 10</div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="dataTables_paginate paging_simple_numbers">
+                                                <ul class="pagination">
+                                                    <li id="btn_prev"><a id="prev">Previous</a></li>
+                                                    <li id="btn_next"><a id="next">Next</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table table-striped table-bordered table-hover" id="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Avatar</th>
+                                                <th>Tên</th>
+                                                <th>Hành động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -65,7 +87,7 @@
                     <h4 class="modal-title" id="myModalLabel">ADD CATEGORY</h4>
                 </div>
                 <div class="panel-body">
-                    <form role="form" id="formInsert" method="post"> 
+                    <form role="form" id="formInsert" method="post">
                         <div class="form-group">
                             <label>Name</label>
                             <input name="name" id="name" class="form-control" type="text" />
@@ -78,7 +100,7 @@
                     </form>
 
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -98,13 +120,13 @@
                         </div>
                         <div class="form-group" style="color: red;" id="errUpdate"></div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button id="submitUpdate" type="button" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">CANCLE</button>
+                            <button id="submitUpdate" type="button" class="btn btn-primary">OK</button>
                         </div>
                     </form>
 
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -122,7 +144,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button id="submitDelete" type="button" class="btn btn-primary">OK</button>                    
+                    <button id="submitDelete" type="button" class="btn btn-primary">OK</button>
                 </div>
             </div>
         </div>
@@ -141,41 +163,47 @@
     <script>
         var isSubmit = false;
         var focusUpdate = null;
-        var focusDelete = null;
+        var relatedTarget = null;
+        var page = 1;
+        var total = 1;
+        var type = 0;
 
-        const fetchAPI = async (url,option) => {
-            const res = await fetch(url,option);
+
+        const fetchAPI = async (url, option) => {
+            const res = await fetch(url, option);
             return res.json();
         }
-        $('#addCategory').on('show.bs.modal',function (event){
+        $('#addCategory').on('show.bs.modal', function(event) {
             var modal = $(this);
             modal.find('#name').val("");
             modal.find('#errAdd').text("");
-            modal.find('#submitAdd').on('click', async function(event){
+            modal.find('#submitAdd').on('click', async function(event) {
                 if (isSubmit) {
                     return;
                 }
                 const name = modal.find('#name').val();
                 const url = `category/insert.php?name=${name}`;
                 const options = {
-                    method:'get',
-                    headers:{'Content-Type':'application/json',"Authorization": 'Bearer ' + localStorage.getItem('accessToken')},
+                    method: 'get',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
+                    },
                 }
-                try{
+                try {
                     isSubmit = true;
-                    const result = await fetchAPI(url,options);
-                    if(result.status){
+                    const result = await fetchAPI(url, options);
+                    if (result.status) {
                         window.location.href = 'category.php';
-                    }
-                    else{
-                        if(result.code!=null){
+                    } else {
+                        if (result.code != null) {
                             isSubmit = false;
-                            switch(result.code){
+                            switch (result.code) {
                                 case 1001:
                                     modal.find('#errAdd').text("<?php echo $Err_1001; ?>");
                                     break;
                                 case 1002:
-                                    modal.find('#errAdd').text("<?php echo $Err_1002; ?>"); 
+                                    modal.find('#errAdd').text("<?php echo $Err_1002; ?>");
                                     break;
                                 case 1003:
                                     modal.find('#errAdd').text("<?php echo $Err_1003; ?>");
@@ -183,46 +211,47 @@
                             }
                         }
                     }
-                }
-                catch(err){
+                } catch (err) {
                     console.log(err);
                 }
             })
         })
-        $('#addCategory').on('hidden.bs.modal', function (event){
+        $('#addCategory').on('hidden.bs.modal', function(event) {
             isSubmit = false;
         })
-        $('#updateCategory').on('show.bs.modal', function (event) {
+        $('#updateCategory').on('show.bs.modal', function(event) {
             var a = $(event.relatedTarget);
             focusUpdate = a.data('category');
-            var modal = $(this);    
+            var modal = $(this);
             modal.find('#errUpdate').text("");
             modal.find('#name').val(focusUpdate.name);
-            modal.find('#submitUpdate').on('click', async function(event){
+            modal.find('#submitUpdate').on('click', async function(event) {
                 if (isSubmit) {
                     return;
                 }
                 const name = modal.find('#name').val();
                 const url = `category/update.php?id=${focusUpdate.id}&name=${name}`;
                 const options = {
-                    method:'get',
-                    headers:{'Content-Type':'application/json',"Authorization": 'Bearer ' + localStorage.getItem('accessToken')},
+                    method: 'get',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
+                    },
                 }
-                try{
+                try {
                     isSubmit = true;
-                    const result = await fetchAPI(url,options);
-                    if(result.status){
+                    const result = await fetchAPI(url, options);
+                    if (result.status) {
                         window.location.href = 'category.php';
-                    }
-                    else{
-                        if(result.code!=null){
+                    } else {
+                        if (result.code != null) {
                             isSubmit = false;
-                            switch(result.code){
+                            switch (result.code) {
                                 case 1001:
                                     modal.find('#errUpdate').text("<?php echo $Err_1001; ?>");
                                     break;
                                 case 1002:
-                                    modal.find('#errUpdate').text("<?php echo $Err_1002; ?>"); 
+                                    modal.find('#errUpdate').text("<?php echo $Err_1002; ?>");
                                     break;
                                 case 1003:
                                     modal.find('#errUpdate').text("<?php echo $Err_1003; ?>");
@@ -230,83 +259,148 @@
                             }
                         }
                     }
-                }
-                catch(err){
+                } catch (err) {
                     console.log(err);
                 }
             })
 
         })
-        $('#updateCategory').on('hidden.bs.modal', function (event){
+        $('#updateCategory').on('hidden.bs.modal', function(event) {
             isSubmit = false;
             focusUpdate = null;
         })
 
 
-        $('#deleteCategory').on('show.bs.modal',function(event){
+        $('#deleteCategory').on('show.bs.modal', function(event) {
             var modal = $(this);
             var b = $(event.relatedTarget);
             focusDelete = b.data('id').id;
             modal.find('#errDelete').text("");
-            modal.find('#submitDelete').on('click', async function(event){
+            modal.find('#submitDelete').on('click', async function(event) {
                 if (isSubmit) {
                     return;
                 }
                 const url = `category/delete.php?id=${focusDelete}`;
                 const options = {
-                    method:'get',
-                    headers:{'Content-Type':'application/json',"Authorization": 'Bearer ' + localStorage.getItem('accessToken')},
+                    method: 'get',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
+                    },
                 }
-                try{
+                try {
                     isSubmit = true;
-                    const result = await fetchAPI(url,options);
-                    if(result.status){
+                    const result = await fetchAPI(url, options);
+                    if (result.status) {
                         window.location.href = 'category.php';
-                    }
-                    else{
-                        if(result.code!=null){
+                    } else {
+                        if (result.code != null) {
                             isSubmit = false;
-                            switch(result.code){
+                            switch (result.code) {
                                 case 1001:
                                     modal.find('#errDelete').text("<?php echo $Err_1001; ?>");
                                     break;
                                 case 1005:
-                                    modal.find('#errDelete').text("<?php echo $Err_1005; ?>"); 
+                                    modal.find('#errDelete').text("<?php echo $Err_1005; ?>");
                                     break;
                             }
                         }
                     }
-                }
-                catch(err){
+                } catch (err) {
                     console.log(err);
                 }
             })
         })
-        $('#deleteCategory').on('hidden.bs.modal', function (event){
+        $('#deleteCategory').on('hidden.bs.modal', function(event) {
             isSubmit = false;
             focusDelete = null;
         })
 
-        $.ajax({
-            type: "GET",
-            url:`category/getAll.php`,
-            headers: {"Authorization": 'Bearer ' + localStorage.getItem('accessToken')},
-            success:(res) => {
-                if(res["status"]==false){
-                    window.location.href = "login.php";
-                }
-                else{
-                    var tr;
-                    for (var i = 0; i < res.length; i++) {
-                        tr = $('<tr/>');
-                        tr.append("<td>" + res[i].id+ "</td>");
-                        tr.append("<td>" + res[i].name + "</td>");
-                        tr.append(`<td><button data-category='{"id":${res[i].id},"name":"${res[i].name}"}' class="btn btn-primary" data-toggle="modal" data-target="#updateCategory"><i class="fa fa-edit "></i> Edit</button><button data-id='{"id":${res[i].id}}' class="btn btn-danger" data-toggle="modal" data-target="#deleteCategory"><i class="fa fa-trash-o"></i> Delete</button></td>`);
-                        $('#table').append(tr);
+        loadData();
+
+        function loadData() {
+            var url = "";
+            if (type == 0) {
+                url = `../../api/category/getAll.php?page=${page}&limit=10`;
+            } else {
+                url = `../../api/category/search.php?page=${page}&limit=10&query=${$('#search').val()}`;
+            }
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                headers: {
+                    "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
+                },
+                success: (res) => {
+                    console.log(res);
+
+                    if (!res.is_error) {
+                        total = res.total;
+
+                        if (page == total) {
+                            $("#btn_next").attr("class", "paginate_button previous disabled");
+                        } else {
+                            $("#btn_next").attr("class", "paginate_button previous");
+                        }
+
+                        if (page == 1) {
+                            $("#btn_prev").attr("class", "paginate_button previous disabled ");
+                        } else {
+                            $("#btn_prev").attr("class", "paginate_button previous ");
+                        }
+                        $('#table').html("");
+                        $("#page").html(`Page ${page} of ${res.total}`);
+
+                        var categories = res.data;
+                        var tr;
+                        for (var i = 0; i < categories.length; i++) {
+                            tr = $('<tr/>');
+                            tr.append("<td>" + categories[i].id + "</td>");
+                            if (categories[i].avatar != null && categories[i].avatar != "") {
+                                tr.append("<td><img src=" + categories[i].avatar + " width='80' height='60'  style='object-fit: cover'/></td>")
+                            } else {
+                                tr.append("<td><img src='https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-1-scaled-1150x647.png' width='80' height='60'  /></td>")
+                            }
+                            tr.append("<td>" + categories[i].name + "</td>");
+                            tr.append(`<td><button data-category='{"id":${categories[i].id},"name":"${categories[i].name}"}' class="btn btn-primary" data-toggle="modal" data-target="#updateCategory"><i class="fa fa-edit "></i> Edit</button><button data-id='{"id":${categories[i].id}}' class="btn btn-danger" data-toggle="modal" data-target="#deleteCategory"><i class="fa fa-trash-o"></i> Delete</button></td>`);
+                            $('#table').append(tr);
+                        }
+                    } else {
+                        $.ajax({
+                            url: '../../config/errorcode.php',
+                            type: 'POST',
+                            data: {
+                                code: res.code
+                            },
+                            success: (res) => {
+                                window.alert(res);
+                                type = 0;
+                            }
+                        });
                     }
                 }
-            }
-        });
+            });
+        }
+
+
+        $('#next').on('click', function(event) {
+            if (page == total) return;
+            page++;
+            loadData();
+        })
+
+        $('#prev').on('click', function(event) {
+            if (page == 1) return;
+            page--;
+            loadData();
+        })
+
+        $('#search').on('search', function(event) {
+            page = 1;
+            type = 1;
+            loadData();
+        })
     </script>
 </body>
 

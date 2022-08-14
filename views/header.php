@@ -61,9 +61,6 @@
                             <li><a href="dashboard.php">DASHBOARD</a></li>
                             <li><a href="order.php">ORDERS</a></li>
                             <li><a href="category.php">CATEGORIES</a></li>
-                            <li><a href="teacher.php">TEACHERS</a></li>
-                            <li><a href="recharge.php">RECHARGE</a></li>
-                            <li><a href="subject.php">SUBJECTS</a></li>
                             <li><a href="user.php">USERS</a></li>
                         </ul>
                     </div>

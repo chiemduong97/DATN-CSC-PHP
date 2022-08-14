@@ -1,19 +1,19 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/config/configHeader.php';
-include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/user_controller.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/category_controller.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 
-(new CF_Header()) -> config("GET");
+(new CF_Header())->config("GET");
 
-$code = 400;
+$code = 1001;
 $data = [];
 $load_more = false;
 $total = 0;
+
 $authen = new Authen();
 
 if ($authen->checkToken()) {
-    $permission = $_GET["permission"];
     $page = 1;
     $limit = 10;
 
@@ -23,6 +23,7 @@ if ($authen->checkToken()) {
     if (isset($_GET['limit'])) {
         $limit = $_GET['limit'];
     }
+
     if (isset($_GET['query'])) {
         $query = $_GET['query'];
     }
@@ -30,11 +31,10 @@ if ($authen->checkToken()) {
     if ($query == "") {
         $code = 1013;
     } else {
-        $total = (new UserController())->getTotalPageSearch($permission,$limit,$query);
-        $data = (new UserController())->search($permission,$page,$limit,$query);
+        $total = (new CategoryController())->getTotalPageSearch($query);
+        $data = (new CategoryController())->search($query, $page, $limit);
         is_null($data) ? $code = 1001 : $code = 1000;
     }
-   
 } else {
     $code = 401;
 }
@@ -44,6 +44,6 @@ echo (
         $code,
         $data,
         $load_more,
-        $total != 0 ? $total : 1
+        $total
     ))->response()
 );

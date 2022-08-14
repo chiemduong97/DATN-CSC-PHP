@@ -292,7 +292,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                     if (isSubmit) {
                         return;
                     }
-                    const url = "../views/noti/noti.php";
+                    const url = "../../api/notify/sendNotify.php";
                     const data = new URLSearchParams();
                     data.append("action", modal.find('#action').val());
                     data.append("description", modal.find('#description').val());
@@ -305,18 +305,23 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                         body: data
                     };
                     try {
+                        isSubmit = true;
                         const result = await fetchAPI(url, options);
-                        if (result.status) {
-                            window.location.href = 'user.php';
+                        if (!result.is_error) {
+                            modal.modal("hide");
+                            window.alert("Gửi thông báo thành công");
                         } else {
-                            switch (result.code) {
-                                case 1001:
-                                    $("#errSendNoti").text("<?php echo $Err_1001; ?>");
-                                    break;
-                                case 1003:
-                                    $("#errSendNoti").text("<?php echo $Err_1003; ?>");
-                                    break;
-                            }
+                            isSubmit = false;
+                            $.ajax({
+                                url: '../../config/errorcode.php',
+                                type: 'POST',
+                                data: {
+                                    code: response.code
+                                },
+                                success: (res) => {
+                                    window.alert(res);
+                                }
+                            });
                         }
                     } catch (err) {
                         console.log(err);
@@ -325,13 +330,15 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             })
             $('#sendNoti').on('hidden.bs.modal', function(event) {
                 isSubmit = false;
+                focusUpdate = null;
+                relatedTarget = null;
             })
 
             const user = JSON.parse(localStorage.getItem("user"));
             loadData();
 
             function loadData() {
-                
+
                 var url = "";
                 if (type == 0) {
                     url = `../../api/user/user_getAll.php?permission=${user.data.permission}&page=${page}&limit=10`;
@@ -346,22 +353,22 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                     },
                     success: (res) => {
                         console.log(res);
-                        total = res.total;
-                        $("#page").html(`Page ${page} of ${total}`);
-                        $('#table').html("");
-                        if (page == total) {
-                            $("#btn_next").attr("class", "paginate_button previous disabled");
-                        } else {
-                            $("#btn_next").attr("class", "paginate_button previous");
-                        }
-
-                        if (page == 1) {
-                            $("#btn_prev").attr("class", "paginate_button previous disabled");
-                        } else {
-                            $("#btn_prev").attr("class", "paginate_button previous");
-                        }
-
                         if (!res["is_error"]) {
+                            total = res.total;
+                            if (page == total) {
+                                $("#btn_next").attr("class", "paginate_button previous disabled");
+                            } else {
+                                $("#btn_next").attr("class", "paginate_button previous");
+                            }
+
+                            if (page == 1) {
+                                $("#btn_prev").attr("class", "paginate_button previous disabled");
+                            } else {
+                                $("#btn_prev").attr("class", "paginate_button previous");
+                            }
+
+                            $("#page").html(`Page ${page} of ${total}`);
+                            $('#table').html("");
                             $('#table').append(tr);
                             const users = res.data;
                             var tr;
@@ -389,6 +396,18 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                                 }
                                 $('#table').append(tr);
                             }
+                        } else {
+                            $.ajax({
+                                url: '../../config/errorcode.php',
+                                type: 'POST',
+                                data: {
+                                    code: res.code
+                                },
+                                success: (res) => {
+                                    window.alert(res);
+                                    type = 0;
+                                }
+                            });
                         }
                     }
                 });

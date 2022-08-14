@@ -6,7 +6,7 @@ class CategoryService
 {
     private $connection;
     private $tableName = "categories";
-    // private $totalPostInPage = 10;
+    private $totalPostInPage = 10;
 
     public function __construct()
     {
@@ -16,7 +16,7 @@ class CategoryService
     public function getByID($id)
     {
         try {
-            $query = "select id, name, avatar,category_id from " . $this->tableName . " where id=:id and status = 1";
+            $query = "select id, name, avatar, status,category_id from " . $this->tableName . " where id=:id and status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -27,6 +27,7 @@ class CategoryService
                     "id" => $id,
                     "name" => $name,
                     "avatar" => $avatar,
+                    "status" => $status,
                     "category" => $this -> getByID($category_id)
                 );
 
@@ -221,4 +222,101 @@ class CategoryService
             return null;
         }
     }
+
+    public function getAll($page, $limit)
+    {
+        try {
+
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+
+            $query = "SELECT id, name, avatar, status, created_at, category_id from " . $this->tableName . " WHERE status = 1
+                     ORDER BY created_at DESC LIMIT :start, :limit";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            $data = array();
+            if ($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar,
+                        "status" => $status,
+                        "category" => $this -> getByID($category_id)
+                    );
+                    array_push($data, $each);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return null;
+        }
+    }
+
+
+
+    public function getTotalPageSearch($query)
+    {
+        try {
+            $sql = "SELECT COUNT(*) as total FROM " . $this->tableName . " WHERE status = 1 AND name like '%$query%'";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->execute();
+            if ($stmt->rowCount() > 0) {
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                extract($row);
+                $count = $row['total'];
+                $totalPage = ceil($count / $this->totalPostInPage);
+                return $totalPage;
+            }
+            return null;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function search($query,$page, $limit)
+    {
+        try {
+
+            $page -= 1;
+            if ($page < 0) {
+                $page = 0;
+            }
+            $start = $page * $limit;
+
+            $sql = "SELECT id, name, avatar, status, created_at, category_id from " . $this->tableName . " WHERE status = 1
+                    AND name LIKE '%$query%' ORDER BY created_at DESC LIMIT :start, :limit";
+            $stmt = $this->connection->prepare($sql);
+            $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+            $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
+            $stmt->execute();
+            $data = array();
+            if ($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar,
+                        "status" => $status,
+                        "category" => $this -> getByID($category_id)
+                    );
+                    array_push($data, $each);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return null;
+        }
+    }
+
 }

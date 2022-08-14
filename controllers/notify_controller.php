@@ -11,7 +11,7 @@ class NotifyController
         $this->service = new NotifyService();
     }
 
-    public function sendNotify($action, $description, $user_id, $order_code)
+    public function sendNotify($action, $description, $user_id = null, $order_code = null)
     {
         $notify = new Notify();
         $notify -> action = $action;

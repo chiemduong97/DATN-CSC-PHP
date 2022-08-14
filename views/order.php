@@ -15,7 +15,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
         <div class="container">
             <div class="row pad-botm">
                 <div class="col-md-12">
-                    <h4 class="header-line">USERS</h4>
+                    <h4 class="header-line">ORDERS</h4>
                 </div>
             </div>
             <div class="row">
@@ -199,11 +199,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             var page = 1;
             var total = 1;
 
-            const fetchAPI = async (url, option) => {
-                const res = await fetch(url, option);
-                return res.json();
-            }
-
             $('#showOrder').on('show.bs.modal', function(event) {
                 var modal = $(this);
                 relatedTarget = $(event.relatedTarget);
@@ -315,6 +310,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             loadData();
 
             function loadData() {
+                
                 $.ajax({
                     type: "GET",
                     url: `../../api/order/order_getAll.php?page=${page}&limit=10`,
@@ -334,12 +330,10 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                         if (page == 1) {
                             $("#btn_prev").attr("class", "paginate_button previous disabled ");
                         } else {
-                            $("#btn_prev").attr("class", "paginate_button previous ");
+                            $("#btn_prev").attr("class", "paginate_button previous");
                         }
 
                         if (!res["is_error"]) {
-                            total = res.total;
-                            $('#table').append(tr);
                             $("#page").html(`Page ${page} of ${res.total}`);
                             const orders = res.data;
                             var tr;

@@ -63,4 +63,19 @@ class CategoryController
     {
         return $this->service->getTotalPagesCategories();
     }
+
+    public function getAll($page, $limit)
+    {
+        return $this->service->getAll($page, $limit);
+    }
+
+    public function getTotalPageSearch($query)
+    {
+        return $this->service->getTotalPageSearch($query);
+    }
+
+    public function search($query,$page, $limit)
+    {
+        return $this->service->search($query,$page, $limit);
+    }
 }
