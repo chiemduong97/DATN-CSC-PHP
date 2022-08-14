@@ -8,6 +8,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 
 $code = 1001;
 $data = [];
+$total = 0;
 $load_more = false;
 $authen = new Authen();
 
@@ -54,6 +55,7 @@ echo (
     (new Response(
         $code,
         $data,
-        $load_more
+        $load_more,
+        $total
     ))->response()
 );

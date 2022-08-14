@@ -9,6 +9,7 @@ $authen = new Authen();
 
 $code = 1001;
 $data = null;
+$total = 0;
 $load_more = false;
 
 if ($authen->checkToken()) {
@@ -49,6 +50,7 @@ echo (
     (new Response(
         $code,
         $data,
-        $load_more
+        $load_more,
+        $total
     ))->response()
 );

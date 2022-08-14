@@ -47,9 +47,9 @@ class UserController
     {
         $user = $this->service->getByEmail($email);
         if ($user) {
-            $check = password_verify($password, $user->password);
+            $check = password_verify($password, $user["password"]);
             if ($check) {
-                if ($user->status == 0) {
+                if ($user["status"] == 0) {
                     return 1005;
                 } else {
                     return 1000;
@@ -155,7 +155,7 @@ class UserController
     {
         $user = $this->service->getByEmail($body->email);
         if ($user) {
-            $check = password_verify($body->old_password, $user->password);
+            $check = password_verify($body->old_password, $user["password"]);
             if ($check) {
                 $hash = password_hash($body->new_password, PASSWORD_BCRYPT);
                 $user = new User();
@@ -179,11 +179,11 @@ class UserController
     public function login_admin($email, $password)
     {
         $user = $this->service->getByEmail($email);
-        if ($user->permission < 1) return 1020;
+        if ($user["permission"] < 1) return 1020;
         if ($user) {
-            $check = password_verify($password, $user->password);
+            $check = password_verify($password, $user["password"]);
             if ($check) {
-                if ($user->status == 0) {
+                if ($user["status"] == 0) {
                     return 1005;
                 } else {
                     return 1000;

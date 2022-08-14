@@ -12,6 +12,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/services/user_service.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/services/payment_service.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/transaction_model.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/services/transaction_service.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/notify_controller.php';
 
 
 class OrderController
@@ -72,7 +73,17 @@ class OrderController
             }
         }
 
-        return $this->service->updateStatus($order_code, $status);
+        $result = $this->service->updateStatus($order_code, $status);
+
+        if ($result == 1000) {
+            (new NotifyController()) -> sendNotify(
+                "ORDER_DESTROY",
+                "Đơn hàng của bạn đã được hủy, mong bạn tiếp tục ủng hộ CSC ở những lần sau. CSC chờ đợi cơ hội để phục vụ bạn.",
+                $this -> service -> getByorder_code($order_code)["user"] -> id,
+                $order_code
+            );
+        }
+        return $result;
     }
 
     public function insertItem($body)
@@ -148,6 +159,12 @@ class OrderController
             $order->distance = $body->distance;
             $result = $this->service->insertItem($order);
             if ($result) {
+                (new NotifyController()) -> sendNotify(
+                    "ORDER_SUCCESS",
+                    "Cảm ơn bạn đã cho CSC cơ hội được phục vụ. Trong vòng 15 phút nhân viên sẽ gọi điện thoại để xác nhận đơn hàng.",
+                    $order->user_id,
+                    $order->order_code 
+                );
                 return $order->order_code;
             }
         }
@@ -177,6 +194,30 @@ class OrderController
 
     public function updateStatus($order_code, $status)
     {
-        return $this->service->updateStatus($order_code, $status + 1);
+        $result = $this->service->updateStatus($order_code, $status + 1);
+        if ($result == 1000) {
+            $action = "";
+            $description ="";
+            if ($status == 0) {
+                $action = "ORDER_RECEIVED";
+                $description = "Cảm ơn bạn đã cho CSC cơ hội được phục vụ. Đơn hàng đã được nhận và đang chuẩn bị, trong 15 phút sẽ bắt đầu giao đến cho bạn";
+            }
+            if ($status == 1) {
+                $action = "ORDER_DELIVERY";
+                $description = "Cảm ơn bạn đã cho CSC cơ hội được phục vụ. Đơn hàng đang được giao vui lòng đợi tài xế liên hệ khi đến nơi.";
+            }
+            if ($status == 2) {
+                $action = "ORDER_COMPLETE";
+                $description = "Cảm ơn bạn đã cho CSC cơ hội được phục vụ. CSC biết bạn có nhiều sự lựa chọn, cảm ơn vì đã chọn CSC hôm nay.";
+            }
+            
+            (new NotifyController()) -> sendNotify(
+                $action,
+                $description,
+                $this -> service -> getByorder_code($order_code)["user"] -> id,
+                $order_code
+            );
+        }
+        return $result;
     }
 }

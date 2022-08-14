@@ -10,6 +10,7 @@ $authen = new Authen();
 $code = 1001;
 $data = null;
 $load_more = false;
+$total = 0;
 
 if ($authen->checkToken()) {
     if (isset($_GET['user_id']) && isset($_GET['type'])) {
@@ -55,6 +56,7 @@ echo (
     (new Response(
         $code,
         $data,
-        $load_more
+        $load_more,
+        $total
     ))->response()
 );

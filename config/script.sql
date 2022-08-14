@@ -127,6 +127,17 @@ CREATE TABLE IF NOT EXISTS `image_ratings` (
 FOREIGN KEY (`rating_id`) REFERENCES ratings(`id`)
 );
 
+CREATE TABLE IF NOT EXISTS `notifies` (
+`id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`action` VARCHAR(255) NOT NULL DEFAULT 'notify',
+`description` VARCHAR(1025) NOT NULL,
+`created_at` DATETIME DEFAULT NOW() NOT NULL,
+`user_id` INT(11),
+`order_code` VARCHAR(6),
+FOREIGN KEY (`user_id`) REFERENCES users(`id`),
+FOREIGN KEY (`order_code`) REFERENCES orders(`order_code`)
+);
+
 insert into `categories` ( `name`, `avatar`) values 
 ( 'Đồ uống - Giải khát', 'https://tea-3.lozi.vn/v1/images/resized/category-mobile-1912-1653560355?w=60&type=s'),
 ( 'Snack - Đồ ăn vặt', 'https://tea-3.lozi.vn/v1/images/resized/category-mobile-1905-1653560426?w=60&type=s'),
