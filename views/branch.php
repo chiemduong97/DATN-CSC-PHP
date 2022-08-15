@@ -35,7 +35,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                                 <div class="form-inline">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <label>Tìm kiếm: <input type="search" placeholder="Tên thể loại" class="form-control input-sm" id="search"></label>
+                                            <label>Tìm kiếm: <input type="search" placeholder="..." class="form-control input-sm" id="search"></label>
                                         </div>
                                     </div>
                                     <div class="row">
