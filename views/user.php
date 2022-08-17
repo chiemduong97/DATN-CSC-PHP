@@ -343,16 +343,16 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                 relatedTarget = null;
             })
 
-            const user = JSON.parse(localStorage.getItem("user"));
+            const user = JSON.parse(localStorage.getItem("user")).data;
             loadData();
 
             function loadData() {
 
                 var url = "";
                 if (type == 0) {
-                    url = `../../api/user/user_getAll.php?permission=${user.data.permission}&page=${page}&limit=10`;
+                    url = `../../api/user/user_getAll.php?permission=${user.permission}&page=${page}&limit=10`;
                 } else {
-                    url = `../../api/user/user_search.php?permission=${user.data.permission}&page=${page}&limit=10&query=${$('#search').val()}`;
+                    url = `../../api/user/user_search.php?permission=${user.permission}&page=${page}&limit=10&query=${$('#search').val()}`;
                 }
                 $.ajax({
                     type: "GET",
@@ -398,10 +398,14 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                                 } else {
                                     tr.append(`<td><button data-email='{"email":"${users[i].email}"}' class="btn btn-default change" data-toggle="modal" data-target="#changeStatus"><i class="fa fa-square-o "></i> Active</button></td>`);
                                 }
-                                if (users[i].permission != 0) {
-                                    tr.append(`<td><button data-email='{"email":"${users[i].email}"}' class="btn btn-success change" data-toggle="modal" data-target="#changePermission"><i class="fa fa-check-square-o "></i> Admin</button></td>`);
+                                if (user.permission == 2) {
+                                    if (users[i].permission != 0) {
+                                        tr.append(`<td><button data-email='{"email":"${users[i].email}"}' class="btn btn-success change" data-toggle="modal" data-target="#changePermission"><i class="fa fa-check-square-o "></i> Admin</button></td>`);
+                                    } else {
+                                        tr.append(`<td><button data-email='{"email":"${users[i].email}"}' class="btn btn-default change" data-toggle="modal" data-target="#changePermission"><i class="fa fa-square-o "></i> Admin</button></td>`);
+                                    }
                                 } else {
-                                    tr.append(`<td><button data-email='{"email":"${users[i].email}"}' class="btn btn-default change" data-toggle="modal" data-target="#changePermission"><i class="fa fa-square-o "></i> Admin</button></td>`);
+                                    tr.append("<td>User</td>");
                                 }
                                 $('#table').append(tr);
                             }

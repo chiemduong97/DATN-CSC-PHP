@@ -41,7 +41,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="dashboard.php">
+                <a class="navbar-brand" href="statistics.php">
                     <img width="200" src="../public/images/ic_logo.png" />
                 </a>
             </div>
@@ -58,11 +58,11 @@
                 <div class="col-md-12">
                     <div class="navbar-collapse collapse ">
                         <ul id="menu-top" class="nav navbar-nav navbar-right">
-                            <li><a href="dashboard.php">DASHBOARD</a></li>
-                            <li><a href="order.php">ORDERS</a></li>
-                            <li><a href="category.php">CATEGORIES</a></li>
+                            <li><a href="statistics.php">THỐNG KÊ</a></li>
+                            <li><a href="branch.php">CHI NHÁNH</a></li>
+                            <li><a href="order.php">ĐƠN HÀNG</a></li>
+                            <li><a href="category.php">THỂ LOẠI</a></li>
                             <li><a href="user.php">USERS</a></li>
-                            <li><a href="statistics.php">STATISTICS</a></li>
 
                         </ul>
                     </div>

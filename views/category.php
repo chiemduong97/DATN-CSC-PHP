@@ -15,7 +15,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
         <div class="container">
             <div class="row pad-botm">
                 <div class="col-md-12">
-                    <h4 class="header-line">CATEGORIES</h4>
+                    <h4 class="header-line">THỂ LOẠI</h4>
                     <button class="btn btn-success" data-toggle="modal" data-target="#updateCategory">
                         <i class="fa fa-plus-square"></i>
                         Thêm

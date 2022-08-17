@@ -15,7 +15,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
         <div class="container">
             <div class="row pad-botm">
                 <div class="col-md-12">
-                    <h4 class="header-line">ORDERS</h4>
+                    <h4 class="header-line">ĐƠN HÀNG</h4>
                 </div>
             </div>
             <div class="row">
