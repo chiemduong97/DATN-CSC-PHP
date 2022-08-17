@@ -207,6 +207,17 @@ class OrderController
                 $description = "Cảm ơn bạn đã cho CSC cơ hội được phục vụ. Đơn hàng đang được giao vui lòng đợi tài xế liên hệ khi đến nơi.";
             }
             if ($status == 2) {
+
+                $transaction = (new TransactionService())->getTransaction($order_code);
+                if (!is_null($transaction)) {
+                    $resultMomo = (new PaymentService())->confirmMomo($transaction["phone"], $transaction["transid"], $transaction["transid_momo"], "capture");
+                    if (json_decode($resultMomo)->status != 0) {
+                        return 1018;
+                    }
+                } else {
+                    return 1019;
+                }
+
                 $action = "ORDER_COMPLETE";
                 $description = "Cảm ơn bạn đã cho CSC cơ hội được phục vụ. CSC biết bạn có nhiều sự lựa chọn, cảm ơn vì đã chọn CSC hôm nay.";
             }

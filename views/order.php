@@ -310,7 +310,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             loadData();
 
             function loadData() {
-                
+
                 $.ajax({
                     type: "GET",
                     url: `../../api/order/order_getAll.php?page=${page}&limit=10`,

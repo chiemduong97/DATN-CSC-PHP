@@ -24,11 +24,12 @@ class CategoryController
     {
         return $this->service->getByID($id);
     }
-    public function insertItem($name = "chua co ten", $avatar = "https://cdn.pixabay.com/photo/2014/04/02/10/25/man-303792_960_720.png")
+    public function insertItem($name, $avatar,$category_id)
     {
         $category = new Category();
         $category->name = $name;
         $category->avatar = $avatar;
+        $category->id = $category_id;
 
         if ($this->service->checkName($id = 0, $name)) {
             return 1011;
@@ -36,12 +37,14 @@ class CategoryController
             return $this->service->insertItem($category);
         }
     }
-    public function updateItem($id, $name, $avatar)
+    public function updateItem($id,$name,$avatar,$category_id)
     {
         $category = new Category();
         $category->id = $id;
         $category->name = $name;
         $category->avatar = $avatar;
+        $category->category_id = $category_id;
+        if ($id == $category_id) return 1022;
 
         if ($this->service->checkName($id, $name)) {
             return 1011;

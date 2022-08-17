@@ -4,28 +4,21 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/category_controller.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/authen/authen.php';
 
-(new CF_Header())->config("DELETE");
+(new CF_Header())->config("POST");
 $code = 1001;
 $data = null;
 $authen = new Authen();
 
-$body = json_decode(file_get_contents("php://input"));
-
 if ($authen->checkToken()) {
-    if (property_exists($body, 'id')) {
-        $id = $body->id;
+    $id = isset($_POST["id"]) ? $_POST["id"] : -1;
+    $data = (new CategoryController())->removeItem($id);
 
-        $data = (new CategoryController())->removeItem($id);
-
-        if ($data == 1000) {
-            $code = 1000;
-        } else {
-            $code = $data;
-        }
-        $data = null;
+    if ($data == 1000) {
+        $code = 1000;
     } else {
-        $code = 1013;
+        $code = $data;
     }
+    $data = null;
 } else {
     $code = 401;
 }

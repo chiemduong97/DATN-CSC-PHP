@@ -26,14 +26,23 @@ function getErrorMessage($code)
         case 1005:
             $errMessage = "Tài khoản đã bị khóa, vui lòng liên hệ admin để mở khóa!";
             break;
+        case 1011:
+            $errMessage = "Đã tồn tại, vui lòng chọn tên khác!";
+            break;
         case 1013:
             $errMessage = "Vui lòng nhập đủ dữ liệu!";
+            break;
+        case 1014:
+            $errMessage = "Không tìm thấy!";
             break;
         case 1020:
             $errMessage = "Tài khoản không đủ quyền";
             break;
         case 1021:
             $errMessage = "Không tìm thấy đơn hàng";
+            break;
+        case 1022:
+            $errMessage = "Không thể chọn chính bản thân làm thể loại";
             break;
     }
     return $errMessage;

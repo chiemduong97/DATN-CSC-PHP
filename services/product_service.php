@@ -90,6 +90,7 @@ class ProductService
                         "name" => $name,
                         "avatar" => $avatar,
                         "description" => $description,
+                        "sold" => $sold,
                         "price" => $price,
                         "quantity" => $quantity,
                         "category" => (new CategoryService()) -> getByID($category_id)

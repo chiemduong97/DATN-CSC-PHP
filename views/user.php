@@ -165,7 +165,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
         </section>
         <script>
             var isSubmit = false;
-            var focusUpdate = null;
+            var focus = null;
             var relatedTarget = null;
             var page = 1;
             var total = 1;
@@ -180,7 +180,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             $('#changeStatus').on('show.bs.modal', function(event) {
                 var modal = $(this);
                 relatedTarget = $(event.relatedTarget);
-                focusUpdate = relatedTarget.data('email');
+                focus = relatedTarget.data('email');
                 modal.find('#errUpdate').text("");
                 modal.find('#submitUpdate').on('click', async function(event) {
                     if (isSubmit) {
@@ -188,55 +188,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                     }
                     const url = "../../api/user/updateStatus.php";
                     const data = new URLSearchParams();
-                    data.append("email", focusUpdate.email);
-                    const options = {
-                        method: 'post',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
-                        },
-                        body: data
-                    };
-                    try {
-                        isSubmit = true;
-                        const response = await fetchAPI(url, options);
-                        console.log(response);
-                        if (!response.is_error) {
-                            modal.modal("hide");
-                            if (relatedTarget.attr("class") != "btn btn-success change") {
-                                relatedTarget.attr("class", "btn btn-success change");
-                                relatedTarget.children().attr("class", "fa fa-check-square-o");
-                            } else {
-                                relatedTarget.attr("class", "btn btn-default change");
-                                relatedTarget.children().attr("class", "fa fa-square-o ");
-                            }
-                        } else {
-                            isSubmit = false;
-                            modal.find('#errUpdate').text("<?php echo getErrorMessage('" + response.code + "'); ?>");
-                        }
-                    } catch (err) {
-                        console.log(err);
-                    }
-                })
-            })
-            $('#changeStatus').on('hidden.bs.modal', function(event) {
-                isSubmit = false;
-                focusUpdate = null;
-                relatedTarget = null;
-            })
-
-            $('#changePermission').on('show.bs.modal', function(event) {
-                var modal = $(this);
-                relatedTarget = $(event.relatedTarget);
-                focusUpdate = relatedTarget.data('email');
-                modal.find('#errUpdate').text("");
-                modal.find('#submitUpdate').on('click', async function(event) {
-                    if (isSubmit) {
-                        return;
-                    }
-                    const url = "../../api/user/updatePermission.php";
-                    const data = new URLSearchParams();
-                    data.append("email", focusUpdate.email);
+                    data.append("email", focus.email);
                     const options = {
                         method: 'post',
                         headers: {
@@ -267,7 +219,64 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                                     code: response.code
                                 },
                                 success: function(data) {
-                                    $("#err").text(data);
+                                    $("#errUpdate").text(data);
+                                }
+                            });
+                        }
+                    } catch (err) {
+                        console.log(err);
+                    }
+                })
+            })
+            $('#changeStatus').on('hidden.bs.modal', function(event) {
+                isSubmit = false;
+                focus = null;
+                relatedTarget = null;
+            })
+
+            $('#changePermission').on('show.bs.modal', function(event) {
+                var modal = $(this);
+                relatedTarget = $(event.relatedTarget);
+                focus = relatedTarget.data('email');
+                modal.find('#errUpdate').text("");
+                modal.find('#submitUpdate').on('click', async function(event) {
+                    if (isSubmit) {
+                        return;
+                    }
+                    const url = "../../api/user/updatePermission.php";
+                    const data = new URLSearchParams();
+                    data.append("email", focus.email);
+                    const options = {
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
+                        },
+                        body: data
+                    };
+                    try {
+                        isSubmit = true;
+                        const response = await fetchAPI(url, options);
+                        console.log(response);
+                        if (!response.is_error) {
+                            modal.modal("hide");
+                            if (relatedTarget.attr("class") != "btn btn-success change") {
+                                relatedTarget.attr("class", "btn btn-success change");
+                                relatedTarget.children().attr("class", "fa fa-check-square-o");
+                            } else {
+                                relatedTarget.attr("class", "btn btn-default change");
+                                relatedTarget.children().attr("class", "fa fa-square-o ");
+                            }
+                        } else {
+                            isSubmit = false;
+                            $.ajax({
+                                url: '../../config/errorcode.php',
+                                type: 'POST',
+                                data: {
+                                    code: response.code
+                                },
+                                success: function(data) {
+                                    $("#errUpdate").text(data);
                                 }
                             });
                         }
@@ -279,7 +288,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
 
             $('#changePermission').on('hidden.bs.modal', function(event) {
                 isSubmit = false;
-                focusUpdate = null;
+                focus = null;
                 relatedTarget = null;
             })
 
@@ -330,7 +339,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             })
             $('#sendNoti').on('hidden.bs.modal', function(event) {
                 isSubmit = false;
-                focusUpdate = null;
+                focus = null;
                 relatedTarget = null;
             })
 

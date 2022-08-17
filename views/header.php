@@ -62,6 +62,8 @@
                             <li><a href="order.php">ORDERS</a></li>
                             <li><a href="category.php">CATEGORIES</a></li>
                             <li><a href="user.php">USERS</a></li>
+                            <li><a href="statistics.php">STATISTICS</a></li>
+
                         </ul>
                     </div>
                 </div>
@@ -78,6 +80,16 @@
     <!-- CUSTOM SCRIPTS  -->
     <script src="../public/javascripts/custom.js"></script>
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBj15wftaGCexBOsxTRNqgkYPIBDuD63iA",
+            authDomain: "myreact-bce2e.firebaseapp.com",
+            projectId: "myreact-bce2e",
+            storageBucket: "myreact-bce2e.appspot.com",
+            messagingSenderId: "526333838997",
+            appId: "1:526333838997:web:c47de5baea83b4a0663d9c"
+        };
+        firebase.initializeApp(firebaseConfig);
+
         const email = localStorage.getItem("email");
         $.ajax({
             type: "GET",
@@ -86,10 +98,10 @@
                 "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
             },
             success: (res) => {
-                if (localStorage.getItem("user") == null) localStorage.setItem("user", JSON.stringify(res));
                 if (res["is_error"]) {
                     window.location.href = "login.php";
                 } else {
+                    if (localStorage.getItem("user") == null) localStorage.setItem("user", JSON.stringify(res));
                     $("#email").html(email);
                 }
             }

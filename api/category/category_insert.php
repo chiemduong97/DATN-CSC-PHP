@@ -15,7 +15,8 @@ if ($authen->checkToken()) {
     if (property_exists($body, 'name') && property_exists($body, 'avatar')) {
         $name = $body->name;
         $avatar = $body->avatar;
-        $data = (new CategoryController())->insertItem($name, $avatar);
+        $category_id = $body->category_id;
+        $data = (new CategoryController())->insertItem($name, $avatar,$category_id);
 
         if ($data == 1000) {
             $code = 1000;
