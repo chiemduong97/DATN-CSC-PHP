@@ -28,6 +28,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                                         <option value="3">Số lượng đơn hàng theo trạng thái</option>
                                         <option value="4">Số lượng đơn hàng theo ngày</option>
                                         <option value="5">Top 10 sản phẩm bán chạy</option>
+                                        <option value="6">Nhập kho theo ngày</option>
                                     </select>
                                 </label>
                             </div>
@@ -80,7 +81,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             $('#table').html("");
             selected = $("#option").val();
             console.log(selected);
-            if (selected != "1" && selected != "4") $("#time").attr("class", "row hide");
+            if (selected != "1" && selected != "4" && selected != "6") $("#time").attr("class", "row hide");
             else $("#time").attr("class", "row");
             switch (selected) {
                 case "2":
@@ -99,7 +100,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
 
         $("#run").on("click", () => {
             if (selected == 1) revenueByDate();
-            else countOrderByDate();
+            else if (selected == 4) countOrderByDate();
+            else warehouse();
         });
 
         function revenueByDate() {
@@ -234,7 +236,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
 
                     if (!res.is_error) {
                         $('#table').html("");
-                        $('#table').append(`<thead><tr><th>Ngày</th><th>Số đơn</th><th>Tỉ lệ hoàn thành đơn</th></tr></thead>`);
+                        $('#table').append(`<thead><tr><th>Ngày</th><th>Số đơn hoàn thành</th><th>Tỉ lệ hoàn thành đơn</th></tr></thead>`);
                         var data = res.data;
                         var tr;
                         for (var i = 0; i < data.length; i++) {
@@ -300,7 +302,48 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                 }
             });
         }
+        function warehouse() {
+            var start = $("#start").val();
+            var end = $("#end").val();
+            $.ajax({
+                type: "GET",
+                url: `../../api/statistics/warehouse.php?start=${start}&end=${end}`,
+                headers: {
+                    "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
+                },
+                success: (res) => {
+                    console.log(res);
 
+                    if (!res.is_error) {
+                        $('#table').html("");
+                        $('#table').append(`<thead><tr><th>Mã nhập kho</th><th>Tên sản phẩm</th><th>Số lượng</th><th>Người nhập</th><th>Ngày nhập</th>/tr></thead>`);
+                        var data = res.data;
+                        var tr;
+                        for (var i = 0; i < data.length; i++) {
+                            tr = $('<tr>');
+                            tr.append("<td>" + data[i].id + "</td>");
+                            tr.append("<td>" + data[i].product.name + "</td>");
+                            tr.append("<td>" + data[i].quantity + "</td>");
+                            tr.append("<td>" + data[i].email + "</td>");
+                            tr.append("<td>" + data[i].date + "</td>");
+                            $('#table').append(tr);
+                        }
+                    } else {
+                        $.ajax({
+                            url: '../../config/errorcode.php',
+                            type: 'POST',
+                            data: {
+                                code: res.code
+                            },
+                            success: (res) => {
+                                window.alert(res);
+                                type = 0;
+                            }
+                        });
+                    }
+                }
+            });
+        }
 
 
         function toVND(amount) {

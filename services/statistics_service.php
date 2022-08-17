@@ -1,6 +1,7 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/branch_model.php';
+include_once $_SERVER['DOCUMENT_ROOT'] . '/services/product_service.php';
 
 class StatisticsService
 {
@@ -26,7 +27,7 @@ class StatisticsService
                         ON O.promotion_id = P.id 
                         WHERE DATE(O.created_at) BETWEEN :start AND :end
                         GROUP BY date
-                        ORDER BY date DESC";
+                        ORDER BY created_at DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":start", $start, PDO::PARAM_STR);
             $stmt->bindParam(":end", $end, PDO::PARAM_STR);
@@ -64,7 +65,7 @@ class StatisticsService
                         LEFT JOIN promotions P 
                         ON O.promotion_id = P.id 
                         GROUP BY month
-                        ORDER BY month DESC";
+                        ORDER BY O.created_at DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
             $data = array();
@@ -126,7 +127,7 @@ class StatisticsService
                       FROM orders 
                       WHERE DATE(created_at) BETWEEN :start AND :end
                       GROUP BY date
-                      ORDER BY date DESC";
+                      ORDER BY created_at DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":start", $start, PDO::PARAM_STR);
             $stmt->bindParam(":end", $end, PDO::PARAM_STR);
@@ -139,6 +140,40 @@ class StatisticsService
                         "date" => $date,
                         "quantity" => $quantity,
                         "percent" => $percent,
+                    );
+                    array_push($data, $each);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            //throw $th;
+            echo "loi get(): " . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function warehouse($start,$end)
+    {
+
+        try {
+            $query = "SELECT id,DATE_FORMAT(created_at,'%d-%m-%Y') AS date,quantity,product_id,email
+                      FROM warehouse 
+                      WHERE DATE(created_at) BETWEEN :start AND :end
+                      ORDER BY created_at DESC";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(":start", $start, PDO::PARAM_STR);
+            $stmt->bindParam(":end", $end, PDO::PARAM_STR);
+            $stmt->execute();
+            $data = array();
+            if ($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "date" => $date,
+                        "quantity" => $quantity,
+                        "product" => (new ProductService()) -> getByID($product_id),
+                        "email" => $email
                     );
                     array_push($data, $each);
                 }

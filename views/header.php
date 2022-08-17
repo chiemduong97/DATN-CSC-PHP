@@ -46,8 +46,8 @@
                 </a>
             </div>
             <div class="right-div">
-                <a onclick="logout()" class="btn btn-info pull-right">LOG OUT</a>
-                <p class="pull-right btn">Wellcome <strong id="email"></strong></p>
+                <a onclick="logout()" class="btn btn-info pull-right">ĐĂNG XUẤT</a>
+                <p class="pull-right btn">Xin chào <strong id="email"></strong></p>
             </div>
         </div>
     </div>
@@ -60,10 +60,9 @@
                         <ul id="menu-top" class="nav navbar-nav navbar-right">
                             <li><a href="statistics.php">THỐNG KÊ</a></li>
                             <li><a href="branch.php">CHI NHÁNH</a></li>
-                            <li><a href="order.php">ĐƠN HÀNG</a></li>
                             <li><a href="category.php">THỂ LOẠI</a></li>
-                            <li><a href="user.php">USERS</a></li>
-
+                            <li><a href="order.php">ĐƠN HÀNG</a></li>
+                            <li><a href="user.php">NGƯỜI DÙNG</a></li>
                         </ul>
                     </div>
                 </div>

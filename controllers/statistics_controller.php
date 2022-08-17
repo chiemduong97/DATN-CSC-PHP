@@ -29,5 +29,10 @@ class StatisticsController
         return $this -> service -> countOrderByDate($start,$end);
     }
 
+    public function warehouse($start,$end)
+    {
+        return $this -> service -> warehouse($start,$end);
+    }
+
     
 }

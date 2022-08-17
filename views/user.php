@@ -15,7 +15,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
         <div class="container">
             <div class="row pad-botm">
                 <div class="col-md-12">
-                    <h4 class="header-line">USERS</h4>
+                    <h4 class="header-line">NGƯỜI DÙNG</h4>
                     <button class="btn btn-success" data-toggle="modal" data-target="#sendNoti">
                         <i class="fa fa-bell-o"></i>
                         GỬI THÔNG BÁO

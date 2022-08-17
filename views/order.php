@@ -271,7 +271,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                                                     code: res.code
                                                 },
                                                 success: (res) => {
-                                                    model.find("#err").text(res);
+                                                    modal.find("#err").text(res);
                                                 }
                                             });
                                         }

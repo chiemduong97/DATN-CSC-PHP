@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `warehouse` (
 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `quantity` INT(11) NOT NULL,
 `created_at` DATETIME DEFAULT NOW() NOT NULL,
+`email` VARCHAR(255) NOT NULL,
 `product_id` INT(11) NOT NULL,
 FOREIGN KEY (`product_id`) REFERENCES products(`id`)
 );
