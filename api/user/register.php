@@ -9,8 +9,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/php-jwt-master/src/ExpiredExcept
 include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/php-jwt-master/src/SignatureInvalidException.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/libs/php-jwt-master/src/JWT.php';
 include_once $_SERVER['DOCUMENT_ROOT'] . '/models/response_model.php';
-
 (new CF_Header())->config("POST");
+$code = 1001;
+$data = [];
 if (
     isset($_POST["email"]) && isset($_POST["password"])
     && isset($_POST["phone"]) && isset($_POST["fullname"])
