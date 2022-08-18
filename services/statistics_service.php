@@ -27,7 +27,7 @@ class StatisticsService
                         ON O.promotion_id = P.id 
                         WHERE DATE(O.created_at) BETWEEN :start AND :end
                         GROUP BY date
-                        ORDER BY created_at DESC";
+                        ORDER BY O.created_at DESC";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":start", $start, PDO::PARAM_STR);
             $stmt->bindParam(":end", $end, PDO::PARAM_STR);
