@@ -236,7 +236,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
 
                     if (!res.is_error) {
                         $('#table').html("");
-                        $('#table').append(`<thead><tr><th>Ngày</th><th>Số đơn hoàn thành</th><th>Tỉ lệ hoàn thành đơn</th></tr></thead>`);
+                        $('#table').append(`<thead><tr><th>Ngày</th><th>Số đơn</th><th>Tỉ lệ hoàn thành đơn</th></tr></thead>`);
                         var data = res.data;
                         var tr;
                         for (var i = 0; i < data.length; i++) {

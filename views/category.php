@@ -186,6 +186,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                     avatar: null,
                     category: null
                 };
+            } else {
+                modal.find("#myModalLabel").html("SỬA THỂ LOẠI");
             }
             console.log(focus);
             modal.find('#errUpdate').text("");
