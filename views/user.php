@@ -108,7 +108,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Send Notification</h4>
+                        <h4 class="modal-title" id="myModalLabel">GỬI THÔNG BÁO</h4>
                     </div>
                     <div class="panel-body">
                         <form role="form" id="formInsert" method="post">
@@ -343,7 +343,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                 relatedTarget = null;
             })
 
-            const user = JSON.parse(localStorage.getItem("user")).data;
+            const user = JSON.parse(localStorage.getItem("user"));
             loadData();
 
             function loadData() {

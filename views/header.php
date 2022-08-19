@@ -59,6 +59,7 @@
                     <div class="navbar-collapse collapse ">
                         <ul id="menu-top" class="nav navbar-nav navbar-right">
                             <li><a href="statistics.php">THỐNG KÊ</a></li>
+                            <li><a href="product.php">SẢN PHẨM</a></li>
                             <li><a href="branch.php">CHI NHÁNH</a></li>
                             <li><a href="category.php">THỂ LOẠI</a></li>
                             <li><a href="order.php">ĐƠN HÀNG</a></li>
@@ -100,7 +101,7 @@
                 if (res["is_error"]) {
                     window.location.href = "login.php";
                 } else {
-                    if (localStorage.getItem("user") == null) localStorage.setItem("user", JSON.stringify(res));
+                    if (localStorage.getItem("user") == null) localStorage.setItem("user", JSON.stringify(res.data));
                     $("#email").html(email);
                 }
             }
