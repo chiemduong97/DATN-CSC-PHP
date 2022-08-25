@@ -100,4 +100,9 @@ class ProductController
     {
         return $this->service->getTotalPagesSearch($limit, $query);
     }
+
+    public function warehouse($product_id,$quantity,$email)
+    {
+        return $this->service->insertWarehouse($product_id,$quantity,$email);
+    }
 }

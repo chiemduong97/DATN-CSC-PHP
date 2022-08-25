@@ -25,8 +25,9 @@ class ProductService
 
             $query =
                 "SELECT products.id, products.name, products.avatar, products.description, 
-                products.price, products.category_id, warehouse.quantity FROM " . $this->tableName . "
-                INNER JOIN warehouse ON products.id = warehouse.product_id 
+                products.price, products.category_id, 
+                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity
+                FROM " . $this->tableName . "
                 INNER JOIN order_details ON products.id = order_details.product_id
                 INNER JOIN orders ON order_details.order_code = orders.order_code
                 WHERE orders.user_id =:user_id and orders.status = 3
@@ -71,9 +72,10 @@ class ProductService
 
             $query =
                 "SELECT products.id, products.name, products.avatar, products.description, 
-                products.price, products.category_id, warehouse.quantity, 
+                products.price, products.category_id, 
+                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity, 
                 (SELECT sum(quantity) from order_details WHERE product_id = products.id) as sold 
-                FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
+                FROM  " . $this->tableName . "
                 WHERE products.status = 1 and (SELECT sum(quantity) from order_details WHERE product_id = products.id) is not null
                 ORDER BY sold DESC LIMIT :start , :total";
 
@@ -115,8 +117,9 @@ class ProductService
 
             $query =
                 "SELECT products.id, products.name, products.avatar, products.description, 
-                products.price, products.category_id, products.created_at, products.status, warehouse.quantity
-                FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
+                products.price, products.category_id, products.created_at, products.status,
+                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity,
+                products.status FROM  " . $this->tableName . "
                 WHERE products.status = 1
                 ORDER BY products.created_at DESC LIMIT :start , :total";
 
@@ -159,9 +162,10 @@ class ProductService
             $start = $page * $limit;
 
             $query =
-                "SELECT products.id, products.name, products.avatar, products.description, 
-                products.price, products.category_id, warehouse.quantity
-                FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
+                "SELECT id, products.name, products.avatar, products.description, 
+                products.price, products.category_id, 
+                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity,
+                products.status FROM  " . $this->tableName . "
                 WHERE products.category_id = :category_id and products.status = 1 
                 ORDER BY id DESC LIMIT :start , :total";
 
@@ -181,6 +185,7 @@ class ProductService
                         "description" => $description,
                         "price" => $price,
                         "quantity" => $quantity,
+                        "status" => $status,
                         "category" => (new CategoryService()) -> getByID($category_id)
                     );
                     array_push($data, $each);
@@ -203,9 +208,10 @@ class ProductService
             $start = $page * $limit;
 
             $query =
-                "SELECT products.id, products.name, products.avatar, products.description, 
-                products.price, products.category_id, warehouse.quantity
-                FROM  " . $this->tableName . " INNER JOIN warehouse ON products.id = warehouse.product_id
+                "SELECT id, products.name, products.avatar, products.description, 
+                products.price, products.category_id, products.status,
+                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity
+                FROM  " . $this->tableName . "
                 WHERE products.status = 1 and products.name like '%$filter%'
                 ORDER BY id DESC LIMIT :start , :total";
 
@@ -224,6 +230,7 @@ class ProductService
                         "description" => $description,
                         "price" => $price,
                         "quantity" => $quantity,
+                        "status" => $status,
                         "category" => (new CategoryService()) -> getByID($category_id)
                     );
                     array_push($data, $each);
@@ -239,9 +246,14 @@ class ProductService
     public function getByID($id)
     {
         try {
-            $query = "select id, name, avatar, description, price from " . $this->tableName . " where id=:id and status = 1";
+            $query =
+                "SELECT products.id, products.name, products.avatar, products.description, 
+                products.price, products.category_id, products.status, 
+                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity
+                FROM  " . $this->tableName . "
+                WHERE products.id = :id";
             $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(":id", $id);
+            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
             $stmt->execute();
             if ($stmt->rowCount() > 0) {
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -251,7 +263,10 @@ class ProductService
                     "name" => $name,
                     "avatar" => $avatar,
                     "description" => $description,
-                    "price" => $price
+                    "price" => $price,
+                    "quantity" => $quantity,
+                    "status" => $status,
+                    "category" => (new CategoryService()) -> getByID($category_id)
                 );
                 return $data;
             }
@@ -382,8 +397,7 @@ class ProductService
     {
         try {
             $query = "select COUNT(*) as total FROM " . $this->tableName . 
-            " INNER JOIN warehouse ON products.id = warehouse.product_id
-            INNER JOIN order_details ON products.id = order_details.product_id
+            " INNER JOIN order_details ON products.id = order_details.product_id
             INNER JOIN orders ON order_details.order_code = orders.order_code
             WHERE orders.user_id =:user_id and orders.status = 3
             GROUP BY products.id ";
@@ -408,8 +422,7 @@ class ProductService
     {
         try {
             $query = "select COUNT(*) as total FROM " . $this->tableName . 
-            " INNER JOIN warehouse ON products.id = warehouse.product_id
-            WHERE products.status = 1 and 
+            " WHERE products.status = 1 and 
             (SELECT sum(quantity) from order_details WHERE product_id = products.id) is not null";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
@@ -430,8 +443,7 @@ class ProductService
     public function getTotalPagesNew($limit = 10)
     {
         try {
-            $query = "select COUNT(*) as total FROM " . $this->tableName . " 
-                INNER JOIN warehouse ON products.id = warehouse.product_id
+            $query = "select COUNT(*) as total FROM " . $this->tableName . "
                 WHERE products.status = 1 ";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
@@ -453,7 +465,6 @@ class ProductService
     {
         try {
             $query = "select COUNT(*) as total FROM " . $this->tableName . " 
-                INNER JOIN warehouse ON products.id = warehouse.product_id
                 WHERE products.category_id = :category_id and products.status = 1 ";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
@@ -476,7 +487,6 @@ class ProductService
     {
         try {
             $query = "select COUNT(*) as total FROM " . $this->tableName . " 
-                INNER JOIN warehouse ON products.id = warehouse.product_id
                 WHERE products.status = 1 and products.name like '%$filter%' ";
             $stmt = $this->connection->prepare($query);
             $stmt->execute();
@@ -491,6 +501,26 @@ class ProductService
         } catch (Exception $e) {
             echo "loi: " . $e->getMessage();
             return 1;
+        }
+    }
+
+    public function insertWarehouse($product_id,$quantity,$email)
+    {
+        try {
+            $query = "INSERT INTO warehouse SET product_id = :product_id,
+                                                quantity = :quantity,
+                                                email = :email";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+            $stmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+            $stmt->bindParam(':email', $email);
+            if ($stmt->execute() > 0) {
+                return 1000;
+            }
+            return 1001;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return 1001;
         }
     }
 }

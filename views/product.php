@@ -52,6 +52,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                                             <tr>
                                                 <th>#</th>
                                                 <th>Tên sản phẩm</th>
+                                                <th>Tồn kho</th>
                                                 <th>Giá bán</th>
                                                 <th>Ngày thêm</th>
                                                 <th>Trạng thái</th>
@@ -79,91 +80,84 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">CHI TIẾT ĐƠN HÀNG</h4>
+                        <h4 class="modal-title" id="myModalLabel">CHI TIẾT SẢN PHẨM</h4>
                     </div>
                     <div class="modal-body">
                         <table class="table table-striped table-bordered">
                             <tbody>
                                 <tr>
-                                    <td>Mã đơn</td>
-                                    <td id="order_code">33WE3XN</td>
+                                    <td>Mã sản phẩm</td>
+                                    <td id="id">1</td>
                                 </tr>
                                 <tr>
-                                    <td>Đặt hàng lúc</td>
-                                    <td id="created_at">13/08 10:50</td>
+                                    <td>Tên sản phẩm</td>
+                                    <td id="name">Nước Ngọt Coca Cola Lon 320ml - 1 Lon</td>
                                 </tr>
                                 <tr>
-                                    <td>Nơi mua hàng</td>
-                                    <td id="branch_name">CSC Huỳnh Tấn Phát</td>
+                                    <td>Hình minh họa</td>
+                                    <td id="avatar"><img src='https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-1-scaled-1150x647.png' width='80' height='60' /></td>
                                 </tr>
                                 <tr>
-                                    <td>Danh sách sản phẩm</td>
-                                    <td>
-                                        <table class="table" id="order_details">
-                                            <tbody>
-                                                <tr>
-                                                    <td>Snack</td>
-                                                    <td>x2</td>
-                                                    <td>10.000 đ</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Snack</td>
-                                                    <td>x2</td>
-                                                    <td>10.000 đ</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Snack</td>
-                                                    <td>x2</td>
-                                                    <td>10.000 đ</td>
-                                                </tr>
-                                            </tbody>
+                                    <td>Mô tả</td>
+                                    <td id="description">Là loại nước ngọt được nhiều người yêu thích với hương vị thơm ngon, sảng khoái. Nước ngọt Coca Cola 320ml với lượng gas lớn sẽ giúp bạn xua tan mọi cảm giác mệt mỏi, căng thẳng, đem lại cảm giác thoải mái sau khi hoạt động ngoài trời</td>
+                                </tr>
+                                <tr>
+                                    <td>Giá</td>
+                                    <td id="price">12.000 đ</td>
+                                </tr>
+                                <tr>
+                                    <td>Thể loại</td>
+                                    <td id="category">Đồ uống - nước giải khát</td>
+                                </tr>
+                                <tr>
+                                    <td>Tồn kho</td>
+                                    <td id="quantity">100</td>
+                                </tr>
+                                <tr>
+                                    <td>Trạng thái</td>
+                                    <td id="status">Đang bậc</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="form-group" style="color: red;" id="err"></div>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" id="form" method="post">
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">CANCEL</button>
+                                <button id="submit" type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                                        </table>
-                                    </td>
+        <div class="modal fade" id="showWarehouse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">NHẬP KHO</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped table-bordered">
+                            <tbody>
+                                <tr>
+                                    <td>Mã sản phẩm</td>
+                                    <td id="id">1</td>
                                 </tr>
                                 <tr>
-                                    <td>Nơi nhận hàng</td>
-                                    <td id="address">70 Lữ Gia, Phường 15, Quận 11, Thành phố Hồ Chí Minh 700000, Việt Nam</td>
+                                    <td>Tên sản phẩm</td>
+                                    <td id="name">Nước Ngọt Coca Cola Lon 320ml - 1 Lon</td>
                                 </tr>
                                 <tr>
-                                    <td>Khoảng cách</td>
-                                    <td id="distance">1.9 km</td>
+                                    <td>Số lượng nhập kho</td>
+                                    <td><input id="quantity" type="number" /></td>
                                 </tr>
                                 <tr>
-                                    <td>T.khoản đặt đơn</td>
-                                    <td id="user_email">chiemduong@lozi.vn</td>
-                                </tr>
-                                <tr>
-                                    <td>Tên người nhận</td>
-                                    <td id="user_name">Đỗ Chiếm Dương</td>
-                                </tr>
-                                <tr>
-                                    <td>SDT người nhận</td>
-                                    <td id="user_phone">0976453651</td>
-                                </tr>
-                                <tr>
-                                    <td>Tiền hàng</td>
-                                    <td id="amount">125.000 đ</td>
-                                </tr>
-                                <tr>
-                                    <td>Phí ship</td>
-                                    <td id="shipping_fee">0 đ</td>
-                                </tr>
-                                <tr>
-                                    <td>Mã giảm giá</td>
-                                    <td id="promotion">PROMOTION7 - 20.000 đ</td>
-                                </tr>
-                                <tr>
-                                    <td>Tổng tiền</td>
-                                    <td id="total"><b>105.000 đ<b></td>
-                                </tr>
-                                <tr>
-                                    <td>Hình thức thanh toán</td>
-                                    <td id="payment_method">Trả bằng tiền mặt khi nhận hàng</td>
-                                </tr>
-                                <tr>
-                                    <td>Trạng thái đơn hàng</td>
-                                    <td id="status">Chờ xử lý</td>
+                                    <td>Người nhập kho</td>
+                                    <td id="email">chiemduong@lozi</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -198,14 +192,19 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             var page = 1;
             var total = 1;
 
+            const fetchAPI = async (url, option) => {
+                const res = await fetch(url, option);
+                return res.json();
+            }
+
             $('#showProduct').on('show.bs.modal', function(event) {
                 var modal = $(this);
                 relatedTarget = $(event.relatedTarget);
-                focusUpdate = relatedTarget.data('order');
+                focusUpdate = relatedTarget.data('id');
                 console.log(focusUpdate);
                 modal.find("#err").html("");
                 $.ajax({
-                    url: `../../api/order/order_getByOrderCode.php?order_code=${focusUpdate.order_code}`,
+                    url: `../../api/product/product_getById.php?id=${focusUpdate.id}`,
                     type: 'GET',
                     headers: {
                         "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
@@ -213,70 +212,17 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                     success: (res) => {
                         console.log(res);
                         if (!res.is_error) {
-                            const order = res.data;
-                            modal.find("#order_code").html(order.order_code);
-                            modal.find("#created_at").html(order.created_at);
-                            modal.find("#branch_name").html(order.branch.name);
-                            $('#order_details').html("");
-                            var tr;
-                            var order_details = order.order_details;
-                            for (var i = 0; i < order_details.length; i++) {
-                                tr = $(`<tr>`);
-                                tr.append("<td>" + `x${order_details[i].quantity}` + "</td>");
-                                tr.append("<td>" + order_details[i].product.name + "</td>");
-                                tr.append("<td>" + `${toVND(order_details[i].price)}` + "</td>");
-                                $('#order_details').append(tr);
-                            }
-                            modal.find("#address").html(order.address);
-                            modal.find("#distance").html(`${Math.ceil(order.distance*10)/10} km`);
-                            modal.find("#user_email").html(order.user.email);
-                            modal.find("#user_name").html(order.user.fullname);
-                            modal.find("#user_phone").html(order.user.phone);
-                            modal.find("#amount").html(toVND(order.amount));
-                            modal.find("#shipping_fee").html(toVND(order.shipping_fee));
-                            const promotion = order.promotion;
-                            var value = 0;
-                            if (promotion != null) {
-                                value = promotion.value < 1 ? parseInt((promotion.value * order.amount) / 1000) * 1000 : promotion.value;
-                                modal.find("#promotion").html(`${promotion.code} - ${toVND(value)}`);
-                            } else {
-                                modal.find("#promotion").html("");
-                            }
-                            modal.find("#shipping_fee").html(toVND(order.shipping_fee));
-                            modal.find("#total").html(`<b>${toVND(order.amount - value - -order.shipping_fee)}</b>`);
-                            modal.find("#payment_method").html(getPayment(order.payment_method));
-                            modal.find("#status").html(getOrderStatus(order.status));
-
+                            const product = res.data;
+                            modal.find("#id").html(product.id);
+                            modal.find("#name").html(product.name);
+                            modal.find("#avatar").html(`<img src=${product.avatar} width='80' height='60'  style='object-fit: cover'/>`);
+                            modal.find("#description").html(product.description);
+                            modal.find("#price").html(toVND(product.price));
+                            modal.find("#category").html(product.category.name);
+                            modal.find("#quantity").html(`${product.quantity} <button id="update" data-product='{"id":"${product.id}","name":"${product.name}"}' data-toggle="modal" data-target="#showWarehouse" class="btn btn-primary change"></i> Nhập kho</button></b>`);
+                            modal.find("#status").html(getStatus(product.status));
                             modal.find("#update").on("click", function() {
-                                $.ajax({
-                                    url: '../../api/order/updateStatus.php',
-                                    type: 'POST',
-                                    headers: {
-                                        "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
-                                    },
-                                    data: {
-                                        order_code: order.order_code,
-                                        status: order.status
-                                    },
-                                    success: (res) => {
-                                        if (!res.is_error) {
-                                            modal.click();
-                                            relatedTarget.find("#status").html(getStatus(parseInt(order.status) + 1));
-                                        } else {
-                                            $.ajax({
-                                                url: '../../config/errorcode.php',
-                                                type: 'POST',
-                                                data: {
-                                                    code: res.code
-                                                },
-                                                success: (res) => {
-                                                    modal.find("#err").text(res);
-                                                }
-                                            });
-                                        }
-
-                                    }
-                                });
+                                modal.modal("hide");
                             })
                         } else {
                             modal.modal("hide");
@@ -303,6 +249,71 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                 $("#search").removeAttr("data-toggle");
                 $("#search").removeAttr("data-target");
                 $("#search").removeData();
+            })
+
+            $('#showWarehouse').on('show.bs.modal', function(event) {
+                var modal = $(this);
+                relatedTarget = $(event.relatedTarget);
+                focusUpdate = relatedTarget.data('product');
+                console.log(focusUpdate);
+                modal.find("#err").html("");
+                modal.find("#id").html(focusUpdate.id);
+                modal.find("#name").html(focusUpdate.name);
+                modal.find("#quantity").val("");
+                const email = JSON.parse(localStorage.getItem("user")).email;
+                const product_id = focusUpdate.id;
+                modal.find("#email").html(email);
+                modal.find("#submit").on("click", async function(event) {
+                    if (isSubmit) {
+                        return;
+                    }
+                    const quantity = modal.find("#quantity").val();
+                    const url = `../../api/product/warehouse.php`;
+                    const body = {
+                        product_id,
+                        quantity,
+                        email,
+                    };
+                    console.log(JSON.stringify(body));
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
+                        },
+                        body: JSON.stringify(body)
+                    }
+                    try {
+                        isSubmit = true;
+                        const result = await fetchAPI(url, options);
+                        console.log(result);
+                        if (!result.is_error) {
+                            window.alert("Nhập kho thành công!")
+                        } else {
+                            isSubmit = false;
+                            $.ajax({
+                                url: '../../config/errorcode.php',
+                                type: 'POST',
+                                data: {
+                                    code: result.code
+                                },
+                                success: function(data) {
+                                    modal.find("#err").text(data);
+                                }
+                            });
+                        }
+                    } catch (err) {
+                        isSubmit = false;
+                        console.log(err);
+                    }
+                })
+
+
+            })
+            $('#showWarehouse').on('hidden.bs.modal', function(event) {
+                isSubmit = false;
+                focusUpdate = null;
+                relatedTarget = null;
             })
 
 
@@ -337,10 +348,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                             const products = res.data;
                             var tr;
                             for (var i = 0; i < products.length; i++) {
-                                tr = $('<tr>');
+                                tr = $(`<tr data-id='{"id":"${products[i].id}"}' data-toggle="modal" data-target="#showProduct">`);
                                 tr.append("<td>" + products[i].id + "</td>");
                                 tr.append("<td>" + products[i].name + "</td>");
-                                tr.append("<td>" + toVND(products[i].price)+ "</td>");
+                                tr.append("<td>" + products[i].quantity + "</td>");
+                                tr.append("<td>" + toVND(products[i].price) + "</td>");
                                 tr.append("<td>" + products[i].created_at + "</td>");
                                 tr.append(`<td id="status">` + getStatus(products[i].status) + `</td>`);
                                 $('#table').append(tr);
@@ -366,16 +378,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                 var mStatus = "";
                 if (status == 1) mStatus = `<b style="color:#36E605">Đang bật</b>`;
                 if (status == 0) mStatus = `<b style="color:#CBCBCB">Đã tắt</b>`;
-                return mStatus;
-            }
-
-            function getOrderStatus(status) {
-                var mStatus = "";
-                if (status == 0) mStatus = `<b style="color:#F5A623">Đang chờ <button id="update" class="btn btn-primary change"></i> Nhận đơn</button></b> `;
-                if (status == 1) mStatus = `<b style="color:#001FE8">Đã nhận đơn <button id="update" class="btn btn-primary change"></i> Giao hàng</button></b> `;
-                if (status == 2) mStatus = `<b style="color:#F7001E">Đang giao <button id="update" class="btn btn-primary change"></i> Hoàn thành</button></b> `;
-                if (status == 3) mStatus = `<b style="color:#36E605">Hoàn thành</b>`;
-                if (status == 4) mStatus = `<b style="color:#CBCBCB">Đã hủy</b>`;
                 return mStatus;
             }
 
