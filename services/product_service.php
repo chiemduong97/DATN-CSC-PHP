@@ -26,7 +26,9 @@ class ProductService
             $query =
                 "SELECT products.id, products.name, products.avatar, products.description, 
                 products.price, products.category_id, 
-                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity
+                ((SELECT SUM(quantity) from warehouse WHERE product_id = products.id) - 
+                (CASE WHEN (SELECT sum(quantity) from order_details WHERE product_id = products.id) IS NULL THEN 0 
+                ELSE (SELECT sum(quantity) from order_details WHERE product_id = products.id) END)) as quantity
                 FROM " . $this->tableName . "
                 INNER JOIN order_details ON products.id = order_details.product_id
                 INNER JOIN orders ON order_details.order_code = orders.order_code
@@ -73,8 +75,10 @@ class ProductService
             $query =
                 "SELECT products.id, products.name, products.avatar, products.description, 
                 products.price, products.category_id, 
-                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity, 
-                (SELECT sum(quantity) from order_details WHERE product_id = products.id) as sold 
+                (SELECT sum(quantity) from order_details WHERE product_id = products.id) as sold,
+                ((SELECT SUM(quantity) from warehouse WHERE product_id = products.id) - 
+                (CASE WHEN (SELECT sum(quantity) from order_details WHERE product_id = products.id) IS NULL THEN 0 
+                ELSE (SELECT sum(quantity) from order_details WHERE product_id = products.id) END)) as quantity
                 FROM  " . $this->tableName . "
                 WHERE products.status = 1 and (SELECT sum(quantity) from order_details WHERE product_id = products.id) is not null
                 ORDER BY sold DESC LIMIT :start , :total";
@@ -118,7 +122,9 @@ class ProductService
             $query =
                 "SELECT products.id, products.name, products.avatar, products.description, 
                 products.price, products.category_id, products.created_at, products.status,
-                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity,
+                ((SELECT SUM(quantity) from warehouse WHERE product_id = products.id) - 
+                (CASE WHEN (SELECT sum(quantity) from order_details WHERE product_id = products.id) IS NULL THEN 0 
+                ELSE (SELECT sum(quantity) from order_details WHERE product_id = products.id) END)) as quantity,
                 products.status FROM  " . $this->tableName . "
                 WHERE products.status = 1
                 ORDER BY products.created_at DESC LIMIT :start , :total";
@@ -164,7 +170,9 @@ class ProductService
             $query =
                 "SELECT id, products.name, products.avatar, products.description, 
                 products.price, products.category_id, 
-                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity,
+                ((SELECT SUM(quantity) from warehouse WHERE product_id = products.id) - 
+                (CASE WHEN (SELECT sum(quantity) from order_details WHERE product_id = products.id) IS NULL THEN 0 
+                ELSE (SELECT sum(quantity) from order_details WHERE product_id = products.id) END)) as quantity,
                 products.status FROM  " . $this->tableName . "
                 WHERE products.category_id = :category_id and products.status = 1 
                 ORDER BY id DESC LIMIT :start , :total";
@@ -210,7 +218,9 @@ class ProductService
             $query =
                 "SELECT id, products.name, products.avatar, products.description, 
                 products.price, products.category_id, products.status,
-                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity
+                ((SELECT SUM(quantity) from warehouse WHERE product_id = products.id) - 
+                (CASE WHEN (SELECT sum(quantity) from order_details WHERE product_id = products.id) IS NULL THEN 0 
+                ELSE (SELECT sum(quantity) from order_details WHERE product_id = products.id) END)) as quantity
                 FROM  " . $this->tableName . "
                 WHERE products.status = 1 and products.name like '%$filter%'
                 ORDER BY id DESC LIMIT :start , :total";
@@ -249,7 +259,9 @@ class ProductService
             $query =
                 "SELECT products.id, products.name, products.avatar, products.description, 
                 products.price, products.category_id, products.status, 
-                (SELECT SUM(quantity) from warehouse WHERE product_id = products.id) as quantity
+                ((SELECT SUM(quantity) from warehouse WHERE product_id = products.id) - 
+                (CASE WHEN (SELECT sum(quantity) from order_details WHERE product_id = products.id) IS NULL THEN 0 
+                ELSE (SELECT sum(quantity) from order_details WHERE product_id = products.id) END)) as quantity
                 FROM  " . $this->tableName . "
                 WHERE products.id = :id";
             $stmt = $this->connection->prepare($query);

@@ -288,7 +288,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                         const result = await fetchAPI(url, options);
                         console.log(result);
                         if (!result.is_error) {
-                            window.alert("Nhập kho thành công!")
+                            modal.modal("hide");
+                            window.alert("Nhập kho thành công!");
+                            loadData();
                         } else {
                             isSubmit = false;
                             $.ajax({
