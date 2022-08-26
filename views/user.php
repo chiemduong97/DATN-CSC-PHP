@@ -295,8 +295,8 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
 
             $('#sendNoti').on('show.bs.modal', function(event) {
                 var modal = $(this);
-                modal.find('#name').val("");
-                modal.find('#errSendNoti').text("");
+                modal.find('#action').val("");
+                modal.find('#description').val("");
                 modal.find('#submitSendNoti').on('click', async function(event) {
                     if (isSubmit) {
                         return;
