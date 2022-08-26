@@ -191,6 +191,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             var relatedTarget = null;
             var page = 1;
             var total = 1;
+            var type = 0;
 
             const fetchAPI = async (url, option) => {
                 const res = await fetch(url, option);
@@ -322,31 +323,37 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             loadData();
 
             function loadData() {
+                var url = "";
+                if (type == 0) {
+                    url = `../../api/product/product_getNew.php?page=${page}&limit=10`;
+                } else {
+                    url = `../../api/product/product_search.php?page=${page}&limit=10&query=${$('#search').val()}`;
+                }
 
                 $.ajax({
                     type: "GET",
-                    url: `../../api/product/product_getNew.php?page=${page}&limit=10`,
+                    url: url,
                     headers: {
                         "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
                     },
                     success: (res) => {
                         console.log(res);
-                        total = res.total;
-                        $('#table').html("");
-                        if (page == total) {
-                            $("#btn_next").attr("class", "paginate_button previous disabled");
-                        } else {
-                            $("#btn_next").attr("class", "paginate_button previous");
-                        }
-
-                        if (page == 1) {
-                            $("#btn_prev").attr("class", "paginate_button previous disabled ");
-                        } else {
-                            $("#btn_prev").attr("class", "paginate_button previous");
-                        }
-
                         if (!res["is_error"]) {
-                            $("#page").html(`Page ${page} of ${res.total}`);
+                            total = res.total;
+                            if (page == total) {
+                                $("#btn_next").attr("class", "paginate_button previous disabled");
+                            } else {
+                                $("#btn_next").attr("class", "paginate_button previous");
+                            }
+
+                            if (page == 1) {
+                                $("#btn_prev").attr("class", "paginate_button previous disabled");
+                            } else {
+                                $("#btn_prev").attr("class", "paginate_button previous");
+                            }
+
+                            $('#table').html("");
+                            $("#page").html(`Page ${page} of ${total}`);
                             const products = res.data;
                             var tr;
                             for (var i = 0; i < products.length; i++) {
@@ -359,6 +366,18 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                                 tr.append(`<td id="status">` + getStatus(products[i].status) + `</td>`);
                                 $('#table').append(tr);
                             }
+                        } else {
+                            $.ajax({
+                                url: '../../config/errorcode.php',
+                                type: 'POST',
+                                data: {
+                                    code: res.code
+                                },
+                                success: (res) => {
+                                    window.alert(res);
+                                    type = 0;
+                                }
+                            });
                         }
                     }
                 });
@@ -400,11 +419,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
 
             $('#search').on('search', function(event) {
                 focusUpdate = `{"order_code":"${$(this).val()}"}`
-                $(this).attr("data-order", focusUpdate);
-                $(this).attr("data-toggle", "modal");
-                $(this).attr("data-target", "#showProduct");
-                $(this).val("");
-                $(this).click();
+                page = 1;
+                type = 1;
+                loadData();
             })
         </script>
 </body>
