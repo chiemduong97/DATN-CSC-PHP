@@ -41,13 +41,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="dashboard.php">
+                <a class="navbar-brand" href="statistics.php">
                     <img width="200" src="../public/images/ic_logo.png" />
                 </a>
             </div>
             <div class="right-div">
-                <a onclick="logout()" class="btn btn-info pull-right">LOG OUT</a>
-                <p class="pull-right btn">Wellcome <strong id="email"></strong></p>
+                <a onclick="logout()" class="btn btn-info pull-right">ĐĂNG XUẤT</a>
+                <p class="pull-right btn">Xin chào <strong id="email"></strong></p>
             </div>
         </div>
     </div>
@@ -58,10 +58,12 @@
                 <div class="col-md-12">
                     <div class="navbar-collapse collapse ">
                         <ul id="menu-top" class="nav navbar-nav navbar-right">
-                            <li><a href="dashboard.php">DASHBOARD</a></li>
-                            <li><a href="order.php">ORDERS</a></li>
-                            <li><a href="category.php">CATEGORIES</a></li>
-                            <li><a href="user.php">USERS</a></li>
+                            <li><a href="statistics.php">THỐNG KÊ</a></li>
+                            <li><a href="product.php">SẢN PHẨM</a></li>
+                            <li><a href="branch.php">CHI NHÁNH</a></li>
+                            <li><a href="category.php">THỂ LOẠI</a></li>
+                            <li><a href="order.php">ĐƠN HÀNG</a></li>
+                            <li><a href="user.php">NGƯỜI DÙNG</a></li>
                         </ul>
                     </div>
                 </div>
@@ -78,6 +80,16 @@
     <!-- CUSTOM SCRIPTS  -->
     <script src="../public/javascripts/custom.js"></script>
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBj15wftaGCexBOsxTRNqgkYPIBDuD63iA",
+            authDomain: "myreact-bce2e.firebaseapp.com",
+            projectId: "myreact-bce2e",
+            storageBucket: "myreact-bce2e.appspot.com",
+            messagingSenderId: "526333838997",
+            appId: "1:526333838997:web:c47de5baea83b4a0663d9c"
+        };
+        firebase.initializeApp(firebaseConfig);
+
         const email = localStorage.getItem("email");
         $.ajax({
             type: "GET",
@@ -86,10 +98,10 @@
                 "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
             },
             success: (res) => {
-                if (localStorage.getItem("user") == null) localStorage.setItem("user", JSON.stringify(res));
                 if (res["is_error"]) {
                     window.location.href = "login.php";
                 } else {
+                    if (localStorage.getItem("user") == null) localStorage.setItem("user", JSON.stringify(res.data));
                     $("#email").html(email);
                 }
             }

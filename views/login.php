@@ -69,7 +69,7 @@
                 const response = await fetchAPI(url,options);
                 console.log(response);
                 if(!response.is_error){
-                    window.location.href = '../views/dashboard.php';
+                    window.location.href = '../views/statistics.php';
                     localStorage.setItem("accessToken",response.data.access_token);
                     localStorage.setItem("email",email);
                 }
@@ -96,7 +96,7 @@
             headers: {"Authorization": 'Bearer ' + localStorage.getItem('accessToken')},
             success:(res) => {
                 if(!res["is_error"]){
-                    window.location.href = "dashboard.php";
+                    window.location.href = "statistics.php";
                 }
             }
         });

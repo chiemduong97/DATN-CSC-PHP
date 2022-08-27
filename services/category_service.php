@@ -63,7 +63,11 @@ class CategoryService
     public function insertItem($category)
     {
         try {
-            $query = "insert into " . $this->tableName . " set name = :name, avatar = :avatar";
+
+            $category_id = $category -> category_id;
+            $query = "";
+            if (is_null($category_id)) $query = "INSERT INTO " . $this->tableName . " SET name = :name, avatar = :avatar, category_id = null";
+            else $query = "INSERT INTO " . $this->tableName . " SET name = :name, avatar = :avatar, category_id = $category_id";
 
             $name = $category->name;
             $avatar = $category->avatar;
@@ -85,28 +89,35 @@ class CategoryService
 
     public function updateItem($category)
     {
-        try {
-            $query = "update " . $this->tableName . " 
-            set name = :name, avatar = :avatar where id = :id and status = 1";
 
-            $id = $category->id;
-            $name = $category->name;
-            $avatar = $category->avatar;
-
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(":id", $id);
-            $stmt->bindParam(":name", $name);
-            $stmt->bindParam(":avatar", $avatar);
-            $stmt->execute();
-            if ($stmt->rowCount() > 0) {
-                return 1000;
-            } else {
+        if ($category -> id == -1) {
+            return $this -> insertItem($category);
+        } else {
+            try {
+                $category_id = $category -> category_id;
+                $query = "";
+                if (is_null($category_id)) $query = "UPDATE " . $this->tableName . " SET name = :name, avatar = :avatar, category_id = null WHERE id = :id";
+                else $query = "UPDATE " . $this->tableName . " SET name = :name, avatar = :avatar, category_id = $category_id WHERE id = :id";
+    
+                $id = $category->id;
+                $name = $category->name;
+                $avatar = $category->avatar;
+                $stmt = $this->connection->prepare($query);
+                $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+                $stmt->bindParam(":name", $name);
+                $stmt->bindParam(":avatar", $avatar);
+                $stmt->execute();
+                if ($stmt->rowCount() > 0) {
+                    return 1000;
+                } else {
+                    return 1001;
+                }
+            } catch (Exception $e) {
+                throw $e;
                 return 1001;
             }
-        } catch (Exception $e) {
-            throw $e;
-            return 1001;
         }
+        
     }
 
     public function removeItem($id)
@@ -131,7 +142,7 @@ class CategoryService
     public function checkRemove($id)
     {
         try {
-            $query = "select id from " . $this->tableName . " where id=:id and status = 1";
+            $query = "SELECT * FROM " . $this->tableName . " WHERE id = :id AND status = 1";
             $stmt = $this->connection->prepare($query);
             $stmt->bindParam(":id", $id);
             $stmt->execute();

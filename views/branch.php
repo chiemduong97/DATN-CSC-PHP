@@ -15,7 +15,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
         <div class="container">
             <div class="row pad-botm">
                 <div class="col-md-12">
-                    <h4 class="header-line">CATEGORIES</h4>
+                    <h4 class="header-line">CHI NHÁNH</h4>
                     <button class="btn btn-success" data-toggle="modal" data-target="#addCategory">
                         <i class="fa fa-plus-square"></i>
                         Thêm
@@ -28,7 +28,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                     <!--    Hover Rows  -->
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            LIST BRANCH
+                            Danh sách chi nhánh
                         </div>
                         <div class="panel-body">
                             <div class="table-responsive">
