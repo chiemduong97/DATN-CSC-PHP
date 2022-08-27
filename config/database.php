@@ -5,7 +5,7 @@
 		// private $username = "root";
 		private $username = "sql6515473";
 		// private $password = "";
-		private $password = "	Please wait";
+		private $password = "wzz3w3lVBX";
 		// private $db_name = "datn_csc";
 		private $db_name = "sql6515473";
 		public $connect; 
