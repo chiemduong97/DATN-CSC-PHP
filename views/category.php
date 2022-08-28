@@ -273,9 +273,9 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             });
 
             modal.find("#superCategory").on("change", () => {
-                category_id = $("#superCategory").val()
-                category.id = $("#superCategory").val();
-                category.name = $("#superCategory option:selected").text();
+                category_id = modal.find("#superCategory").val()
+                category.id = modal.find("#superCategory").val();
+                category.name = modal.find("#superCategory option:selected").text();
                 console.log(category);
             });
 

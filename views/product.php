@@ -454,7 +454,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                 });
 
                 modal.find("#category").on("change", () => {
-                    category_id = $("#category").val();
+                    category = modal.find("#category").val();
                 });
 
                 modal.find('#submitUpdate').on('click', async function(event) {
