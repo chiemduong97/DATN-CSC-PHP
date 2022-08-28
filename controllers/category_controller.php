@@ -16,6 +16,12 @@ class CategoryController
     {
         return $this->service->getCategoriesLevel_0();
     }
+
+    public function getCategoriesLevel_1_admin()
+    {
+        return $this->service->getCategoriesLevel_1_admin();
+    }
+
     public function getCategoriesLevel_1($category_id)
     {
         return $this->service->getCategoriesLevel_1($category_id);

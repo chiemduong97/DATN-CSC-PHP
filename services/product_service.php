@@ -311,7 +311,7 @@ class ProductService
     public function insertItem($product_model, $category_id)
     {
         try {
-            $query = "insert into " . $this->tableName . " set name = :name, avatar = :avatar,
+            $query = "INSERT INTO " . $this->tableName . " SET name = :name, avatar = :avatar,
              description = :description, price = :price, category_id = :category_id";
 
             $name = $product_model->name;

@@ -16,6 +16,10 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             <div class="row pad-botm">
                 <div class="col-md-12">
                     <h4 class="header-line">SẢN PHẨM</h4>
+                    <button class="btn btn-success" data-toggle="modal" data-target="#updateProduct">
+                        <i class="fa fa-plus-square"></i>
+                        Thêm
+                    </button>
                 </div>
             </div>
             <div class="row">
@@ -174,6 +178,53 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="updateProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="myModalLabel">THÊM SẢN PHẨM</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Ảnh minh họa
+                                <input id="choose-img" value="abc" type="file" style="display: none;" />
+                                <button class="btn btn-success" id="addImage"><i class="fa fa-plus-square"></i> Add</button>
+                                <button class="btn btn-danger" id="deleteImage"><i class="fa fa-trash-o"></i> Delete</button>
+                            </div>
+                            <div class="panel-body text-center recent-users-sec" id="image">
+                            </div>
+                        </div>
+                        <form role="form" id="formUpdate" method="post">
+                            <div class="form-group">
+                                <label>Tên</label>
+                                <input name="name" id="name" class="form-control" type="text" />
+                            </div>
+                            <div class="form-group">
+                                <label>Thể loại</label>
+                                <select name="category" id="category">
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Mô tả</label>
+                                <input name="description" id="description" class="form-control" type="text" />
+                            </div>
+                            <div class="form-group">
+                                <label>Giá bán</label>
+                                <input name="price" id="price" class="form-control" type="number" />
+                            </div>
+                            <div class="form-group" style="color: red;" id="errUpdate"></div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">CANCLE</button>
+                                <button id="submitUpdate" type="button" class="btn btn-primary">OK</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- MODAL END-->
         <section class="footer-section">
             <div class="container">
@@ -192,7 +243,15 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
             var page = 1;
             var total = 1;
             var type = 0;
+            var avatar = null;
 
+            const uuid = () => {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0,
+                        v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
             const fetchAPI = async (url, option) => {
                 const res = await fetch(url, option);
                 return res.json();
@@ -216,7 +275,11 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                             const product = res.data;
                             modal.find("#id").html(product.id);
                             modal.find("#name").html(product.name);
-                            modal.find("#avatar").html(`<img src=${product.avatar} width='80' height='60'  style='object-fit: cover'/>`);
+                            if (product.avatar == null) {
+                                modal.find("#avatar").html("Chưa có");
+                            } else {
+                                modal.find("#avatar").html(`<img src=${product.avatar} width='80' height='60'  style='object-fit: cover'/>`);
+                            }
                             modal.find("#description").html(product.description);
                             modal.find("#price").html(toVND(product.price));
                             modal.find("#category").html(product.category.name);
@@ -319,6 +382,140 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                 relatedTarget = null;
             })
 
+            $('#updateProduct').on('show.bs.modal', function(event) {
+                var modal = $(this);
+                modal.find('#errUpdate').text("");
+                modal.find('#image').html("");
+                modal.find('#choose-img').val("");
+                modal.find('#name').val("");
+                modal.find('#description').val("");
+                modal.find('#price').val("");
+                var category;
+                modal.find('#deleteImage').on('click', function(event) {
+                    event.stopPropagation();
+                    event.stopImmediatePropagation();
+                    modal.find('#image').html("");
+                    avatar = null;
+                });
+                modal.find('#addImage').on('click', function(event) {
+                    event.stopPropagation();
+                    event.stopImmediatePropagation();
+                    modal.find('#choose-img').trigger('click');
+                });
+                modal.find("#superCategory").html(`<option value=${null}>None</option>`)
+
+                $.ajax({
+                    url: '../../api/category/category_getLevel_1_admin.php',
+                    type: 'GET',
+                    headers: {
+                        "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
+                    },
+                    success: (res) => {
+                        console.log(res);
+                        if (!res.is_error) {
+                            for (var i = 0; i < res.data.length; i++) {
+                                modal.find("#category").append(
+                                    `<option value=${res.data[i].id}>${res.data[i].name}</option>`
+                                )
+                            }
+                            category = res.data[0].id;
+                        } else {
+                            $.ajax({
+                                url: '../../config/errorcode.php',
+                                type: 'POST',
+                                data: {
+                                    code: res.code
+                                },
+                                success: (res) => {
+                                    window.alert(res);
+                                    type = 0;
+                                }
+                            });
+                        }
+                    }
+                });
+
+                modal.find('#choose-img').on('change', function(event) {
+                    const ref = firebase.storage().ref(uuid());
+                    const uploadTask = ref.put(modal.find('#choose-img')[0].files[0]);
+                    uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+                        (snapshot) => {},
+                        (err) => {
+                            console.log("err: ", err)
+                        },
+                        () => {
+                            uploadTask.snapshot.ref.getDownloadURL().then(url => {
+                                console.log("URL: ", url);
+                                modal.find('#image').html(`<img class='img-thumbnail' src=${url} >`);
+                                avatar = url;
+                            })
+                        }
+                    )
+                });
+
+                modal.find("#category").on("change", () => {
+                    category_id = $("#category").val();
+                });
+
+                modal.find('#submitUpdate').on('click', async function(event) {
+                    if (isSubmit) {
+                        return;
+                    }
+                    const name = modal.find('#name').val();
+                    const description = modal.find('#description').val();
+                    if (category != null) category = parseInt(category);
+                    const price = parseFloat(modal.find('#price').val());
+                    const url = `../../api/product/product_insert.php`;
+                    const body = {
+                        name,
+                        avatar,
+                        description,
+                        price,
+                        category
+                    };
+                    console.log(JSON.stringify(body));
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "Authorization": 'Bearer ' + localStorage.getItem('accessToken')
+                        },
+                        body: JSON.stringify(body)
+                    }
+                    try {
+                        isSubmit = true;
+                        const result = await fetchAPI(url, options);
+                        console.log(result);
+                        if (!result.is_error) {
+                            modal.modal("hide");
+                            window.alert("Thêm thành công");
+                            loadData();
+                        } else {
+                            isSubmit = false;
+                            $.ajax({
+                                url: '../../config/errorcode.php',
+                                type: 'POST',
+                                data: {
+                                    code: result.code
+                                },
+                                success: function(data) {
+                                    $("#errUpdate").text(data);
+                                }
+                            });
+                        }
+                    } catch (err) {
+                        isSubmit = false;
+                        console.log(err);
+                    }
+                })
+
+            })
+            $('#updateProduct').on('hidden.bs.modal', function(event) {
+                isSubmit = false;
+                focus = null;
+                avatar = null;
+                $("#category").removeData();
+            })
 
             loadData();
 

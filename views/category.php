@@ -265,7 +265,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                     () => {
                         uploadTask.snapshot.ref.getDownloadURL().then(url => {
                             console.log("URL: ", url);
-                            modal.find('#image').html(`<img class='img-thumbnail' src=${avatar} >`);
+                            modal.find('#image').html(`<img class='img-thumbnail' src=${url} >`);
                             avatar = url;
                         })
                     }
@@ -349,7 +349,6 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
         $('#updateCategory').on('hidden.bs.modal', function(event) {
             isSubmit = false;
             focus = null;
-            superCategory = null;
             avatar = null;
             $("#superCategory").removeData();
         })

@@ -11,7 +11,7 @@ $body = json_decode(file_get_contents("php://input"));
 $code = 400;
 $data = null;
 
-// if ($authen->checkToken()) {
+if ($authen->checkToken()) {
     if (
         property_exists($body, 'name') &&
         property_exists($body, 'avatar') &&
@@ -35,9 +35,9 @@ $data = null;
     } else {
         $code = 1013;
     }
-// } else {
-//     $code = 401;
-// }
+} else {
+    $code = 401;
+}
 
 echo (
     (new Response(

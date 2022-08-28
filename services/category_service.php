@@ -185,6 +185,34 @@ class CategoryService
         }
     }
 
+    public function getCategoriesLevel_1_admin()
+    {
+        try {
+           
+            $query = "select id, name, avatar from " . $this->tableName . " 
+                where status = 1   and category_id IS NOT NULL";
+            $stmt = $this->connection->prepare($query);
+            $stmt->execute();
+            $data = array();
+
+            if ($stmt->rowCount() > 0) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    extract($row);
+                    $each = array(
+                        "id" => $id,
+                        "name" => $name,
+                        "avatar" => $avatar
+                    );
+                    array_push($data, $each);
+                }
+            }
+            return $data;
+        } catch (Exception $e) {
+            echo "loi: " . $e->getMessage();
+            return null;
+        }
+    }
+
     public function getCategoriesLevel_1($category_id = 0)
     {
         try {
