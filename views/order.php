@@ -238,7 +238,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/config/errorcode.php';
                             const promotion = order.promotion;
                             var value = 0;
                             if (promotion != null) {
-                                value = promotion.value < 1 ? parseInt((promotion.value * order.amount) / 1000) * 1000 : promotion.value;
+                                value = promotion.value < 1 ? Math.ceil((promotion.value * order.amount) / 1000) * 1000 : promotion.value;
                                 modal.find("#promotion").html(`${promotion.code} - ${toVND(value)}`);
                             } else {
                                 modal.find("#promotion").html("");
